@@ -160,5 +160,24 @@ public interface AttemptControllerOpenApi {
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId,
             @RequestBody SubmitAnswerRequest request);
+
+    @Operation(
+            summary = "Delete answer for question",
+            description = "Deletes the submitted answer for a specific question within an attempt",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Answer deleted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Attempt or question not found"
+            )
+    })
+    ResponseEntity<Void> deleteAnswer(
+            @PathVariable UUID attemptId,
+            @PathVariable UUID questionId);
 }
 

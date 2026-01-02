@@ -29,5 +29,10 @@ public class AnswerRepositoryAdapter implements AnswerRepositoryPort {
     public List<Answer> findByAttemptId(UUID attemptId) {
         return repository.findByAttemptId(attemptId);
     }
+
+    @Override
+    public void deleteByAttemptIdAndQuestionId(UUID attemptId, UUID questionId) {
+        repository.deleteByAttemptIdAndQuestionId(attemptId, questionId);
+    }
 }
 

@@ -12,5 +12,7 @@ public interface AnswerRepositoryPort {
     boolean existsByAttemptIdAndQuestionId(UUID attemptId, UUID questionId);
 
     List<Answer> findByAttemptId(UUID attemptId);
+
+    void deleteByAttemptIdAndQuestionId(UUID attemptId, UUID questionId);
 }
 

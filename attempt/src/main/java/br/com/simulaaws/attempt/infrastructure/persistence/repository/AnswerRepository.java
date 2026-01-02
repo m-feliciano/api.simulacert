@@ -2,6 +2,7 @@ package br.com.simulaaws.attempt.infrastructure.persistence.repository;
 
 import br.com.simulaaws.attempt.domain.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,11 +18,18 @@ public interface AnswerRepository extends JpaRepository<Answer, UUID> {
     List<Answer> findByAttemptId(UUID attemptId);
 
     @Query(value = """
-        WITH correct_options AS (
-            SELECT question_id, STRING_AGG(option_key, ',' ORDER BY option_key) AS correct_keys
-            FROM question_options
-            WHERE is_correct = true
-            GROUP BY question_id
+        WITH attempt_questions_list AS (
+            SELECT question_id
+            FROM attempt_questions
+            WHERE attempt_id = :attemptId
+        ),
+        correct_options AS (
+            SELECT
+                aq.question_id, 
+                STRING_AGG(qo.option_key, ',' ORDER BY qo.option_key) AS correct_keys
+            FROM attempt_questions_list aq
+            JOIN question_options qo ON qo.question_id = aq.question_id AND qo.is_correct = true
+            GROUP BY aq.question_id
         ),
         user_answers_expanded AS (
             SELECT
@@ -44,4 +52,9 @@ public interface AnswerRepository extends JpaRepository<Answer, UUID> {
         WHERE ua.user_keys = co.correct_keys
         """, nativeQuery = true)
     long countCorrectAnswersByAttemptId(@Param("attemptId") UUID attemptId);
+
+    @Modifying
+    @Query("DELETE FROM Answer a WHERE a.attemptId = :attemptId AND a.questionId = :questionId")
+    void deleteByAttemptIdAndQuestionId(@Param("attemptId") UUID attemptId,
+                                        @Param("questionId") UUID questionId);
 }

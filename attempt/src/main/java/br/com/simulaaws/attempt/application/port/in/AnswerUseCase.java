@@ -7,4 +7,6 @@ import java.util.UUID;
 public interface AnswerUseCase {
 
     void submitAnswer(UUID attemptId, UUID questionId, SubmitAnswerRequest request);
+
+    void deleteAnswer(UUID attemptId, UUID questionId);
 }

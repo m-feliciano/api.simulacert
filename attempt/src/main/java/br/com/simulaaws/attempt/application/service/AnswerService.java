@@ -41,13 +41,28 @@ public class AnswerService implements AnswerUseCase {
         }
 
         if (answerRepository.existsByAttemptIdAndQuestionId(attemptId, questionId)) {
-            throw new IllegalStateException("Question already answered");
+            log.warn("Answer already exists for attempt {} question {}. Deleting old answer.", attemptId, questionId);
+            answerRepository.deleteByAttemptIdAndQuestionId(attemptId, questionId);
         }
 
         Answer answer = Answer.create(attemptId, questionId, request.selectedOption(), clock.now());
         answerRepository.save(answer);
 
         log.info("Answer submitted for attempt {} question {}", attemptId, questionId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAnswer(UUID attemptId, UUID questionId) {
+        log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
+
+        if (answerRepository.existsByAttemptIdAndQuestionId(attemptId, questionId)) {
+            answerRepository.deleteByAttemptIdAndQuestionId(attemptId, questionId);
+            log.info("Answer deleted for attempt {} question {}", attemptId, questionId);
+
+        } else {
+            log.info("No answer found for attempt {} question {}, nothing to delete", attemptId, questionId);
+        }
     }
 }
 
