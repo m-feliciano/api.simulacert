@@ -32,7 +32,6 @@ public class StatsController implements StatsControllerOpenApi {
         log.debug("Getting statistics for user {}", userId);
 
         UserStatsDto stats = statsUseCase.getUserStatistics(userId);
-
         return ResponseEntity.ok(stats);
     }
 
@@ -42,7 +41,6 @@ public class StatsController implements StatsControllerOpenApi {
         log.debug("Getting attempt history for user {}", userId);
 
         List<AttemptHistoryItemDto> history = statsUseCase.getAttemptHistory(userId);
-
         return ResponseEntity.ok(history);
     }
 
@@ -53,7 +51,6 @@ public class StatsController implements StatsControllerOpenApi {
         log.debug("Getting performance by AWS domain for user {}", userId);
 
         List<AwsDomainStatsDto> domainStats = statsUseCase.getPerformanceByAwsDomain(userId);
-
         return ResponseEntity.ok(domainStats);
     }
 }

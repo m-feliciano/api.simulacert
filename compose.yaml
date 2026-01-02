@@ -1,15 +1,35 @@
+version: '3.8'
+
 services:
-  grafana-lgtm:
-    image: 'grafana/otel-lgtm:latest'
-    ports:
-      - '3000'
-      - '4317'
-      - '4318'
-  postgres:
-    image: 'postgres:latest'
+  simulaaws-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: simulaaws-app
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SERVER_PORT: ${SERVER_PORT}
     ports:
-      - '5432'
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    networks:
+      - simulaaws-network
+    restart: unless-stopped
+
+  grafana-lgtm:
+    image: grafana/otel-lgtm:latest
+    container_name: simulaaws-observability
+    ports:
+      - "3000:3000"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - simulaaws-network
+    restart: unless-stopped
+
+networks:
+  simulaaws-network:
+    driver: bridge
