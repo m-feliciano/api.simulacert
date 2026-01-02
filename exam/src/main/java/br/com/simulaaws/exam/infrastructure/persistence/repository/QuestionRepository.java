@@ -2,6 +2,7 @@ package br.com.simulaaws.exam.infrastructure.persistence.repository;
 
 import br.com.simulaaws.exam.domain.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question, UUID> {
 
     long countByExamId(UUID examId);
 
+    @Query("SELECT q.id FROM Question q WHERE q.examId = :examId")
     List<UUID> findIdsByExamId(UUID examId);
 }
 
