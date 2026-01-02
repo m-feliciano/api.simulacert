@@ -106,14 +106,9 @@ public class ExamController implements ExamControllerOpenApi {
     public ResponseEntity<Void> deleteExam(@PathVariable UUID examId) {
         log.info("Deleting exam: {}", examId);
 
-        try {
-            examUseCase.deleteExam(examId);
-            log.info("Exam deleted: {}", examId);
-            return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            log.warn("Exam not found: {}", examId);
-            return ResponseEntity.notFound().build();
-        }
+        examUseCase.deleteExam(examId);
+        log.info("Exam deleted: {}", examId);
+        return ResponseEntity.noContent().build();
     }
 }
 
