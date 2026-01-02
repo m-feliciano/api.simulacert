@@ -1,14 +1,18 @@
 package br.com.simulaaws.exam.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,6 +38,10 @@ public class Question {
 
     @Column(nullable = false, length = 50)
     private String difficulty;
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<QuestionOption> options = new ArrayList<>();
 
     public static Question create(UUID examId, String text, String domain, String difficulty) {
         Objects.requireNonNull(examId, "examId cannot be null");

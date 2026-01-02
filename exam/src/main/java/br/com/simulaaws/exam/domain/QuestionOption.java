@@ -3,6 +3,8 @@ package br.com.simulaaws.exam.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,8 +25,9 @@ public class QuestionOption {
     @Id
     private UUID id;
 
-    @Column(nullable = false, name = "question_id")
-    private UUID questionId;
+    @ManyToOne
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
 
     @Column(nullable = false, length = 1, name = "option_key")
     private String optionKey;
@@ -35,15 +38,15 @@ public class QuestionOption {
     @Column(nullable = false, name = "is_correct")
     private Boolean isCorrect;
 
-    public static QuestionOption create(UUID questionId, String optionKey, String optionText, Boolean isCorrect) {
-        Objects.requireNonNull(questionId, "questionId cannot be null");
+    public static QuestionOption create(Question question, String optionKey, String optionText, Boolean isCorrect) {
+        Objects.requireNonNull(question, "question cannot be null");
         Objects.requireNonNull(optionKey, "optionKey cannot be null");
         Objects.requireNonNull(optionText, "optionText cannot be null");
         Objects.requireNonNull(isCorrect, "isCorrect cannot be null");
 
         return QuestionOption.builder()
                 .id(UUID.randomUUID())
-                .questionId(questionId)
+                .question(question)
                 .optionKey(optionKey.trim().toUpperCase())
                 .optionText(optionText.trim())
                 .isCorrect(isCorrect)

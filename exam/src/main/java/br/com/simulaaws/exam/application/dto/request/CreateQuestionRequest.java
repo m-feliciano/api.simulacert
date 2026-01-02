@@ -1,4 +1,4 @@
-package br.com.simulaaws.exam.application.dto;
+package br.com.simulaaws.exam.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -6,10 +6,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+import java.util.UUID;
 
 public record CreateQuestionRequest(
         @NotNull(message = "Exam ID is required")
-        java.util.UUID examId,
+        UUID examId,
 
         @NotBlank(message = "Text is required")
         @Size(min = 10, max = 2000, message = "Text must be between 10 and 2000 characters")

@@ -1,7 +1,7 @@
 package br.com.simulaaws.exam.application.service;
 
-import br.com.simulaaws.exam.application.dto.CreateQuestionRequest;
-import br.com.simulaaws.exam.application.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.request.CreateQuestionRequest;
+import br.com.simulaaws.exam.application.dto.response.QuestionResponse;
 import br.com.simulaaws.exam.application.mapper.QuestionMapper;
 import br.com.simulaaws.exam.application.port.in.QuestionUseCase;
 import br.com.simulaaws.exam.application.port.out.ExamRepositoryPort;
@@ -61,11 +61,11 @@ public class QuestionService implements QuestionUseCase {
                 request.difficulty()
         );
 
-        Question savedQuestion = questionRepository.save(question);
+        Question saved = questionRepository.save(question);
 
         List<QuestionOption> options = request.options().stream()
                 .map(opt -> QuestionOption.create(
-                        savedQuestion.getId(),
+                        saved,
                         opt.key(),
                         opt.text(),
                         opt.isCorrect()
@@ -74,9 +74,9 @@ public class QuestionService implements QuestionUseCase {
 
         questionOptionRepository.saveAll(options);
 
-        log.info("Question created with id: {} and {} options", savedQuestion.getId(), options.size());
+        log.info("Question created with id: {} and {} options", saved.getId(), options.size());
 
-        return questionMapper.toResponse(savedQuestion);
+        return questionMapper.toResponse(saved);
     }
 }
 

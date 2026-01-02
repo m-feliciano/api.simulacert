@@ -16,6 +16,6 @@ public interface QuestionOptionRepository extends JpaRepository<QuestionOption, 
 
     void deleteByQuestionId(UUID questionId);
 
-    @Query("SELECT qo.optionKey FROM QuestionOption qo WHERE qo.questionId = :questionId AND qo.isCorrect = true")
+    @Query("SELECT qo.optionKey FROM QuestionOption qo WHERE qo.question.id = :questionId AND qo.isCorrect = true")
     List<String> findCorrectOptionKeysByQuestionId(@Param("questionId") UUID questionId);
 }

@@ -1,4 +1,4 @@
-package br.com.simulaaws.exam.application.dto;
+package br.com.simulaaws.exam.application.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

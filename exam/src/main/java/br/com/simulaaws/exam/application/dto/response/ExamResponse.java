@@ -1,4 +1,4 @@
-package br.com.simulaaws.exam.application.dto;
+package br.com.simulaaws.exam.application.dto.response;
 
 import java.util.UUID;
 

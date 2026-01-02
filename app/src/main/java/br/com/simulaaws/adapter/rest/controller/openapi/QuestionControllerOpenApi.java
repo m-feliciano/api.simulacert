@@ -1,7 +1,7 @@
 package br.com.simulaaws.adapter.rest.controller.openapi;
 
-import br.com.simulaaws.exam.application.dto.CreateQuestionRequest;
-import br.com.simulaaws.exam.application.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.request.CreateQuestionRequest;
+import br.com.simulaaws.exam.application.dto.response.QuestionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

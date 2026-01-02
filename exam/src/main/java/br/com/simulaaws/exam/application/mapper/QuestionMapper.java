@@ -1,6 +1,6 @@
 package br.com.simulaaws.exam.application.mapper;
 
-import br.com.simulaaws.exam.application.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.response.QuestionResponse;
 import br.com.simulaaws.exam.domain.Question;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

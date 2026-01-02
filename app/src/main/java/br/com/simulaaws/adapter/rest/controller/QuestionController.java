@@ -1,8 +1,8 @@
 package br.com.simulaaws.adapter.rest.controller;
 
 import br.com.simulaaws.adapter.rest.controller.openapi.QuestionControllerOpenApi;
-import br.com.simulaaws.exam.application.dto.CreateQuestionRequest;
-import br.com.simulaaws.exam.application.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.request.CreateQuestionRequest;
+import br.com.simulaaws.exam.application.dto.response.QuestionResponse;
 import br.com.simulaaws.exam.application.port.in.QuestionUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

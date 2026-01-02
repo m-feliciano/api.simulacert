@@ -1,8 +1,8 @@
 package br.com.simulaaws.exam.application.port.in;
 
-import br.com.simulaaws.exam.application.dto.CreateExamRequest;
-import br.com.simulaaws.exam.application.dto.ExamResponse;
-import br.com.simulaaws.exam.application.dto.UpdateExamRequest;
+import br.com.simulaaws.exam.application.dto.request.CreateExamRequest;
+import br.com.simulaaws.exam.application.dto.response.ExamResponse;
+import br.com.simulaaws.exam.application.dto.request.UpdateExamRequest;
 
 import java.util.List;
 import java.util.UUID;
