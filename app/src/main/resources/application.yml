@@ -1,0 +1,108 @@
+info:
+  app:
+    version: 1.0.0
+    description: SimulaAWS - Modular Monolith Application
+    architecture: modular-monolith
+
+spring:
+  profiles:
+    active: dev
+
+  docker:
+    compose:
+      enabled: false
+
+  application:
+    name: simulaaws
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/simulaaws
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    web:
+      pageable:
+        default-page-size: 20
+        max-page-size: 100
+        one-indexed-parameters: false
+        page-parameter: page
+        size-parameter: size
+      sort:
+        sort-parameter: sort
+
+# Feign Client Configuration
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+server:
+  port: 8080
+
+# Client URLs for internal module communication via Feign
+# For MONOLITH MODE: Use http://localhost:8080 (all modules in same app)
+# For MICROSERVICES MODE: Use different ports as configured below
+clients:
+  auth:
+    url: http://localhost:8081
+  exam:
+    url: http://localhost:8082
+  attempt:
+    url: http://localhost:8083
+  stats:
+    url: http://localhost:8084
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui
+    operations-sorter: method
+  writer-with-order-by-keys: true
+
+# JWT Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:simulaaws-secret-key-change-this-in-production-min-256-bits-HS256-algorithm-requires-at-least-32-characters}
+    expiration: 86400000  # 24 hours in milliseconds
+
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: INFO
+    br.com.simulaaws: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: ERROR
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/simulaaws.log
+    max-size: 10MB
+    max-history: 30
+

@@ -1,0 +1,53 @@
+// Aplicação principal - orquestra todos os módulos
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+description = 'Main Spring Boot application'
+
+dependencies {
+    // Módulos internos
+    implementation project(':common')
+    implementation project(':auth')
+    implementation project(':exam')
+    implementation project(':attempt')
+    implementation project(':stats')
+    implementation project(':llm')
+    implementation project(':clients')
+
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // OpenAPI/Swagger Documentation
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
+
+    // Database
+    implementation 'org.springframework.boot:spring-boot-starter-flyway'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2'
+
+    // Observability
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-opentelemetry'
+
+    // Dev tools
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
+

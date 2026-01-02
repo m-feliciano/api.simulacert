@@ -1,0 +1,11 @@
+rootProject.name = 'simulaaws'
+
+include 'common'
+include 'auth'
+include 'exam'
+include 'attempt'
+include 'stats'
+include 'llm'
+include 'clients'
+include 'app'
+
