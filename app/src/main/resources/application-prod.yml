@@ -1,0 +1,92 @@
+spring:
+  application:
+    name: simulaaws-prod
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/simulaaws}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+server:
+  port: ${SERVER_PORT:8080}
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+  shutdown: graceful
+
+clients:
+  auth:
+    url: ${AUTH_SERVICE_URL:http://localhost:8080}
+  exam:
+    url: ${EXAM_SERVICE_URL:http://localhost:8080}
+  attempt:
+    url: ${ATTEMPT_SERVICE_URL:http://localhost:8080}
+  stats:
+    url: ${STATS_SERVICE_URL:http://localhost:8080}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION:3600000}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: false
+
+info:
+  app:
+    version: 1.0.0
+    description: SimulaAWS - Production Profile
+    architecture: modular-monolith
+    profile: prod
+
+logging:
+  level:
+    root: INFO
+    br.com.simulaaws: INFO
+    org.springframework.web: ERROR
+    org.hibernate.SQL: WARN
+  file:
+    name: /var/log/simulaaws/simulaaws.log
+

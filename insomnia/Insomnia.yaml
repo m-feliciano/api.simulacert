@@ -1,0 +1,1727 @@
+type: collection.insomnia.rest/5.0
+schema_version: '5.1'
+name: SimulaAWS – Population Practice Exam 23
+meta:
+  id: wrk_4ab7351756d74023ad7af823ada5c997
+  created: 1767364966290
+  modified: 1767364966290
+  description: ''
+collection:
+- url: '{{ base_url }}/api/v1/questions/exam/{{ _.examId }}'
+  name: Questions
+  meta:
+    id: req_84394b97472b4f998a9a3a9287e59ff7
+    created: 1767366435752
+    modified: 1767366653106
+    isPrivate: false
+    description: ''
+    sortKey: -1767366435752
+  method: GET
+  headers:
+  - name: User-Agent
+    value: insomnia/12.2.0
+    description: ''
+    disabled: false
+  - name: Authorization
+    value: Bearer {{ _.jwt }}
+    description: ''
+    disabled: false
+  settings:
+    renderRequestBody: true
+    encodeUrl: true
+    followRedirects: global
+    cookies:
+      send: true
+      store: true
+    rebuildPath: true
+- name: Questoes
+  meta:
+    id: fld_8219ca578c0e49c8b0b4a4359f851079
+    created: 1767364113996
+    modified: 1767364113996
+    sortKey: -1767364113996
+    description: ''
+  children:
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q2
+    meta:
+      id: req_16f8ec72db6c419187648344f2d3d04e
+      created: 1767364113997
+      modified: 1767364113997
+      isPrivate: false
+      description: ''
+      sortKey: -1767364113997
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais serviços podem ser usados para
+        implantar aplicações na AWS? (Escolha dois.)", "difficulty": "MEDIUM", "domain":
+        "AWS", "options": [{"key": "A", "text": "AWS Elastic Beanstalk", "isCorrect":
+        true}, {"key": "B", "text": "AWS Config", "isCorrect": false}, {"key": "C",
+        "text": "AWS OpsWorks", "isCorrect": true}, {"key": "D", "text": "AWS Application
+        Discovery Service", "isCorrect": false}, {"key": "E", "text": "Amazon Kinesis",
+        "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q1
+    meta:
+      id: req_df7087e7dc5d41febf4735081b1fb7b5
+      created: 1767364113997
+      modified: 1767366063330
+      isPrivate: false
+      description: ''
+      sortKey: -1767364113997
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId":"{{ examId }}","text":"Um usuário está planejando migrar uma
+        carga de trabalho para a Nuvem AWS. Qual controle passa a ser responsabilidade
+        da AWS após a migração?","difficulty":"MEDIUM","domain":"AWS","options":[{"key":"A","text":"Aplicar
+        patches no sistema operacional convidado","isCorrect":false},{"key":"B","text":"Manter
+        controles físicos e ambientais","isCorrect":true},{"key":"C","text":"Proteger
+        comunicações e manter a segurança da zona","isCorrect":false},{"key":"D","text":"Aplicar
+        patches em aplicações específicas","isCorrect":false}]}'
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ _.jwt }}
+      description: ''
+      disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q3
+    meta:
+      id: req_e891edba745045bbada55bf0f9892361
+      created: 1767364114001
+      modified: 1767364114001
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114001
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço da AWS pode ser usado
+        para fornecer um contact center sob demanda baseado em nuvem?", "difficulty":
+        "MEDIUM", "domain": "AWS", "options": [{"key": "A", "text": "AWS Direct Connect",
+        "isCorrect": false}, {"key": "B", "text": "Amazon Connect", "isCorrect": true},
+        {"key": "C", "text": "AWS Support Center", "isCorrect": false}, {"key": "D",
+        "text": "AWS Managed Services", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q4
+    meta:
+      id: req_389f0f21d7114c4eb671689270d233e8
+      created: 1767364114002
+      modified: 1767364114002
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114002
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual ferramenta permite que clientes
+        sem conta AWS estimem custos para quase todos os serviços AWS?", "difficulty":
+        "MEDIUM", "domain": "AWS", "options": [{"key": "A", "text": "Cost Explorer",
+        "isCorrect": false}, {"key": "B", "text": "TCO Calculator", "isCorrect": false},
+        {"key": "C", "text": "AWS Budgets", "isCorrect": false}, {"key": "D", "text":
+        "AWS Pricing Calculator", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q5
+    meta:
+      id: req_f013746fbe224850a05b58196d471dc0
+      created: 1767364114002
+      modified: 1767364114002
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114002
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual componente deve ser anexado
+        a uma VPC para permitir acesso de entrada pela Internet?", "difficulty": "MEDIUM",
+        "domain": "AWS", "options": [{"key": "A", "text": "NAT Gateway", "isCorrect":
+        false}, {"key": "B", "text": "VPC Endpoint", "isCorrect": false}, {"key":
+        "C", "text": "Conexão VPN", "isCorrect": false}, {"key": "D", "text": "Internet
+        Gateway", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q6
+    meta:
+      id: req_2deb0198de6646469d4f9c718eec067d
+      created: 1767364114003
+      modified: 1767364114003
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114003
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual modelo de preços gera maior
+        economia no EC2 para um servidor de banco de dados online por um ano?", "difficulty":
+        "MEDIUM", "domain": "AWS", "options": [{"key": "A", "text": "Instância Spot",
+        "isCorrect": false}, {"key": "B", "text": "Instância On-Demand", "isCorrect":
+        false}, {"key": "C", "text": "Instância Reservada com pagamento parcial",
+        "isCorrect": true}, {"key": "D", "text": "Instância Reservada sem pagamento
+        antecipado", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q7
+    meta:
+      id: req_06b6353498334a6e9809a9c60f1fb970
+      created: 1767364114004
+      modified: 1767364114004
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114004
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Uma empresa precisa aumentar a disponibilidade
+        de um banco MySQL em EC2. Qual ação atende o requisito?", "difficulty": "MEDIUM",
+        "domain": "AWS", "options": [{"key": "A", "text": "Adicionar ALB", "isCorrect":
+        false}, {"key": "B", "text": "Configurar Auto Recovery", "isCorrect": false},
+        {"key": "C", "text": "Migrar para Amazon RDS com Multi-AZ", "isCorrect": true},
+        {"key": "D", "text": "Habilitar termination protection", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q8
+    meta:
+      id: req_1caa1aee1ec64cbcb2bc203ddc2f47a7
+      created: 1767364114005
+      modified: 1767364114005
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114005
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Como configurar requisitos de complexidade
+        de senha para usuários do Console AWS?", "difficulty": "MEDIUM", "domain":
+        "AWS", "options": [{"key": "A", "text": "Política de usuário IAM", "isCorrect":
+        false}, {"key": "B", "text": "SCP do AWS Organizations", "isCorrect": false},
+        {"key": "C", "text": "Política de senha da conta IAM", "isCorrect": true},
+        {"key": "D", "text": "Insight do Security Hub", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q9
+    meta:
+      id: req_5cdaa05cb0a444269aac12f2f72af53f
+      created: 1767364114006
+      modified: 1767364114006
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114006
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "No modelo de responsabilidade compartilhada
+        da AWS, qual é responsabilidade do cliente?", "difficulty": "MEDIUM", "domain":
+        "AWS", "options": [{"key": "A", "text": "Patching de SO e aplicações", "isCorrect":
+        true}, {"key": "B", "text": "Correção da infraestrutura", "isCorrect": false},
+        {"key": "C", "text": "Controles físicos", "isCorrect": false}, {"key": "D",
+        "text": "Configuração de dispositivos AWS", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q11
+    meta:
+      id: req_0aec2e419a904be39470b06f475738df
+      created: 1767364114007
+      modified: 1767364114007
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114007
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço AWS permite mensageria
+        FIFO entre componentes?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "AWS Step Functions", "isCorrect": false}, {"key": "B",
+        "text": "Amazon SNS", "isCorrect": false}, {"key": "C", "text": "Amazon Kinesis",
+        "isCorrect": false}, {"key": "D", "text": "Amazon SQS", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q10
+    meta:
+      id: req_5ca72fc2c2374f0f88d50aa6f41543fa
+      created: 1767364114007
+      modified: 1767364114007
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114007
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "O que é necessário para implantar
+        uma carga compatível com PCI na AWS?", "difficulty": "MEDIUM", "domain": "AWS",
+        "options": [{"key": "A", "text": "Qualquer serviço com controles na app",
+        "isCorrect": false}, {"key": "B", "text": "Serviço PCI + ticket", "isCorrect":
+        false}, {"key": "C", "text": "Qualquer serviço + ticket", "isCorrect": false},
+        {"key": "D", "text": "Serviço PCI com controles na aplicação", "isCorrect":
+        true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q12
+    meta:
+      id: req_7ce080fd546940afa7e2ec6ee5717a17
+      created: 1767364114008
+      modified: 1767364114008
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114008
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Como obter faturamento consolidado
+        entre duas empresas na AWS?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Solicitação a SA", "isCorrect": false}, {"key": "B",
+        "text": "Caso no Support", "isCorrect": false}, {"key": "C", "text": "Convite
+        via AWS Organizations", "isCorrect": true}, {"key": "D", "text": "Migração
+        de recursos", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q14
+    meta:
+      id: req_bcd99144ebb246179dc7d64165d0015c
+      created: 1767364114009
+      modified: 1767364114009
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114009
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço permite implantar rapidamente
+        uma aplicação Node.js escalável?", "difficulty": "MEDIUM", "domain": "AWS",
+        "options": [{"key": "A", "text": "AWS CloudFormation", "isCorrect": false},
+        {"key": "B", "text": "AWS Elastic Beanstalk", "isCorrect": true}, {"key":
+        "C", "text": "Amazon EC2", "isCorrect": false}, {"key": "D", "text": "AWS
+        OpsWorks", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q13
+    meta:
+      id: req_dd79dbcf4b5b4eafab71ed204668e5fe
+      created: 1767364114009
+      modified: 1767364114009
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114009
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual ferramenta cria alertas de custo
+        quando limites são excedidos?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Cost Explorer", "isCorrect": false}, {"key": "B", "text":
+        "AWS Budgets", "isCorrect": true}, {"key": "C", "text": "Cost and Usage Report",
+        "isCorrect": false}, {"key": "D", "text": "AWS CloudTrail", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q15
+    meta:
+      id: req_5f7b6c0f242a4582ace4f11b31bc0fcc
+      created: 1767364114010
+      modified: 1767364114010
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114010
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual verificação do Trusted Advisor
+        está disponível para todos?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Core checks", "isCorrect": true}, {"key": "B", "text":
+        "Todas", "isCorrect": false}, {"key": "C", "text": "Cost optimization", "isCorrect":
+        false}, {"key": "D", "text": "Fault tolerance", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q16
+    meta:
+      id: req_680fb575022c499081aeb8f0fb17aed6
+      created: 1767364114011
+      modified: 1767364114011
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114011
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais serviços ajudam a proteger
+        contra DDoS? (Escolha dois.)", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "AWS Shield", "isCorrect": true}, {"key": "B", "text":
+        "AWS CloudTrail", "isCorrect": false}, {"key": "C", "text": "Amazon CloudFront",
+        "isCorrect": true}, {"key": "D", "text": "AWS Support Center", "isCorrect":
+        false}, {"key": "E", "text": "AWS Service Health Dashboard", "isCorrect":
+        false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q17
+    meta:
+      id: req_99140d1ecb824e1e9fcdfddafcb1e8c5
+      created: 1767364114011
+      modified: 1767364114011
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114011
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço fornece relatórios de
+        conformidade sob demanda?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "AWS Config", "isCorrect": false}, {"key": "B", "text":
+        "Amazon GuardDuty", "isCorrect": false}, {"key": "C", "text": "AWS Trusted
+        Advisor", "isCorrect": false}, {"key": "D", "text": "AWS Artifact", "isCorrect":
+        true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q19
+    meta:
+      id: req_1f14bcebb13b4f7e83e6530a7f1c4fc1
+      created: 1767364114012
+      modified: 1767364114012
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114012
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço registra, avalia e executa
+        remediação de mudanças de configuração?", "difficulty": "MEDIUM", "domain":
+        "AWS", "options": [{"key": "A", "text": "AWS Config", "isCorrect": true},
+        {"key": "B", "text": "AWS Secrets Manager", "isCorrect": false}, {"key": "C",
+        "text": "AWS CloudTrail", "isCorrect": false}, {"key": "D", "text": "AWS Trusted
+        Advisor", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q18
+    meta:
+      id: req_d8d2d63ba3b349e0b7b86c0365e18618
+      created: 1767364114012
+      modified: 1767364114012
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114012
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Como conceder acesso ao Amazon RDS
+        apenas via CLI/SDK seguindo menor privilégio? (Escolha dois.)", "difficulty":
+        "MEDIUM", "domain": "AWS", "options": [{"key": "A", "text": "Usuário IAM com
+        console", "isCorrect": false}, {"key": "B", "text": "Usuário IAM com acesso
+        programático", "isCorrect": true}, {"key": "C", "text": "Role IAM com console",
+        "isCorrect": false}, {"key": "D", "text": "Política admin", "isCorrect": false},
+        {"key": "E", "text": "Política específica RDS", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q20
+    meta:
+      id: req_7432aa3bfb004ad5972da9b6ced9d4ad
+      created: 1767364114014
+      modified: 1767364114014
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114014
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais vantagens existem ao usar EC2
+        em múltiplas AZs? (Escolha dois.)", "difficulty": "MEDIUM", "domain": "AWS",
+        "options": [{"key": "A", "text": "Evitar ponto único de falha", "isCorrect":
+        true}, {"key": "B", "text": "Reduzir custos", "isCorrect": false}, {"key":
+        "C", "text": "Baixa latência cross-region", "isCorrect": false}, {"key": "D",
+        "text": "Aumentar disponibilidade", "isCorrect": true}, {"key": "E", "text":
+        "Aumentar carga", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q21
+    meta:
+      id: req_01ef9015b09c43f2853d0c82e0d7a589
+      created: 1767364114015
+      modified: 1767364114015
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114015
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual modelo de preços minimiza custo
+        para workload estável de EC2?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Dedicated Hosts", "isCorrect": false}, {"key": "B",
+        "text": "On-Demand", "isCorrect": false}, {"key": "C", "text": "Spot", "isCorrect":
+        false}, {"key": "D", "text": "Reserved Instances", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q22
+    meta:
+      id: req_5e5b0286fef84c899268febdf8644577
+      created: 1767364114016
+      modified: 1767364114016
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114016
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual ferramenta identifica mudanças
+        programadas na infraestrutura AWS?", "difficulty": "MEDIUM", "domain": "AWS",
+        "options": [{"key": "A", "text": "AWS Personal Health Dashboard", "isCorrect":
+        true}, {"key": "B", "text": "AWS Trusted Advisor", "isCorrect": false}, {"key":
+        "C", "text": "Billing Dashboard", "isCorrect": false}, {"key": "D", "text":
+        "AWS Config", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q23
+    meta:
+      id: req_c0fe496334c0401fb8fcfb039c00b71c
+      created: 1767364114016
+      modified: 1767364114016
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114016
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual é responsabilidade do cliente
+        ao usar Amazon RDS?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Patching do SO", "isCorrect": false}, {"key": "B",
+        "text": "Controle de tráfego via SG", "isCorrect": true}, {"key": "C", "text":
+        "Backups PITR", "isCorrect": false}, {"key": "D", "text": "Substituição de
+        instâncias", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q24
+    meta:
+      id: req_6c84a390ccad4f2fbef54efa66966954
+      created: 1767364114017
+      modified: 1767364114017
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114017
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual é responsabilidade do cliente
+        ao usar AWS Lambda?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Configuração do SO", "isCorrect": false}, {"key": "B",
+        "text": "Gerenciamento da aplicação", "isCorrect": true}, {"key": "C", "text":
+        "Gerenciamento da plataforma", "isCorrect": false}, {"key": "D", "text": "Criptografia
+        do código", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q25
+    meta:
+      id: req_02d213d65d5a40f093bc25dc0cafb573
+      created: 1767364114018
+      modified: 1767364114018
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114018
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço notifica quando custos
+        ou uso excedem limites?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "AWS Budgets", "isCorrect": true}, {"key": "B", "text":
+        "Cost Explorer", "isCorrect": false}, {"key": "C", "text": "AWS CloudTrail",
+        "isCorrect": false}, {"key": "D", "text": "Amazon Macie", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q26
+    meta:
+      id: req_b544c4eaace241a1a6bec846cf2ab374
+      created: 1767364114018
+      modified: 1767364114018
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114018
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço hospeda banco NoSQL
+        na AWS?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A",
+        "text": "Amazon Aurora", "isCorrect": false}, {"key": "B", "text": "Amazon
+        DynamoDB", "isCorrect": true}, {"key": "C", "text": "Amazon RDS", "isCorrect":
+        false}, {"key": "D", "text": "Amazon Redshift", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q27
+    meta:
+      id: req_86ca9957c7c34198850eb2617c89ea94
+      created: 1767364114019
+      modified: 1767364114019
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114019
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço permite comprar capacidade
+        EC2 ociosa com desconto?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Reserved Instances", "isCorrect": false}, {"key": "B",
+        "text": "On-Demand", "isCorrect": false}, {"key": "C", "text": "Dedicated
+        Instances", "isCorrect": false}, {"key": "D", "text": "Spot Instances", "isCorrect":
+        true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q28
+    meta:
+      id: req_436df53c51964469b59cfad007d054c6
+      created: 1767364114020
+      modified: 1767364114020
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114020
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço requer ISP e colocation
+        facility?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A",
+        "text": "AWS VPN", "isCorrect": false}, {"key": "B", "text": "Amazon Connect",
+        "isCorrect": false}, {"key": "C", "text": "AWS Direct Connect", "isCorrect":
+        true}, {"key": "D", "text": "Internet Gateway", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q29
+    meta:
+      id: req_58f75c53b3d74449878e3c2510c2d391
+      created: 1767364114021
+      modified: 1767364114021
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114021
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais serviços oferecem capacidade
+        de computação? (Escolha dois.)", "difficulty": "MEDIUM", "domain": "AWS",
+        "options": [{"key": "A", "text": "Amazon EC2", "isCorrect": true}, {"key":
+        "B", "text": "Amazon S3", "isCorrect": false}, {"key": "C", "text": "Amazon
+        EBS", "isCorrect": false}, {"key": "D", "text": "Amazon Cognito", "isCorrect":
+        false}, {"key": "E", "text": "AWS Lambda", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q30
+    meta:
+      id: req_7a4c115d1bf94eac8d9cf6ed470b9a1d
+      created: 1767364114022
+      modified: 1767364114022
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114022
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço armazena código-fonte
+        privado?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A",
+        "text": "AWS CodeBuild", "isCorrect": false}, {"key": "B", "text": "AWS CodeCommit",
+        "isCorrect": true}, {"key": "C", "text": "AWS CodePipeline", "isCorrect":
+        false}, {"key": "D", "text": "AWS CodeStar", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q31
+    meta:
+      id: req_ff76843d45294d7d86aea4086c482838
+      created: 1767364114022
+      modified: 1767364114022
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114022
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço identifica vulnerabilidades
+        de segurança da conta?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "AWS Secrets Manager", "isCorrect": false}, {"key":
+        "B", "text": "Amazon Cognito", "isCorrect": false}, {"key": "C", "text": "Amazon
+        Macie", "isCorrect": false}, {"key": "D", "text": "AWS Trusted Advisor", "isCorrect":
+        true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q32
+    meta:
+      id: req_b991eb81b39d4723aff49640b549873f
+      created: 1767364114023
+      modified: 1767364114023
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114023
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual componente deve ser replicado
+        para tolerância a falhas?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Edge Locations", "isCorrect": false}, {"key": "B",
+        "text": "Availability Zones", "isCorrect": true}, {"key": "C", "text": "Regions",
+        "isCorrect": false}, {"key": "D", "text": "Amazon Route 53", "isCorrect":
+        false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q33
+    meta:
+      id: req_51e2f949d9064ddb9f303ec5524d337e
+      created: 1767364114024
+      modified: 1767364114024
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114024
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço envia mensagens de texto
+        e e-mail?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A",
+        "text": "Amazon SNS", "isCorrect": true}, {"key": "B", "text": "Amazon SES",
+        "isCorrect": false}, {"key": "C", "text": "CloudWatch Alerts", "isCorrect":
+        false}, {"key": "D", "text": "Amazon SQS", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q34
+    meta:
+      id: req_f8f80d5058464bf59a30dedcc780693a
+      created: 1767364114024
+      modified: 1767364114024
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114024
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais princípios aumentam confiabilidade?
+        (Escolha dois.)", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key":
+        "A", "text": "Arquitetura monolítica", "isCorrect": false}, {"key": "B", "text":
+        "Medir eficiência", "isCorrect": false}, {"key": "C", "text": "Testar recuperação",
+        "isCorrect": true}, {"key": "D", "text": "Modelo de consumo", "isCorrect":
+        false}, {"key": "E", "text": "Auto recuperação", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q35
+    meta:
+      id: req_09ee5ba7c01c484fa96aa753e1202b8c
+      created: 1767364114025
+      modified: 1767364114025
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114025
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais serviços permitem baixa latência
+        global? (Escolha dois.)", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Application Load Balancer", "isCorrect": false}, {"key":
+        "B", "text": "AWS Global Accelerator", "isCorrect": true}, {"key": "C", "text":
+        "AWS Direct Connect", "isCorrect": false}, {"key": "D", "text": "Amazon CloudFront",
+        "isCorrect": true}, {"key": "E", "text": "AWS Lambda", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q37
+    meta:
+      id: req_14397b42197e43f6b372997a1c8bd244
+      created: 1767364114026
+      modified: 1767364114026
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114026
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço fornece relatórios de
+        compliance sob demanda?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "AWS Secrets Manager", "isCorrect": false}, {"key":
+        "B", "text": "AWS Artifact", "isCorrect": true}, {"key": "C", "text": "AWS
+        Security Hub", "isCorrect": false}, {"key": "D", "text": "AWS Certificate
+        Manager", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q36
+    meta:
+      id: req_b270e3eb848c4e7ca99fd0f062671af4
+      created: 1767364114026
+      modified: 1767364114026
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114026
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual método cria conexão privada
+        de baixa latência?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key":
+        "A", "text": "VPN", "isCorrect": false}, {"key": "B", "text": "Internet pública",
+        "isCorrect": false}, {"key": "C", "text": "VPC Peering", "isCorrect": false},
+        {"key": "D", "text": "AWS Direct Connect", "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q39
+    meta:
+      id: req_2d2174e95245415eb78f8c0d613c49a2
+      created: 1767364114027
+      modified: 1767364114027
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114027
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Como implantar aplicação web para
+        alta disponibilidade?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Múltiplas instâncias em múltiplas AZs", "isCorrect":
+        true}, {"key": "B", "text": "Múltiplas instâncias em uma AZ", "isCorrect":
+        false}, {"key": "C", "text": "Instância única otimizada", "isCorrect": false},
+        {"key": "D", "text": "Instância única em ASG", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q38
+    meta:
+      id: req_de981329ad24495984480819d4841bea
+      created: 1767364114027
+      modified: 1767364114027
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114027
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço protege contra SQL Injection
+        e XSS?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A",
+        "text": "Amazon GuardDuty", "isCorrect": false}, {"key": "B", "text": "AWS
+        WAF", "isCorrect": true}, {"key": "C", "text": "AWS Trusted Advisor", "isCorrect":
+        false}, {"key": "D", "text": "Amazon Inspector", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q40
+    meta:
+      id: req_2d7c5ae5b5054b5983973b10120a603a
+      created: 1767364114028
+      modified: 1767364114028
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114028
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual opção maximiza economia por
+        3 anos para Oracle em EC2?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Dedicated Instances", "isCorrect": false}, {"key":
+        "B", "text": "Spot Instances", "isCorrect": false}, {"key": "C", "text": "Reserved
+        Instances", "isCorrect": true}, {"key": "D", "text": "On-Demand", "isCorrect":
+        false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q41
+    meta:
+      id: req_684de32bca544f6ea76b3c0f7bb31249
+      created: 1767364114029
+      modified: 1767364114029
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114029
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Forma mais simples de listar usuários
+        IAM e credenciais?", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key":
+        "A", "text": "Criar usuário auditor", "isCorrect": false}, {"key": "B", "text":
+        "Screenshots do console", "isCorrect": false}, {"key": "C", "text": "Relatório
+        de credenciais IAM", "isCorrect": true}, {"key": "D", "text": "Relatório Trusted
+        Advisor", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q42
+    meta:
+      id: req_f1d8dcdf2f3e4586b812eaad7b03e560
+      created: 1767364114030
+      modified: 1767364114030
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114030
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Quais benefícios do faturamento consolidado?
+        (Escolha dois.)", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key":
+        "A", "text": "Desconto por volume", "isCorrect": true}, {"key": "B", "text":
+        "Taxa adicional", "isCorrect": false}, {"key": "C", "text": "Fatura única",
+        "isCorrect": true}, {"key": "D", "text": "Parcelamento", "isCorrect": false},
+        {"key": "E", "text": "Orçamento customizado", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q43
+    meta:
+      id: req_9e0f9129f5c34fc491ebce48c55386c5
+      created: 1767364114031
+      modified: 1767364114031
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114031
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual tipo de instância usar para
+        pico temporário sem interrupção?", "difficulty": "MEDIUM", "domain": "AWS",
+        "options": [{"key": "A", "text": "On-Demand", "isCorrect": true}, {"key":
+        "B", "text": "Spot", "isCorrect": false}, {"key": "C", "text": "Reserved",
+        "isCorrect": false}, {"key": "D", "text": "Dedicated Hosts", "isCorrect":
+        false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q44
+    meta:
+      id: req_d4eed855e4ea46dc96fc9c579be86e1e
+      created: 1767364114031
+      modified: 1767364114031
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114031
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual recurso rastreia mudanças de
+        configuração para compliance?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Cost and Usage Report", "isCorrect": false}, {"key":
+        "B", "text": "SCP", "isCorrect": false}, {"key": "C", "text": "AWS Config
+        Rules", "isCorrect": true}, {"key": "D", "text": "VPC Flow Logs", "isCorrect":
+        false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q45
+    meta:
+      id: req_daa2c1c614734751b90aa3db422c6337
+      created: 1767364114032
+      modified: 1767364114032
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114032
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual abordagem entrega mídia globalmente
+        com baixa latência?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Amazon CloudFront", "isCorrect": true}, {"key": "B",
+        "text": "S3 cross-region", "isCorrect": false}, {"key": "C", "text": "VPN
+        multi-região", "isCorrect": false}, {"key": "D", "text": "AWS PrivateLink",
+        "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q46
+    meta:
+      id: req_33a7827137204429866b221df0b1d921
+      created: 1767364114033
+      modified: 1767364114033
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114033
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Boa prática IAM para menor privilégio
+        é:", "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A", "text":
+        "Política em grupos grandes", "isCorrect": false}, {"key": "B", "text": "Exigir
+        MFA", "isCorrect": false}, {"key": "C", "text": "Múltiplas senhas", "isCorrect":
+        false}, {"key": "D", "text": "Políticas apenas a quem precisa", "isCorrect":
+        true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q47
+    meta:
+      id: req_d641ea2d0676413c9083a0a98c6b1ea6
+      created: 1767364114033
+      modified: 1767364114033
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114033
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual benefício da nuvem representa
+        redução de custo por escala?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Pay-as-you-go", "isCorrect": false}, {"key": "B", "text":
+        "Alta disponibilidade", "isCorrect": false}, {"key": "C", "text": "Alcance
+        global", "isCorrect": false}, {"key": "D", "text": "Economias de escala",
+        "isCorrect": true}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q48
+    meta:
+      id: req_8e21973bc26843288e2422726123caf5
+      created: 1767364114034
+      modified: 1767364114034
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114034
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço simplifica interconexão
+        de milhares de VPCs?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "VPC Endpoint", "isCorrect": false}, {"key": "B", "text":
+        "AWS Direct Connect", "isCorrect": false}, {"key": "C", "text": "AWS Transit
+        Gateway", "isCorrect": true}, {"key": "D", "text": "VPC Peering", "isCorrect":
+        false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q49
+    meta:
+      id: req_b16168df9df64f81aeb106d8befb94d4
+      created: 1767364114034
+      modified: 1767364114034
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114034
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Como a AWS ajuda a controlar custos
+        com uso imprevisível?", "difficulty": "MEDIUM", "domain": "AWS", "options":
+        [{"key": "A", "text": "Reembolso", "isCorrect": false}, {"key": "B", "text":
+        "Escalonamento automático", "isCorrect": true}, {"key": "C", "text": "Uso
+        automático de Spot", "isCorrect": false}, {"key": "D", "text": "Previsão via
+        CloudWatch", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+  - url: '{{ base_url }}/api/v1/questions'
+    name: Q50
+    meta:
+      id: req_a22d077ec1ed4a039a2a25fe8b8f1d69
+      created: 1767364114035
+      modified: 1767366444518
+      isPrivate: false
+      description: ''
+      sortKey: -1767364114035
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"examId": "{{ examId }}", "text": "Qual serviço previne SQL Injection?",
+        "difficulty": "MEDIUM", "domain": "AWS", "options": [{"key": "A", "text":
+        "Security Groups", "isCorrect": false}, {"key": "B", "text": "Network ACLs",
+        "isCorrect": false}, {"key": "C", "text": "AWS WAF", "isCorrect": true}, {"key":
+        "D", "text": "IAM Policy", "isCorrect": false}]}'
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+- name: Preparacao
+  meta:
+    id: fld_2d9604d6beb5447a92cacac9da239cb6
+    created: 1767364295513
+    modified: 1767367488907
+    sortKey: -1767364295513
+    description: ''
+  children:
+  - url: '{{ base_url }}/api/v1/auth/register'
+    name: Register Admin
+    meta:
+      id: req_feebea1fa30f475db0f88257206db6bc
+      created: 1767364295514
+      modified: 1767365144888
+      isPrivate: false
+      description: ''
+      sortKey: -1767364295514
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{ "email": "marcelo@simulaaws.com", "name": "Administrator", "password":
+        "123456789"}'
+    headers:
+    - name: Content-Type
+      value: application/json
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: '{{ base_url }}/api/v1/auth/login'
+    name: Login Admin
+    meta:
+      id: req_1d9d8a25ac9a4194a370a55122b70d41
+      created: 1767364295516
+      modified: 1767365719140
+      isPrivate: false
+      description: ''
+      sortKey: -1767364295516
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{ "email": "marcelo@simulaaws.com", "password": "123456789"}'
+    headers:
+    - name: Content-Type
+      value: application/json
+    scripts:
+      afterResponse: "const json = insomnia.response.json();\n\nif (!json || !json.token)\
+        \ {\n  throw new Error(\"Token JWT não encontrado na resposta\");\n}\n\ninsomnia.environment.set(\"\
+        jwt\", json.token);\n\n\nif (json.user && json.user.id) {\n  insomnia.environment.set(\"\
+        adminUserId\", json.user.id);\n}\n"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: '{{ base_url }}/api/v1/auth/users/{{ adminUserId }}/activate'
+    name: Activate Admin
+    meta:
+      id: req_4ac022dac8c24cb39389d54b09aa21cf
+      created: 1767364295516
+      modified: 1767366555119
+      isPrivate: false
+      description: ''
+      sortKey: -1767364295516
+    method: PUT
+    headers:
+    - name: Authorization
+      value: Bearer {{ jwt }}
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: '{{ base_url }}/api/v1/exams'
+    name: Create Exam
+    meta:
+      id: req_7296923c67e9497e93eb45936d27c87b
+      created: 1767364295517
+      modified: 1767366402097
+      isPrivate: false
+      description: ''
+      sortKey: -1767364295517
+    method: POST
+    body:
+      mimeType: application/json
+      text: '{"title":"Practice Exam 23","description":"Simulado AWS – Practice Exam
+        23 (PT-BR)"}'
+    headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: Bearer {{ jwt }}
+    scripts:
+      afterResponse: "const location =\n  insomnia.response.headers.get(\"location\"\
+        ) ||\n  insomnia.response.headers.get(\"Location\");\n\nif (!location) {\n\
+        \  throw new Error(\"Header Location não encontrado na resposta\");\n}\n\n\
+        const match = location.match(/\\/api\\/v1\\/exams\\/([^/?]+)/);\n\nif (!match\
+        \ || !match[1]) {\n  throw new Error(\"Não foi possível extrair examId do\
+        \ header Location\");\n}\n\nconst examId = match[1];\n\ninsomnia.environment.set(\"\
+        examId\", examId);\n"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_068a8d05fb374a079143e8056992b483
+    created: 1767364115073
+    modified: 1767367488895
+environments:
+  name: Local ENV
+  meta:
+    id: env_d0dab6f0d69e4b89b528e73f26444ff0
+    created: 1767364113993
+    modified: 1767367488895
+    isPrivate: false
+  data:
+    base_url: http://localhost:8080
+    examId: 9deff2bd-c239-41a4-9fee-f004e36ae0f2
+    jwt: eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiQURNSU4iLCJ1c2VySWQiOiI0NzVmOGRjYy0xMDE1LTRlOWEtYWYyZS1jMzhkNDFiYzUzM2YiLCJlbWFpbCI6Im1hcmNlbG9Ac2ltdWxhYXdzLmNvbSIsInN1YiI6IjQ3NWY4ZGNjLTEwMTUtNGU5YS1hZjJlLWMzOGQ0MWJjNTMzZiIsImlhdCI6MTc2NzM2NzQ4NiwiZXhwIjoxNzY3NDUzODg2fQ.YYBKGdYdoUldYFaPMHY9D0qCcNoT8dod7OmG2AfARJK9eTD5i7TreEFnPkt127ncYkBRMybNMhjzXrrrLDAhBQ
+    adminUserId: 475f8dcc-1015-4e9a-af2e-c38d41bc533f
