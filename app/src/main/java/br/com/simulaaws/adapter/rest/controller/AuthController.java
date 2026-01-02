@@ -1,5 +1,6 @@
 package br.com.simulaaws.adapter.rest.controller;
 
+import br.com.simulaaws.adapter.rest.controller.openapi.AuthControllerOpenApi;
 import br.com.simulaaws.auth.application.dto.AuthResponse;
 import br.com.simulaaws.auth.application.dto.ChangePasswordRequest;
 import br.com.simulaaws.auth.application.dto.LoginRequest;
@@ -9,7 +10,6 @@ import br.com.simulaaws.auth.application.port.in.AuthUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,24 +19,32 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.UUID;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthControllerOpenApi {
 
     private final AuthUseCase authUseCase;
 
+    @Override
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Register request for email: {}", request.email());
 
-        AuthResponse response = authUseCase.register(request);
+        UserResponse response = authUseCase.register(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/users/{userId}")
+                .buildAndExpand(response.id())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @PostMapping("/login")
@@ -48,6 +56,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Override
     @GetMapping("/users/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId) {
         log.debug("Get user by id: {}", userId);
@@ -88,6 +97,7 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
     @PutMapping("/users/{userId}/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deactivateUser(@PathVariable UUID userId) {

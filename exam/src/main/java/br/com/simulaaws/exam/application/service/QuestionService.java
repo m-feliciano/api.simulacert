@@ -1,20 +1,27 @@
 package br.com.simulaaws.exam.application.service;
 
-import br.com.simulaaws.clients.exam.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.CreateQuestionRequest;
+import br.com.simulaaws.exam.application.dto.QuestionResponse;
 import br.com.simulaaws.exam.application.mapper.QuestionMapper;
 import br.com.simulaaws.exam.application.port.in.QuestionUseCase;
+import br.com.simulaaws.exam.application.port.out.ExamRepositoryPort;
 import br.com.simulaaws.exam.application.port.out.QuestionRepositoryPort;
+import br.com.simulaaws.exam.domain.Question;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuestionService implements QuestionUseCase {
 
     private final QuestionRepositoryPort questionRepository;
+    private final ExamRepositoryPort examRepository;
     private final QuestionMapper questionMapper;
 
     @Override
@@ -33,5 +40,30 @@ public class QuestionService implements QuestionUseCase {
     public long countQuestionsByExamId(UUID examId) {
         return questionRepository.countByExamId(examId);
     }
+
+    @Override
+    @Transactional
+    public QuestionResponse createQuestion(CreateQuestionRequest request) {
+        log.info("Creating question for exam: {}", request.examId());
+
+        if (!examRepository.existsById(request.examId())) {
+            log.warn("Exam not found: {}", request.examId());
+            throw new IllegalArgumentException("Exam not found: " + request.examId());
+        }
+
+        Question question = Question.create(
+                request.examId(),
+                request.text(),
+                request.domain(),
+                request.difficulty()
+        );
+
+        Question savedQuestion = questionRepository.save(question);
+
+        log.info("Question created with id: {}", savedQuestion.getId());
+
+        return questionMapper.toResponse(savedQuestion);
+    }
 }
+
 

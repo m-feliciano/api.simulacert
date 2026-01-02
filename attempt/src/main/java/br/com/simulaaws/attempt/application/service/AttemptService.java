@@ -1,14 +1,12 @@
 package br.com.simulaaws.attempt.application.service;
 
-import br.com.simulaaws.attempt.application.dto.AttemptResponse;
-import br.com.simulaaws.attempt.application.mapper.AttemptMapper;
+import br.com.simulaaws.attempt.application.dto.AttemptVo;
 import br.com.simulaaws.attempt.application.port.in.AttemptUseCase;
 import br.com.simulaaws.attempt.application.port.out.AttemptRepositoryPort;
 import br.com.simulaaws.attempt.domain.Attempt;
-import br.com.simulaaws.clients.exam.ExamClient;
-import br.com.simulaaws.clients.exam.QuestionClient;
-import br.com.simulaaws.clients.exam.dto.QuestionResponse;
 import br.com.simulaaws.common.ClockPort;
+import br.com.simulaaws.exam.application.port.out.ExamQueryPort;
+import br.com.simulaaws.exam.application.port.out.QuestionQueryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,84 +28,71 @@ public class AttemptService implements AttemptUseCase {
     private static final int MAX_QUESTION_COUNT = 65;
 
     private final AttemptRepositoryPort attemptRepository;
-    private final QuestionClient questionClient;
-    private final ExamClient examClient;
+    private final ExamQueryPort examQueryPort;
+    private final QuestionQueryPort questionQueryPort;
     private final ClockPort clock;
-    private final AttemptMapper attemptMapper;
 
     @Override
-    public AttemptResponse startAttempt(UUID userId, UUID examId, int questionCount) {
-        log.debug("Attempt starting");
-
-        log.debug("Validating input parameters");
+    public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount) {
         validateQuestionCount(questionCount);
         validateExamExists(examId);
 
-        log.debug("Checking for existing attempt for user {} on exam {}", userId, examId);
         var existingAttempt = attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, IN_PROGRESS);
-
         if (existingAttempt.isPresent()) {
-            log.debug("Attempt already exists, returning existing attempt: {}", existingAttempt.get().getId());
-            return attemptMapper.toResponse(existingAttempt.get());
+            return existingAttempt.get().toVo();
         }
-
-        log.debug("Creating new attempt for user {} on exam {}", userId, examId);
 
         long seed = new Random().nextLong();
         List<UUID> selectedQuestionIds = selectQuestions(examId, questionCount, seed);
-        Attempt attempt = Attempt.create(userId, examId, selectedQuestionIds, clock.now(), seed);
+
+        Attempt attempt = Attempt.create(
+                userId,
+                examId,
+                selectedQuestionIds,
+                clock.now(),
+                seed
+        );
+
         attemptRepository.save(attempt);
-
-        log.debug("New attempt created with id {}", attempt.getId());
-
-        return attemptMapper.toResponse(attempt);
+        return attempt.toVo();
     }
 
     @Override
-    public AttemptResponse finishAttempt(UUID attemptId, int score) {
+    public AttemptVo finishAttempt(UUID attemptId, int score) {
         Attempt attempt = attemptRepository.findById(attemptId)
-                .orElseThrow(() -> {
-                    log.warn("Attempt with id {} not found", attemptId);
-                    return new IllegalArgumentException("Attempt not found: " + attemptId);
-                });
-
-        log.debug("Finishing attempt with id {}", attemptId);
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
         attempt.finish(score, clock.now());
-
-        log.debug("Attempt with id {} finished with score {}", attemptId, score);
         attemptRepository.save(attempt);
 
-        return attemptMapper.toResponse(attempt);
+        return attempt.toVo();
     }
 
     @Override
-    public AttemptResponse getAttemptById(UUID attemptId) {
+    public AttemptVo getAttemptById(UUID attemptId) {
         return attemptRepository.findById(attemptId)
-                .map(attemptMapper::toResponse)
+                .map(Attempt::toVo)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
     }
 
     @Override
-    public List<AttemptResponse> getAttemptsByUser(UUID userId) {
-        log.debug("Getting all attempts for user {}", userId);
+    public List<AttemptVo> getAttemptsByUser(UUID userId) {
         return attemptRepository.findByUserIdOrderByStartedAtDesc(userId)
                 .stream()
-                .map(attemptMapper::toResponse)
+                .map(Attempt::toVo)
                 .toList();
     }
 
     private void validateQuestionCount(int questionCount) {
         if (questionCount < MIN_QUESTION_COUNT || questionCount > MAX_QUESTION_COUNT) {
             throw new IllegalArgumentException(
-                    String.format("questionCount must be between %d and %d",
-                            MIN_QUESTION_COUNT, MAX_QUESTION_COUNT)
+                    "questionCount must be between " + MIN_QUESTION_COUNT + " and " + MAX_QUESTION_COUNT
             );
         }
     }
 
     private void validateExamExists(UUID examId) {
-        if (!examClient.existsById(examId)) {
+        if (!examQueryPort.existsById(examId)) {
             throw new IllegalArgumentException("Exam not found: " + examId);
         }
     }
@@ -115,21 +100,16 @@ public class AttemptService implements AttemptUseCase {
     private List<UUID> selectQuestions(UUID examId, int questionCount, long seed) {
         log.debug("Selecting {} questions for exam {} with seed {}", questionCount, examId, seed);
 
-        var questionResponses = questionClient.findByExamId(examId);
-
-        if (questionResponses.size() < questionCount) {
-            String msg = String.format("Exam has only %d questions, cannot select %d", questionResponses.size(), questionCount);
-            throw new IllegalStateException(msg);
+        var questionIds = questionQueryPort.findQuestionIdsByExamId(examId);
+        if (questionIds.size() < questionCount) {
+            throw new IllegalStateException("Exam has only " + questionIds.size() + " questions");
         }
 
-        log.debug("Total questions available for exam {}: {}", examId, questionResponses.size());
-
-        var shuffled = new ArrayList<>(questionResponses);
+        var shuffled = new ArrayList<>(questionIds);
         Collections.shuffle(shuffled, new Random(seed));
 
         return shuffled.stream()
                 .limit(questionCount)
-                .map(QuestionResponse::id)
                 .toList();
     }
 }

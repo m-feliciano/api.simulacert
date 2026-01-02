@@ -1,7 +1,7 @@
 package br.com.simulaaws.exam.application.port.in;
 
-import br.com.simulaaws.clients.exam.dto.ExamResponse;
 import br.com.simulaaws.exam.application.dto.CreateExamRequest;
+import br.com.simulaaws.exam.application.dto.ExamResponse;
 import br.com.simulaaws.exam.application.dto.UpdateExamRequest;
 
 import java.util.List;

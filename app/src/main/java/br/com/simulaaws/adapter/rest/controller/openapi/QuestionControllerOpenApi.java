@@ -1,6 +1,7 @@
 package br.com.simulaaws.adapter.rest.controller.openapi;
 
-import br.com.simulaaws.clients.exam.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.CreateQuestionRequest;
+import br.com.simulaaws.exam.application.dto.QuestionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,8 +10,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.UUID;
@@ -62,5 +65,24 @@ public interface QuestionControllerOpenApi {
             @Parameter(description = "Exam ID", required = true)
             @PathVariable UUID examId
     );
+
+    @Operation(
+            summary = "Create a new question",
+            description = "Creates a new question for an exam")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Question created successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid request data"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Not authenticated"
+            )
+    })
+    ResponseEntity<Void> createQuestion(@Valid @RequestBody CreateQuestionRequest request);
 }
 

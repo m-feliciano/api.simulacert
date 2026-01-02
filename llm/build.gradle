@@ -1,16 +1,13 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
-apply plugin: 'io.spring.dependency-management'
-
-description = 'LLM integration for learning assistance'
-
-dependencyManagement {
-    imports {
-        mavenBom SpringBootPlugin.BOM_COORDINATES
-    }
+plugins {
+    id 'java-library'
 }
+
+description = 'LLM module - integration for learning assistance'
 
 dependencies {
-    implementation project(':common')
+    api project(':common')
 }
 
+jar {
+    enabled = true
+}

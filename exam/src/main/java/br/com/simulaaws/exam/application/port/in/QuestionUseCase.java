@@ -1,6 +1,7 @@
 package br.com.simulaaws.exam.application.port.in;
 
-import br.com.simulaaws.clients.exam.dto.QuestionResponse;
+import br.com.simulaaws.exam.application.dto.CreateQuestionRequest;
+import br.com.simulaaws.exam.application.dto.QuestionResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,5 +13,6 @@ public interface QuestionUseCase {
     QuestionResponse getQuestionById(UUID questionId);
 
     long countQuestionsByExamId(UUID examId);
-}
 
+    QuestionResponse createQuestion(CreateQuestionRequest request);
+}

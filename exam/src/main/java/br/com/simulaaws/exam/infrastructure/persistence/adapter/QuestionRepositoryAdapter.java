@@ -29,4 +29,14 @@ public class QuestionRepositoryAdapter implements QuestionRepositoryPort {
     public long countByExamId(UUID examId) {
         return repository.countByExamId(examId);
     }
+
+    @Override
+    public List<UUID> findIdsByExamId(UUID examId) {
+        return repository.findIdsByExamId(examId);
+    }
+
+    @Override
+    public Question save(Question question) {
+        return repository.save(question);
+    }
 }

@@ -10,39 +10,18 @@ import java.util.UUID;
 
 public interface AuthUseCase {
 
-    /**
-     * Register a new user
-     */
-    AuthResponse register(RegisterRequest request);
+    UserResponse register(RegisterRequest request);
 
-    /**
-     * Authenticate user and generate JWT token
-     */
     AuthResponse login(LoginRequest request);
 
-    /**
-     * Get user by ID
-     */
     UserResponse getUserById(UUID userId);
 
-    /**
-     * Get user by email
-     */
     UserResponse getUserByEmail(String email);
 
-    /**
-     * Change user password
-     */
     void changePassword(UUID userId, ChangePasswordRequest request);
 
-    /**
-     * Deactivate user account
-     */
     void deactivateUser(UUID userId);
 
-    /**
-     * Activate user account
-     */
     void activateUser(UUID userId);
 }
 

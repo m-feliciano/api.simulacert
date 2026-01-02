@@ -1,40 +1,14 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-description = 'Attempt and Answer management'
-
-dependencyManagement {
-    imports {
-        mavenBom SpringBootPlugin.BOM_COORDINATES
-    }
+plugins {
+    id 'java-library'
 }
 
 dependencies {
-    implementation project(':common')
-    implementation project(':auth')
+    api project(':common')
     implementation project(':exam')
-    implementation project(':clients')
 
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-tx'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // OpenAPI/Swagger
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
-
-    // Database
-    runtimeOnly 'org.postgresql:postgresql'
-}
-
-// Enable executable JAR for microservice deployment
-bootJar {
-    enabled = true
-    mainClass = 'br.com.simulaaws.attempt.AttemptServiceApplication'
-}
-
-jar {
-    enabled = false
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

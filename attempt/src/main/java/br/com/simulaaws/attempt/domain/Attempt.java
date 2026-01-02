@@ -1,5 +1,6 @@
 package br.com.simulaaws.attempt.domain;
 
+import br.com.simulaaws.attempt.application.dto.AttemptVo;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -18,7 +19,6 @@ import org.springframework.data.annotation.Version;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -100,11 +100,16 @@ public class Attempt {
         this.finishedAt = finishedAt;
     }
 
-    public boolean isInProgress() {
-        return status == AttemptStatus.IN_PROGRESS;
-    }
-
-    public List<UUID> getQuestionIds() {
-        return Collections.unmodifiableList(questionIds);
+    public AttemptVo toVo() {
+        return AttemptVo.builder()
+                .id(id)
+                .userId(userId)
+                .examId(examId)
+                .status(String.valueOf(status))
+                .startedAt(startedAt)
+                .finishedAt(finishedAt)
+                .score(score)
+                .questionIds(new ArrayList<>(questionIds))
+                .build();
     }
 }

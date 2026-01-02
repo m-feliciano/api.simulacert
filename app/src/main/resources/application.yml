@@ -78,12 +78,6 @@ springdoc:
     operations-sorter: method
   writer-with-order-by-keys: true
 
-# JWT Configuration
-app:
-  jwt:
-    secret: ${JWT_SECRET:simulaaws-secret-key-change-this-in-production-min-256-bits-HS256-algorithm-requires-at-least-32-characters}
-    expiration: 86400000  # 24 hours in milliseconds
-
 management:
   endpoint:
     health:

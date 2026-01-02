@@ -1,11 +1,12 @@
 package br.com.simulaaws.exam.application.service;
 
-import br.com.simulaaws.clients.exam.dto.ExamResponse;
 import br.com.simulaaws.exam.application.dto.CreateExamRequest;
+import br.com.simulaaws.exam.application.dto.ExamResponse;
 import br.com.simulaaws.exam.application.dto.UpdateExamRequest;
 import br.com.simulaaws.exam.application.mapper.ExamMapper;
 import br.com.simulaaws.exam.application.port.in.ExamUseCase;
 import br.com.simulaaws.exam.application.port.out.ExamRepositoryPort;
+import br.com.simulaaws.exam.application.port.out.QuestionRepositoryPort;
 import br.com.simulaaws.exam.domain.Exam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class ExamService implements ExamUseCase {
 
     private final ExamRepositoryPort examRepository;
+    private final QuestionRepositoryPort questionRepository;
     private final ExamMapper examMapper;
 
     @Override
@@ -89,4 +91,9 @@ public class ExamService implements ExamUseCase {
 
         log.info("Exam deleted: {}", examId);
     }
+
+    public boolean hasMinimumQuestions(UUID examId) {
+        return questionRepository.countByExamId(examId) >= 10;
+    }
 }
+

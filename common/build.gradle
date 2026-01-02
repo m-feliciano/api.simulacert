@@ -1,15 +1,9 @@
-apply plugin: 'io.spring.dependency-management'
-
-description = 'Common types and utilities'
-
-dependencyManagement {
-    imports {
-        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
-    }
+plugins {
+    id 'java-library'
 }
+
+description = 'Common module'
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework:spring-context'
 }
-
-

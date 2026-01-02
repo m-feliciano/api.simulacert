@@ -61,6 +61,27 @@ public interface AuthControllerOpenApi {
     ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request);
 
     @Operation(
+            summary = "Get user by ID",
+            description = "Retrieves user information by user ID",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User found",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found"
+            )
+    })
+    ResponseEntity<UserResponse> getUserById(
+            @Parameter(description = "User ID", required = true)
+            @PathVariable UUID userId
+    );
+
+    @Operation(
             summary = "Get user by email",
             description = "Retrieves user information by email address. Admin only.",
             security = @SecurityRequirement(name = "bearerAuth")

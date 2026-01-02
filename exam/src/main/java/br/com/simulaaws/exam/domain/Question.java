@@ -5,14 +5,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "questions")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Question {
@@ -31,4 +34,20 @@ public class Question {
 
     @Column(nullable = false, length = 50)
     private String difficulty;
+
+    public static Question create(UUID examId, String text, String domain, String difficulty) {
+        Objects.requireNonNull(examId, "examId cannot be null");
+        Objects.requireNonNull(text, "text cannot be null");
+        Objects.requireNonNull(domain, "domain cannot be null");
+        Objects.requireNonNull(difficulty, "difficulty cannot be null");
+
+        return Question.builder()
+                .id(UUID.randomUUID())
+                .examId(examId)
+                .text(text.trim())
+                .domain(domain.trim())
+                .difficulty(difficulty.trim())
+                .build();
+    }
 }
+

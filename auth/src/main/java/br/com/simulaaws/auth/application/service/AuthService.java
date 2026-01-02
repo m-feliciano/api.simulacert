@@ -33,19 +33,16 @@ public class AuthService implements AuthUseCase {
 
     @Override
     @Transactional
-    public AuthResponse register(@Valid RegisterRequest request) {
+    public UserResponse register(@Valid RegisterRequest request) {
         log.info("Registering new user with email: {}", request.email());
 
-        // Check if email already exists
         if (userRepository.existsByEmail(request.email())) {
             log.warn("Email already exists: {}", request.email());
             throw new IllegalArgumentException("Email already registered");
         }
 
-        // Encode password
         String passwordHash = passwordEncoder.encode(request.password());
 
-        // Create user
         User user = User.create(
                 request.email(),
                 request.name(),
@@ -53,36 +50,27 @@ public class AuthService implements AuthUseCase {
                 clock.now()
         );
 
-        // Save user
         user = userRepository.save(user);
         log.info("User registered successfully with id: {}", user.getId());
 
-        // Generate token
-        String token = tokenProvider.generateToken(user);
-
-        // Return response
-        UserResponse userResponse = userMapper.toResponse(user);
-        return AuthResponse.of(token, userResponse);
+        return userMapper.toResponse(user);
     }
 
     @Override
     public AuthResponse login(LoginRequest request) {
         log.info("Login attempt for email: {}", request.email());
 
-        // Find user by email
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> {
                     log.warn("User not found with email: {}", request.email());
                     return new IllegalArgumentException("Invalid email or password");
                 });
 
-        // Check if user is active
         if (!user.isActive()) {
             log.warn("User account is deactivated: {}", request.email());
             throw new IllegalArgumentException("Account is deactivated");
         }
 
-        // Verify password
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             log.warn("Invalid password for email: {}", request.email());
             throw new IllegalArgumentException("Invalid email or password");
@@ -90,10 +78,8 @@ public class AuthService implements AuthUseCase {
 
         log.info("User logged in successfully: {}", user.getId());
 
-        // Generate token
         String token = tokenProvider.generateToken(user);
 
-        // Return response
         UserResponse userResponse = userMapper.toResponse(user);
         return AuthResponse.of(token, userResponse);
     }

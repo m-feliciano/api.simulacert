@@ -13,6 +13,8 @@ public interface QuestionRepository extends JpaRepository<Question, UUID> {
     List<Question> findByExamId(UUID examId);
 
     long countByExamId(UUID examId);
+
+    List<UUID> findIdsByExamId(UUID examId);
 }
 
 

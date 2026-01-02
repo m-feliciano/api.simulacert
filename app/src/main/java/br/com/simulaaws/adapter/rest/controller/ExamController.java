@@ -1,13 +1,13 @@
 package br.com.simulaaws.adapter.rest.controller;
 
-import br.com.simulaaws.clients.exam.dto.ExamResponse;
+import br.com.simulaaws.adapter.rest.controller.openapi.ExamControllerOpenApi;
 import br.com.simulaaws.exam.application.dto.CreateExamRequest;
+import br.com.simulaaws.exam.application.dto.ExamResponse;
 import br.com.simulaaws.exam.application.dto.UpdateExamRequest;
 import br.com.simulaaws.exam.application.port.in.ExamUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,10 +28,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/exams")
 @RequiredArgsConstructor
-public class ExamController {
+public class ExamController implements ExamControllerOpenApi {
 
     private final ExamUseCase examUseCase;
 
+    @Override
     @GetMapping
     public ResponseEntity<List<ExamResponse>> getAllExams() {
         log.debug("Getting all exams");
@@ -64,15 +67,22 @@ public class ExamController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ExamResponse> createExam(@Valid @RequestBody CreateExamRequest request) {
+    public ResponseEntity<Void> createExam(@Valid @RequestBody CreateExamRequest request) {
         log.info("Creating exam with title: {}", request.title());
 
         ExamResponse response = examUseCase.createExam(request);
 
         log.info("Exam created with id: {}", response.id());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.id())
+                .toUri();
+
+        return ResponseEntity.created(uri).build();
     }
 
+    @Override
     @PutMapping("/{examId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ExamResponse> updateExam(
@@ -90,6 +100,7 @@ public class ExamController {
         }
     }
 
+    @Override
     @DeleteMapping("/{examId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteExam(@PathVariable UUID examId) {
@@ -105,4 +116,6 @@ public class ExamController {
         }
     }
 }
+
+
 

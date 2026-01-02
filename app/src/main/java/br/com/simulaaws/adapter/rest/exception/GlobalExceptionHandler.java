@@ -1,10 +1,8 @@
 package br.com.simulaaws.adapter.rest.exception;
 
-import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -57,7 +55,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             HttpClientErrorException.BadRequest.class,
-            FeignException.BadRequest.class
     })
     public ApiErrorResponse handleIllegalStateException(IllegalStateException ex, HttpServletRequest request) {
         log.error("Illegal state exception caught: ", ex);
@@ -85,26 +82,6 @@ public class GlobalExceptionHandler {
                 Instant.now(),
                 request.getRequestURI()
         );
-    }
-
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity<ApiErrorResponse> handleFeignException(
-            FeignException ex,
-            HttpServletRequest request
-    ) {
-        log.error("Feign exception caught: ", ex);
-
-        HttpStatus status = HttpStatus.resolve(ex.status());
-        if (status == null) status = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        ApiErrorResponse response = new ApiErrorResponse(
-                status.name(),
-                "An error occurred while communicating with an external service",
-                Instant.now(),
-                request.getRequestURI()
-        );
-
-        return new ResponseEntity<>(response, status);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

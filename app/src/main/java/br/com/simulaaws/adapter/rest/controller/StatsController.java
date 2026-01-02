@@ -1,5 +1,6 @@
 package br.com.simulaaws.adapter.rest.controller;
 
+import br.com.simulaaws.adapter.rest.controller.openapi.StatsControllerOpenApi;
 import br.com.simulaaws.stats.application.dto.AttemptHistoryItemDto;
 import br.com.simulaaws.stats.application.dto.AwsDomainStatsDto;
 import br.com.simulaaws.stats.application.dto.UserStatsDto;
@@ -20,10 +21,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/stats")
 @RequiredArgsConstructor
-public class StatsController {
+public class StatsController implements StatsControllerOpenApi {
 
     private final StatsUseCase statsUseCase;
 
+    @Override
     @GetMapping("/user/{userId}")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<UserStatsDto> getUserStatistics(@PathVariable UUID userId) {
@@ -44,6 +46,7 @@ public class StatsController {
         return ResponseEntity.ok(history);
     }
 
+    @Override
     @GetMapping("/user/{userId}/domains")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<List<AwsDomainStatsDto>> getPerformanceByDomain(@PathVariable UUID userId) {

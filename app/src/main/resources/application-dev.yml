@@ -44,7 +44,7 @@ clients:
 
 app:
   jwt:
-    secret: dev-secret-key-simulaaws-development-only-not-for-production
+    secret: dev-secret-key-simulaaws-development-only-not-for-production-64-bytes-minimum-878xxxxx
     expiration: 86400000
 
 management:
