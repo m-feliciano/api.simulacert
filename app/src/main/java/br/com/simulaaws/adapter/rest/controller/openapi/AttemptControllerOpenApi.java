@@ -46,7 +46,7 @@ public interface AttemptControllerOpenApi {
                     description = "Exam not found"
             )
     })
-    ResponseEntity<Void> startAttempt(@RequestBody StartAttemptRequest request);
+    ResponseEntity<AttemptResponse> startAttempt(@RequestBody StartAttemptRequest request);
 
     @Operation(
             summary = "Finish exam attempt",

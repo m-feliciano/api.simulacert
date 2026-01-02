@@ -8,7 +8,8 @@ public record AttemptQuestionResponse(
         String text,
         String domain,
         String difficulty,
-        List<QuestionOption> options
+        List<QuestionOption> options,
+        String selectedOption
 ) {
 }
 

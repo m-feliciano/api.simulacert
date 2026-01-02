@@ -17,7 +17,7 @@ public class QuestionOptionQueryAdapter implements QuestionOptionQueryPort {
     @Override
     public List<QuestionOptionDto> findByQuestionId(UUID questionId) {
         return repository.findByQuestionId(questionId).stream()
-                .map(qo -> new QuestionOptionDto(qo.getOptionKey(), qo.getOptionText()))
+                .map(qo -> new QuestionOptionDto(qo.getOptionKey(), qo.getOptionText(), qo.getIsCorrect()))
                 .toList();
     }
 }

@@ -7,5 +7,5 @@ public interface QuestionOptionQueryPort {
 
     List<QuestionOptionDto> findByQuestionId(UUID questionId);
 
-    record QuestionOptionDto(String key, String text) {}
+    record QuestionOptionDto(String key, String text, Boolean isCorrect) {}
 }

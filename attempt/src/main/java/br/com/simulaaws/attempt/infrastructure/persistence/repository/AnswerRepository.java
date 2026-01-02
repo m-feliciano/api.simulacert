@@ -23,13 +23,20 @@ public interface AnswerRepository extends JpaRepository<Answer, UUID> {
             WHERE is_correct = true
             GROUP BY question_id
         ),
-        user_answers AS (
-            SELECT 
+        user_answers_expanded AS (
+            SELECT
                 a.question_id,
-                STRING_AGG(UPPER(TRIM(unnest(string_to_array(a.selected_option, ',')))), ',' ORDER BY UPPER(TRIM(unnest(string_to_array(a.selected_option, ','))))) AS user_keys
+                UPPER(TRIM(unnested.option_key)) AS option_key
             FROM answers a
+            CROSS JOIN LATERAL unnest(string_to_array(a.selected_option, ',')) AS unnested(option_key)
             WHERE a.attempt_id = :attemptId
-            GROUP BY a.question_id
+        ),
+        user_answers AS (
+            SELECT
+                question_id,
+                STRING_AGG(option_key, ',' ORDER BY option_key) AS user_keys
+            FROM user_answers_expanded
+            GROUP BY question_id
         )
         SELECT COUNT(*)
         FROM user_answers ua

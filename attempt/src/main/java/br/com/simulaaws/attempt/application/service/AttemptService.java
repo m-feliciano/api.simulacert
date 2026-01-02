@@ -7,6 +7,7 @@ import br.com.simulaaws.attempt.application.port.in.AttemptUseCase;
 import br.com.simulaaws.attempt.application.port.out.AnswerRepositoryPort;
 import br.com.simulaaws.attempt.application.port.out.AttemptQueryPort;
 import br.com.simulaaws.attempt.application.port.out.AttemptRepositoryPort;
+import br.com.simulaaws.attempt.domain.Answer;
 import br.com.simulaaws.attempt.domain.Attempt;
 import br.com.simulaaws.common.ClockPort;
 import br.com.simulaaws.exam.application.port.out.ExamQueryPort;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static br.com.simulaaws.attempt.domain.AttemptStatus.IN_PROGRESS;
 
@@ -111,6 +113,13 @@ public class AttemptService implements AttemptUseCase {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
+        var answers = answerRepository.findByAttemptId(attemptId);
+        var answerMap = answers.stream()
+                .collect(Collectors.toMap(
+                        Answer::getQuestionId,
+                        Answer::getSelectedOption
+                ));
+
         return attempt.getQuestionIds()
                 .stream()
                 .map(questionId -> {
@@ -121,15 +130,18 @@ public class AttemptService implements AttemptUseCase {
 
                     var questionOptions = questionOptionQueryPort.findByQuestionId(questionId);
                     var options = questionOptions.stream()
-                            .map(qo -> new QuestionOption(qo.key(), qo.text()))
+                            .map(qo -> new QuestionOption(qo.key(), qo.text(), qo.isCorrect()))
                             .toList();
+
+                    String selectedOption = answerMap.get(questionId);
 
                     return new AttemptQuestionResponse(
                             question.getId(),
                             question.getText(),
                             question.getDomain(),
                             question.getDifficulty(),
-                            options
+                            options,
+                            selectedOption
                     );
                 })
                 .toList();

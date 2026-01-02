@@ -48,7 +48,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
 
     private UserStatsRow executeUserStatsQuery(UUID userId) {
         String sql = """
-                SELECT 
+                SELECT
                     ? as user_id,
                     COUNT(a.id) as total_attempts,
                     COUNT(CASE WHEN a.status = 'COMPLETED' THEN 1 END) as completed_attempts,
@@ -64,7 +64,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
 
     private List<AttemptHistoryRow> executeAttemptHistoryQuery(UUID userId) {
         String sql = """
-                SELECT 
+                SELECT
                     a.id,
                     a.exam_id,
                     e.title as exam_title,
@@ -83,20 +83,54 @@ public class StatsQueryAdapter implements StatsQueryPort {
 
     private List<AwsDomainStatsRow> executeAwsDomainStatsQuery(UUID userId) {
         String sql = """
-                SELECT 
+                WITH correct_options AS (
+                    SELECT question_id, STRING_AGG(option_key, ',' ORDER BY option_key) AS correct_keys
+                    FROM question_options
+                    WHERE is_correct = true
+                    GROUP BY question_id
+                ),
+                user_answers_expanded AS (
+                    SELECT
+                        a.attempt_id,
+                        a.question_id,
+                        UPPER(TRIM(unnested.option_key)) AS option_key
+                    FROM answers a
+                    JOIN attempts att ON att.id = a.attempt_id
+                    CROSS JOIN LATERAL unnest(string_to_array(a.selected_option, ',')) AS unnested(option_key)
+                    WHERE att.user_id = ?
+                ),
+                user_answers AS (
+                    SELECT
+                        question_id,
+                        STRING_AGG(option_key, ',' ORDER BY option_key) AS user_keys
+                    FROM user_answers_expanded
+                    GROUP BY question_id
+                ),
+                correct_by_question AS (
+                    SELECT ua.question_id
+                    FROM user_answers ua
+                    JOIN correct_options co ON ua.question_id = co.question_id
+                    WHERE ua.user_keys = co.correct_keys
+                )
+                SELECT
                     q.domain,
                     COUNT(DISTINCT aq.question_id) as total_questions,
-                    0 as correct_answers,
-                    0.0 as accuracy_rate
+                    COUNT(DISTINCT cbq.question_id) as correct_answers,
+                    CASE 
+                        WHEN COUNT(DISTINCT aq.question_id) > 0 
+                        THEN ROUND((COUNT(DISTINCT cbq.question_id)::NUMERIC / COUNT(DISTINCT aq.question_id)::NUMERIC) * 100, 2)
+                        ELSE 0.0 
+                    END as accuracy_rate
                 FROM attempts a
                 JOIN attempt_questions aq ON aq.attempt_id = a.id
                 JOIN questions q ON q.id = aq.question_id
+                LEFT JOIN correct_by_question cbq ON cbq.question_id = aq.question_id
                 WHERE a.user_id = ?
                 GROUP BY q.domain
                 ORDER BY q.domain
                 """;
 
-        return jdbcTemplate.query(sql, this::mapAwsDomainStatsRow, userId);
+        return jdbcTemplate.query(sql, this::mapAwsDomainStatsRow, userId, userId);
     }
 
     private UserStatsRow mapUserStatsRow(ResultSet rs, int rowNum) throws SQLException {
