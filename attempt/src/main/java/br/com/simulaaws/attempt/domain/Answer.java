@@ -1,5 +1,6 @@
 package br.com.simulaaws.attempt.domain;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -47,7 +48,7 @@ public class Answer {
         }
 
         return Answer.builder()
-                .id(UUID.randomUUID())
+                .id(UuidCreator.getTimeOrdered())
                 .attemptId(attemptId)
                 .questionId(questionId)
                 .selectedOption(selectedOption.trim())

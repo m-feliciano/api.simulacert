@@ -7,6 +7,10 @@ import br.com.simulaaws.exam.application.port.in.QuestionUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -45,10 +48,14 @@ public class QuestionController implements QuestionControllerOpenApi {
 
     @Override
     @GetMapping("/exam/{examId}")
-    public ResponseEntity<List<QuestionResponse>> getQuestionsByExam(@PathVariable UUID examId) {
-        log.debug("Getting questions for exam {}", examId);
+    public ResponseEntity<Page<QuestionResponse>> getQuestionsByExam(
+            @PathVariable UUID examId,
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable) {
+        log.debug("Getting paginated questions for exam {} with page: {}, size: {}",
+                examId, pageable.getPageNumber(), pageable.getPageSize());
 
-        List<QuestionResponse> questions = questionUseCase.getQuestionsByExamId(examId);
+        Page<QuestionResponse> questions = questionUseCase.getQuestionsByExamIdPaginated(examId, pageable);
 
         return ResponseEntity.ok(questions);
     }
@@ -69,5 +76,3 @@ public class QuestionController implements QuestionControllerOpenApi {
         return ResponseEntity.created(location).build();
     }
 }
-
-

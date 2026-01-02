@@ -4,6 +4,8 @@ import br.com.simulaaws.exam.application.port.out.QuestionRepositoryPort;
 import br.com.simulaaws.exam.domain.Question;
 import br.com.simulaaws.exam.infrastructure.persistence.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +20,11 @@ public class QuestionRepositoryAdapter implements QuestionRepositoryPort {
     @Override
     public List<Question> findByExamId(UUID examId) {
         return repository.findByExamId(examId);
+    }
+
+    @Override
+    public Page<Question> findByExamIdPaginated(UUID examId, Pageable pageable) {
+        return repository.findByExamId(examId, pageable);
     }
 
     @Override

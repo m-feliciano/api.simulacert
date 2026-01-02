@@ -11,6 +11,8 @@ import br.com.simulaaws.exam.domain.QuestionOption;
 import br.com.simulaaws.exam.infrastructure.persistence.repository.QuestionOptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,13 @@ public class QuestionService implements QuestionUseCase {
     public List<QuestionResponse> getQuestionsByExamId(UUID examId) {
         var questions = questionRepository.findByExamId(examId);
         return questionMapper.toResponseList(questions);
+    }
+
+    @Override
+    public Page<QuestionResponse> getQuestionsByExamIdPaginated(UUID examId, Pageable pageable) {
+        log.debug("Getting paginated questions for exam {} with pageable: {}", examId, pageable);
+        Page<Question> questionsPage = questionRepository.findByExamIdPaginated(examId, pageable);
+        return questionsPage.map(questionMapper::toResponse);
     }
 
     @Override
@@ -79,5 +88,3 @@ public class QuestionService implements QuestionUseCase {
         return questionMapper.toResponse(saved);
     }
 }
-
-

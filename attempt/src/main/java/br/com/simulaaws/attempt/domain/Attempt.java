@@ -1,6 +1,7 @@
 package br.com.simulaaws.attempt.domain;
 
 import br.com.simulaaws.attempt.application.dto.AttemptVo;
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -73,7 +74,7 @@ public class Attempt {
         if (questionIds.isEmpty()) throw new IllegalArgumentException("questionIds cannot be empty");
 
         return Attempt.builder()
-                .id(UUID.randomUUID())
+                .id(UuidCreator.getTimeOrdered())
                 .userId(userId)
                 .examId(examId)
                 .status(AttemptStatus.IN_PROGRESS)

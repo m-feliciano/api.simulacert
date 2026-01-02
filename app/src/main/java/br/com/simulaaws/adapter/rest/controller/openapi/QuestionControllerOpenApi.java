@@ -11,11 +11,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Questions", description = "Question retrieval endpoints")
@@ -47,8 +48,8 @@ public interface QuestionControllerOpenApi {
     );
 
     @Operation(
-            summary = "Get questions by exam",
-            description = "Retrieves all questions for a specific exam",
+            summary = "Get questions by exam (paginated)",
+            description = "Retrieves questions for a specific exam with pagination support",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
@@ -61,9 +62,11 @@ public interface QuestionControllerOpenApi {
                     description = "Not authenticated"
             )
     })
-    ResponseEntity<List<QuestionResponse>> getQuestionsByExam(
+    ResponseEntity<Page<QuestionResponse>> getQuestionsByExam(
             @Parameter(description = "Exam ID", required = true)
-            @PathVariable UUID examId
+            @PathVariable UUID examId,
+            @Parameter(description = "Pagination parameters (page, size, sort)")
+            Pageable pageable
     );
 
     @Operation(
@@ -85,4 +88,3 @@ public interface QuestionControllerOpenApi {
     })
     ResponseEntity<Void> createQuestion(@Valid @RequestBody CreateQuestionRequest request);
 }
-

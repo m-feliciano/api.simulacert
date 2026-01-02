@@ -1,5 +1,6 @@
 package br.com.simulaaws.auth.domain;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -64,7 +65,7 @@ public class User {
         Objects.requireNonNull(passwordHash, "passwordHash cannot be null");
 
         return User.builder()
-                .id(UUID.randomUUID())
+                .id(UuidCreator.getTimeOrdered())
                 .email(email.toLowerCase().trim())
                 .name(name.trim())
                 .passwordHash(passwordHash)

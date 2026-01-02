@@ -1,6 +1,8 @@
 package br.com.simulaaws.exam.infrastructure.persistence.repository;
 
 import br.com.simulaaws.exam.domain.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,10 +15,10 @@ public interface QuestionRepository extends JpaRepository<Question, UUID> {
 
     List<Question> findByExamId(UUID examId);
 
+    Page<Question> findByExamId(UUID examId, Pageable pageable);
+
     long countByExamId(UUID examId);
 
     @Query("SELECT q.id FROM Question q WHERE q.examId = :examId")
     List<UUID> findIdsByExamId(UUID examId);
 }
-
-

@@ -1,10 +1,12 @@
 package br.com.simulaaws.exam.domain;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,7 +52,7 @@ public class Question {
         Objects.requireNonNull(difficulty, "difficulty cannot be null");
 
         return Question.builder()
-                .id(UUID.randomUUID())
+                .id(UuidCreator.getTimeOrdered())
                 .examId(examId)
                 .text(text.trim())
                 .domain(domain.trim())

@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = mapToErrorCode(ex.getMessage());
         return new ApiErrorResponse(
                 errorCode.name(),
-                ex.getMessage(),
+                "This error may occur due to invalid input data or request parameters.",
                 Instant.now(),
                 request.getRequestURI()
         );
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = mapToErrorCode(ex.getMessage());
         return new ApiErrorResponse(
                 errorCode.name(),
-                ex.getMessage(),
+                "This error may occur due to invalid input data or request parameters.",
                 Instant.now(),
                 request.getRequestURI()
         );
@@ -78,7 +78,7 @@ public class GlobalExceptionHandler {
 
         return new ApiErrorResponse(
                 ErrorCode.INTERNAL_SERVER_ERROR.name(),
-                ex.getMessage(),
+                "This operation is not supported.",
                 Instant.now(),
                 request.getRequestURI()
         );
