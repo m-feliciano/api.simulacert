@@ -2,6 +2,8 @@ package br.com.simulaaws.adapter.rest.controller.openapi;
 
 import br.com.simulaaws.adapter.rest.dto.AttemptResponse;
 import br.com.simulaaws.adapter.rest.dto.StartAttemptRequest;
+import br.com.simulaaws.attempt.application.dto.AttemptQuestionResponse;
+import br.com.simulaaws.attempt.application.dto.SubmitAnswerRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,7 +15,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
@@ -68,8 +69,7 @@ public interface AttemptControllerOpenApi {
             )
     })
     ResponseEntity<AttemptResponse> finishAttempt(
-            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId,
-            @Parameter(description = "Final score (0-100)", required = true) @RequestParam int score
+            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId
     );
 
     @Operation(
@@ -118,5 +118,47 @@ public interface AttemptControllerOpenApi {
     ResponseEntity<List<AttemptResponse>> getAttemptsByUser(
             @Parameter(description = "User ID", required = true) @PathVariable UUID userId
     );
+
+
+    @Operation(
+            summary = "Get attempt questions",
+            description = "Retrieves all questions associated with a specific attempt",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Attempt questions retrieved successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Attempt not found"
+            )
+    })
+    ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId);
+
+    @Operation(
+            summary = "Submit answer for question",
+            description = "Submits an answer for a specific question within an attempt",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Answer submitted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid answer data"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Attempt or question not found"
+            )
+    })
+    ResponseEntity<Void> submitAnswer(
+            @PathVariable UUID attemptId,
+            @PathVariable UUID questionId,
+            @RequestBody SubmitAnswerRequest request);
 }
 

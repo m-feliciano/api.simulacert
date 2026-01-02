@@ -34,14 +34,14 @@ public class Attempt {
     @Id
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_id")
     private UUID userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "exam_id")
     private UUID examId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private AttemptStatus status;
 
     @Column(name = "started_at", nullable = false)

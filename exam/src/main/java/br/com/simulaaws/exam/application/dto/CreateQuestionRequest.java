@@ -1,8 +1,11 @@
 package br.com.simulaaws.exam.application.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public record CreateQuestionRequest(
         @NotNull(message = "Exam ID is required")
@@ -18,7 +21,10 @@ public record CreateQuestionRequest(
 
         @NotBlank(message = "Difficulty is required")
         @Size(max = 50, message = "Difficulty must not exceed 50 characters")
-        String difficulty
+        String difficulty,
+
+        @NotEmpty(message = "Options are required")
+        List<QuestionOptionDto> options
 ) {
 }
 

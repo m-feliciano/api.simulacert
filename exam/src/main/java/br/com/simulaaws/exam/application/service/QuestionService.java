@@ -7,6 +7,8 @@ import br.com.simulaaws.exam.application.port.in.QuestionUseCase;
 import br.com.simulaaws.exam.application.port.out.ExamRepositoryPort;
 import br.com.simulaaws.exam.application.port.out.QuestionRepositoryPort;
 import br.com.simulaaws.exam.domain.Question;
+import br.com.simulaaws.exam.domain.QuestionOption;
+import br.com.simulaaws.exam.infrastructure.persistence.repository.QuestionOptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.UUID;
 public class QuestionService implements QuestionUseCase {
 
     private final QuestionRepositoryPort questionRepository;
+    private final QuestionOptionRepository questionOptionRepository;
     private final ExamRepositoryPort examRepository;
     private final QuestionMapper questionMapper;
 
@@ -60,7 +63,18 @@ public class QuestionService implements QuestionUseCase {
 
         Question savedQuestion = questionRepository.save(question);
 
-        log.info("Question created with id: {}", savedQuestion.getId());
+        List<QuestionOption> options = request.options().stream()
+                .map(opt -> QuestionOption.create(
+                        savedQuestion.getId(),
+                        opt.key(),
+                        opt.text(),
+                        opt.isCorrect()
+                ))
+                .toList();
+
+        questionOptionRepository.saveAll(options);
+
+        log.info("Question created with id: {} and {} options", savedQuestion.getId(), options.size());
 
         return questionMapper.toResponse(savedQuestion);
     }

@@ -23,7 +23,7 @@ public class Exam {
     @Id
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String title;
 
     @Column(length = 1000)

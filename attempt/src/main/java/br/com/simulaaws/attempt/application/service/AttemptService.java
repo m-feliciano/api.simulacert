@@ -1,15 +1,23 @@
 package br.com.simulaaws.attempt.application.service;
 
+import br.com.simulaaws.attempt.application.dto.AttemptQuestionResponse;
 import br.com.simulaaws.attempt.application.dto.AttemptVo;
+import br.com.simulaaws.attempt.application.dto.QuestionOption;
 import br.com.simulaaws.attempt.application.port.in.AttemptUseCase;
+import br.com.simulaaws.attempt.application.port.out.AnswerRepositoryPort;
+import br.com.simulaaws.attempt.application.port.out.AttemptQueryPort;
 import br.com.simulaaws.attempt.application.port.out.AttemptRepositoryPort;
 import br.com.simulaaws.attempt.domain.Attempt;
 import br.com.simulaaws.common.ClockPort;
 import br.com.simulaaws.exam.application.port.out.ExamQueryPort;
+import br.com.simulaaws.exam.application.port.out.QuestionOptionQueryPort;
 import br.com.simulaaws.exam.application.port.out.QuestionQueryPort;
+import br.com.simulaaws.exam.application.port.out.QuestionRepositoryPort;
+import br.com.simulaaws.exam.infrastructure.persistence.repository.QuestionOptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +36,12 @@ public class AttemptService implements AttemptUseCase {
     private static final int MAX_QUESTION_COUNT = 65;
 
     private final AttemptRepositoryPort attemptRepository;
+    private final AnswerRepositoryPort answerRepository;
+    private final AttemptQueryPort attemptQueryPort;
     private final ExamQueryPort examQueryPort;
     private final QuestionQueryPort questionQueryPort;
+    private final QuestionRepositoryPort questionRepository;
+    private final QuestionOptionQueryPort questionOptionQueryPort;
     private final ClockPort clock;
 
     @Override
@@ -58,9 +70,20 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    public AttemptVo finishAttempt(UUID attemptId, int score) {
+    @Transactional
+    public AttemptVo finishAttempt(UUID attemptId) {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        long answeredCount = answerRepository.findByAttemptId(attemptId).size();
+        long totalQuestions = attempt.getQuestionIds().size();
+
+        if (answeredCount < totalQuestions) {
+            throw new IllegalStateException("All questions must be answered before finishing");
+        }
+
+        long correctAnswers = attemptQueryPort.countCorrectAnswers(attemptId);
+        int score = (int) ((correctAnswers * 100) / totalQuestions);
 
         attempt.finish(score, clock.now());
         attemptRepository.save(attempt);
@@ -80,6 +103,35 @@ public class AttemptService implements AttemptUseCase {
         return attemptRepository.findByUserIdOrderByStartedAtDesc(userId)
                 .stream()
                 .map(Attempt::toVo)
+                .toList();
+    }
+
+    @Override
+    public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        return attempt.getQuestionIds()
+                .stream()
+                .map(questionId -> {
+                    var question = questionRepository.findById(questionId);
+                    if (question == null) {
+                        throw new IllegalStateException("Question not found: " + questionId);
+                    }
+
+                    var questionOptions = questionOptionQueryPort.findByQuestionId(questionId);
+                    var options = questionOptions.stream()
+                            .map(qo -> new QuestionOption(qo.key(), qo.text()))
+                            .toList();
+
+                    return new AttemptQuestionResponse(
+                            question.getId(),
+                            question.getText(),
+                            question.getDomain(),
+                            question.getDifficulty(),
+                            options
+                    );
+                })
                 .toList();
     }
 

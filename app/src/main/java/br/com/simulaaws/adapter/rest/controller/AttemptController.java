@@ -4,23 +4,18 @@ import br.com.simulaaws.adapter.rest.controller.openapi.AttemptControllerOpenApi
 import br.com.simulaaws.adapter.rest.dto.AttemptResponse;
 import br.com.simulaaws.adapter.rest.dto.StartAttemptRequest;
 import br.com.simulaaws.adapter.rest.mapper.AttemptMapper;
+import br.com.simulaaws.attempt.application.dto.AttemptQuestionResponse;
 import br.com.simulaaws.attempt.application.dto.AttemptVo;
+import br.com.simulaaws.attempt.application.dto.SubmitAnswerRequest;
+import br.com.simulaaws.attempt.application.port.in.AnswerUseCase;
 import br.com.simulaaws.attempt.application.port.in.AttemptUseCase;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -35,6 +30,7 @@ import java.util.UUID;
 public class AttemptController implements AttemptControllerOpenApi {
 
     private final AttemptUseCase useCase;
+    private final AnswerUseCase answerUseCase;
     private final AttemptMapper mapper;
 
     @Override
@@ -59,15 +55,13 @@ public class AttemptController implements AttemptControllerOpenApi {
     }
 
     @Override
-    @PutMapping("/{attemptId}/finish")
-    public ResponseEntity<AttemptResponse> finishAttempt(
-            @PathVariable UUID attemptId,
-            @RequestParam @Min(0) @Max(100) int score) {
-        log.info("Finishing attempt {} with score {}", attemptId, score);
+    @PostMapping("/{attemptId}/finish")
+    public ResponseEntity<AttemptResponse> finishAttempt(@PathVariable UUID attemptId) {
+        log.info("Finishing attempt {}", attemptId);
 
-        AttemptVo response = useCase.finishAttempt(attemptId, score);
+        AttemptVo response = useCase.finishAttempt(attemptId);
 
-        log.info("Attempt {} finished", attemptId);
+        log.info("Attempt {} finished with score {}", attemptId, response.score());
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
@@ -92,4 +86,28 @@ public class AttemptController implements AttemptControllerOpenApi {
 
         return ResponseEntity.ok(mapper.toResponseList(attempts));
     }
+
+    @Override
+    @GetMapping("/{attemptId}/questions")
+    public ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId) {
+        log.debug("Getting questions for attempt {}", attemptId);
+
+        List<AttemptQuestionResponse> questions = useCase.getAttemptQuestions(attemptId);
+
+        return ResponseEntity.ok(questions);
+    }
+
+    @Override
+    @PostMapping("/{attemptId}/answers/{questionId}")
+    public ResponseEntity<Void> submitAnswer(
+            @PathVariable UUID attemptId,
+            @PathVariable UUID questionId,
+            @RequestBody SubmitAnswerRequest request) {
+        log.info("Submitting answer for attempt {} question {}", attemptId, questionId);
+
+        answerUseCase.submitAnswer(attemptId, questionId, request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
 }
+
