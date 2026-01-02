@@ -41,20 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userIdStr = tokenProvider.extractUserId(jwt);
                 UUID userId = UUID.fromString(userIdStr);
 
-                User user = userRepository.findById(userId).orElse(null);
+                userRepository.findById(userId)
+                        .filter(User::isActive)
+                        .ifPresent(user -> {
+                            var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
-                if (user != null && user.isActive()) {
-                    var authorities = List.of(
-                            new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
-                    );
+                            UsernamePasswordAuthenticationToken authentication =
+                                    new UsernamePasswordAuthenticationToken(user, null, authorities);
+                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(user, null, authorities);
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    log.debug("Set authentication for user: {} with role: {}", user.getEmail(), user.getRole());
-                }
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                            log.debug("Set authentication for user: {} with role: {}", user.getEmail(), user.getRole());
+                        });
             }
         } catch (Exception ex) {
             log.error("Could not set user authentication in security context", ex);

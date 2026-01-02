@@ -2,10 +2,6 @@ spring:
   application:
     name: stats-service-dev
 
-  docker:
-    compose:
-      enabled: false
-
   datasource:
     url: jdbc:h2:mem:stats
     username: sa
@@ -26,22 +22,7 @@ spring:
       hibernate:
         format_sql: true
 
-server:
-  port: 8084
-
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,h2-console
-  endpoint:
-    health:
-      show-details: always
-
-info:
-  app:
-    version: 1.0.0-DEV
-    description: Stats Service - Development Profile
-    profile: dev
-
+logging:
+  level:
+    root: DEBUG
+    br.com.simulaaws.stats: DEBUG

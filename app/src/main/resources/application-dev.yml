@@ -2,10 +2,6 @@ spring:
   application:
     name: simulaaws-dev
 
-  docker:
-    compose:
-      enabled: false
-
   datasource:
     url: jdbc:h2:mem:simulaaws
     username: sa
@@ -32,16 +28,6 @@ spring:
 server:
   port: 8080
 
-clients:
-  auth:
-    url: http://localhost:8080
-  exam:
-    url: http://localhost:8080
-  attempt:
-    url: http://localhost:8080
-  stats:
-    url: http://localhost:8080
-
 app:
   jwt:
     secret: dev-secret-key-simulaaws-development-only-not-for-production-64-bytes-minimum-878xxxxx
@@ -51,7 +37,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,h2-console
+        include: health,info,metrics
   endpoint:
     health:
       show-details: always
@@ -66,8 +52,9 @@ springdoc:
 
 info:
   app:
+    name: SimulaAWS
     version: 1.0.0-DEV
-    description: SimulaAWS - Development Profile
+    description: Sistema de Simulados AWS - Development
     architecture: modular-monolith
     profile: dev
 
@@ -77,4 +64,6 @@ logging:
     br.com.simulaaws: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+
 

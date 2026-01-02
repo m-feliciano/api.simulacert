@@ -39,16 +39,6 @@ server:
     mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
   shutdown: graceful
 
-clients:
-  auth:
-    url: ${AUTH_SERVICE_URL:http://localhost:8080}
-  exam:
-    url: ${EXAM_SERVICE_URL:http://localhost:8080}
-  attempt:
-    url: ${ATTEMPT_SERVICE_URL:http://localhost:8080}
-  stats:
-    url: ${STATS_SERVICE_URL:http://localhost:8080}
-
 app:
   jwt:
     secret: ${JWT_SECRET}
@@ -62,9 +52,9 @@ management:
   endpoint:
     health:
       show-details: when-authorized
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 springdoc:
@@ -76,8 +66,9 @@ springdoc:
 
 info:
   app:
+    name: SimulaAWS
     version: 1.0.0
-    description: SimulaAWS - Production Profile
+    description: Sistema de Simulados AWS - Production
     architecture: modular-monolith
     profile: prod
 

@@ -1,6 +1,7 @@
 package br.com.simulaaws.app.config;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -10,16 +11,13 @@ import java.util.Arrays;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class LoggingConfig {
 
     private final Environment env;
 
     @Value("${spring.application.name}")
     private String appName;
-
-    public LoggingConfig(Environment env) {
-        this.env = env;
-    }
 
     @PostConstruct
     public void logStartupInfo() {

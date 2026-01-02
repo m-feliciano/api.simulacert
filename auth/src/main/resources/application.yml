@@ -13,18 +13,6 @@ spring:
       ddl-auto: validate
     show-sql: false
 
-server:
-  port: 8081
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  endpoint:
-    health:
-      show-details: when_authorized
-
 logging:
   level:
     root: INFO
