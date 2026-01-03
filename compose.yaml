@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  simulaaws-app:
+  simulacert-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: simulaaws-app
+    container_name: simulacert-app
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
@@ -16,9 +16,9 @@ services:
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     networks:
-      - simulaaws-network
+      - simulacert-network
     restart: unless-stopped
 
 networks:
-  simulaaws-network:
+  simulacert-network:
     driver: bridge

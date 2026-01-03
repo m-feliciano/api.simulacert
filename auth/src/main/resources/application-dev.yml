@@ -4,11 +4,11 @@ spring:
 
 app:
   jwt:
-    secret: dev-secret-key-simulaaws-development-only-not-for-production-64-bytes-minimum-xxxxxxxx
+    secret: dev-secret-key-simulacert-development-only-not-for-production-64-bytes-minimum-xxxxxxxx
     expiration: 86400000
 
 logging:
   level:
     root: DEBUG
-    br.com.simulaaws.auth: DEBUG
+    br.com.simulacert.auth: DEBUG
     org.springframework.security: DEBUG

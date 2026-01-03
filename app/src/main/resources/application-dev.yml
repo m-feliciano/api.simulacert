@@ -1,9 +1,9 @@
 spring:
   application:
-    name: simulaaws-dev
+    name: simulacert-dev
 
 #  datasource:
-#    url: jdbc:h2:mem:simulaaws
+#    url: jdbc:h2:mem:simulacert
 #    username: sa
 #    password:
 #    driver-class-name: org.h2.Driver
@@ -30,7 +30,7 @@ server:
 
 app:
   jwt:
-    secret: dev-secret-key-simulaaws-development-only-not-for-production-64-bytes-minimum-878xxxxx
+    secret: dev-secret-key-simulacert-development-only-not-for-production-64-bytes-minimum-878xxxxx
     expiration: 86400000
 
 management:
@@ -52,7 +52,7 @@ springdoc:
 
 info:
   app:
-    name: SimulaAWS
+    name: simulacert
     version: 1.0.0-DEV
     description: Sistema de Simulados AWS - Development
     architecture: modular-monolith
@@ -61,7 +61,7 @@ info:
 logging:
   level:
     root: INFO
-    br.com.simulaaws: DEBUG
+    br.com.simulacert: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 

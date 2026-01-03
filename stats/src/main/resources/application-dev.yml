@@ -5,4 +5,4 @@ spring:
 logging:
   level:
     root: DEBUG
-    br.com.simulaaws.stats: DEBUG
+    br.com.simulacert.stats: DEBUG

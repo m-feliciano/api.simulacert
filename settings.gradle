@@ -5,7 +5,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'simulaaws'
+rootProject.name = 'simulacert'
 
 include 'common'
 include 'auth'

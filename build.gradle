@@ -4,7 +4,7 @@ plugins {
 }
 
 allprojects {
-    group = 'br.com.simulaaws'
+    group = 'br.com.simulacert'
     version = '0.0.1-SNAPSHOT'
 
     repositories {
@@ -12,7 +12,7 @@ allprojects {
     }
 }
 
-description = "SimulaAWS Project ROOT Module"
+description = "simulacert Project ROOT Module"
 
 subprojects {
     apply plugin: 'java'

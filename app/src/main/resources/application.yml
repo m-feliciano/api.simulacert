@@ -1,7 +1,7 @@
 
 info:
   app:
-    name: SimulaAWS
+    name: simulacert
     version: 1.0.0
     description: Sistema de Simulados AWS - Monólito Modular
     architecture: modular-monolith
@@ -11,10 +11,10 @@ spring:
     active: dev
 
   application:
-    name: simulaaws
+    name: simulacert
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/simulaaws
+    url: jdbc:postgresql://localhost:5432/simulacert
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
@@ -68,5 +68,5 @@ logging:
   level:
     root: INFO
   file:
-    name: logs/simulaaws.log
+    name: logs/simulacert.log
 

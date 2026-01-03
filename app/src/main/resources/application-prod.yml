@@ -1,6 +1,6 @@
 spring:
   application:
-    name: simulaaws-prod
+    name: simulacert-prod
 
   datasource:
     url: ${SPRING_DATASOURCE_URL}
@@ -66,7 +66,7 @@ springdoc:
 
 info:
   app:
-    name: SimulaAWS
+    name: simulacert
     version: 1.0.0
     description: Sistema de Simulados AWS - Production
     architecture: modular-monolith
@@ -75,9 +75,9 @@ info:
 logging:
   level:
     root: INFO
-    br.com.simulaaws: INFO
+    br.com.simulacert: INFO
     org.springframework.web: ERROR
     org.hibernate.SQL: WARN
   file:
-    name: /var/log/simulaaws/simulaaws.log
+    name: /var/log/simulacert/simulacert.log
 
