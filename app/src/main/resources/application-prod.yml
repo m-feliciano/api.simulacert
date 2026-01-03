@@ -72,12 +72,12 @@ info:
     architecture: modular-monolith
     profile: prod
 
-logging:
-  level:
-    root: INFO
-    br.com.simulacert: INFO
-    org.springframework.web: ERROR
-    org.hibernate.SQL: WARN
-  file:
-    name: /var/log/simulacert/simulacert.log
+#logging:
+#  level:
+#    root: INFO
+#    br.com.simulacert: INFO
+#    org.springframework.web: ERROR
+#    org.hibernate.SQL: WARN
+#  file:
+#    name: /var/log/simulacert/simulacert.log
 
