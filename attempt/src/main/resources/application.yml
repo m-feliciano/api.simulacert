@@ -3,7 +3,7 @@ spring:
     name: attempt-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/simulaaws
+    url: jdbc:postgresql://localhost:5432/simulacert
     username: postgres
     password: postgres
 
@@ -13,22 +13,8 @@ spring:
       ddl-auto: validate
     show-sql: false
 
-server:
-  port: 8083
-
-clients:
-  exam:
-    url: http://localhost:8082
-  auth:
-    url: http://localhost:8081
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
 
 logging:
   level:
     root: INFO
-    br.com.simulaaws.attempt: INFO
+    br.com.simulacert.attempt: INFO

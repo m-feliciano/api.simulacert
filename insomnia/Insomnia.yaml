@@ -1,6 +1,6 @@
 type: collection.insomnia.rest/5.0
 schema_version: '5.1'
-name: SimulaAWS – Population Practice Exam 23
+name: simulacert – Population Practice Exam 23
 meta:
   id: wrk_4ab7351756d74023ad7af823ada5c997
   created: 1767364966290
@@ -1609,7 +1609,7 @@ collection:
     method: POST
     body:
       mimeType: application/json
-      text: '{ "email": "marcelo@simulaaws.com", "name": "Administrator", "password":
+      text: '{ "email": "marcelo@simulacert.com", "name": "Administrator", "password":
         "123456789"}'
     headers:
     - name: Content-Type
@@ -1634,7 +1634,7 @@ collection:
     method: POST
     body:
       mimeType: application/json
-      text: '{ "email": "marcelo@simulaaws.com", "password": "123456789"}'
+      text: '{ "email": "marcelo@simulacert.com", "password": "123456789"}'
     headers:
     - name: Content-Type
       value: application/json

@@ -1,0 +1,68 @@
+package com.simulacert.attempt.application.service;
+
+import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
+import com.simulacert.attempt.application.port.in.AnswerUseCase;
+import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
+import com.simulacert.attempt.application.port.out.AttemptRepositoryPort;
+import com.simulacert.attempt.domain.Answer;
+import com.simulacert.attempt.domain.Attempt;
+import com.simulacert.attempt.domain.AttemptStatus;
+import com.simulacert.common.ClockPort;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class AnswerService implements AnswerUseCase {
+
+    private final AnswerRepositoryPort answerRepository;
+    private final AttemptRepositoryPort attemptRepository;
+    private final ClockPort clock;
+
+    @Override
+    @Transactional
+    public void submitAnswer(UUID attemptId, UUID questionId, SubmitAnswerRequest request) {
+        log.info("Submitting answer for attempt {} question {}", attemptId, questionId);
+
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        if (attempt.getStatus() != AttemptStatus.IN_PROGRESS) {
+            throw new IllegalStateException("Cannot submit answer to attempt with status: " + attempt.getStatus());
+        }
+
+        if (!attempt.getQuestionIds().contains(questionId)) {
+            throw new IllegalArgumentException("Question not part of this attempt");
+        }
+
+        if (answerRepository.existsByAttemptIdAndQuestionId(attemptId, questionId)) {
+            log.warn("Answer already exists for attempt {} question {}. Deleting old answer.", attemptId, questionId);
+            answerRepository.deleteByAttemptIdAndQuestionId(attemptId, questionId);
+        }
+
+        Answer answer = Answer.create(attemptId, questionId, request.selectedOption(), clock.now());
+        answerRepository.save(answer);
+
+        log.info("Answer submitted for attempt {} question {}", attemptId, questionId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAnswer(UUID attemptId, UUID questionId) {
+        log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
+
+        if (answerRepository.existsByAttemptIdAndQuestionId(attemptId, questionId)) {
+            answerRepository.deleteByAttemptIdAndQuestionId(attemptId, questionId);
+            log.info("Answer deleted for attempt {} question {}", attemptId, questionId);
+
+        } else {
+            log.info("No answer found for attempt {} question {}, nothing to delete", attemptId, questionId);
+        }
+    }
+}
+
