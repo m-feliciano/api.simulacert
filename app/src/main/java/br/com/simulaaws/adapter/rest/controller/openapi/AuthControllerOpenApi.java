@@ -37,7 +37,7 @@ public interface AuthControllerOpenApi {
                     description = "Invalid input data or email already exists"
             )
     })
-    ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request);
+    ResponseEntity<Void> register(@RequestBody RegisterRequest request);
 
     @Operation(
             summary = "User login",

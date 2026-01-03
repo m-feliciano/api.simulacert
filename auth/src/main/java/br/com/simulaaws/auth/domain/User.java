@@ -69,7 +69,7 @@ public class User {
                 .email(email.toLowerCase().trim())
                 .name(name.trim())
                 .passwordHash(passwordHash)
-                .role(UserRole.ADMIN) // TODO: USER here
+                .role(UserRole.USER) // TODO: USER here
                 .active(true)
                 .createdAt(createdAt)
                 .build();

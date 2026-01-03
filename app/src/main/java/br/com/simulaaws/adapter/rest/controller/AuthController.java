@@ -34,7 +34,7 @@ public class AuthController implements AuthControllerOpenApi {
 
     @Override
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
         log.info("Register request for email: {}", request.email());
 
         UserResponse response = authUseCase.register(request);

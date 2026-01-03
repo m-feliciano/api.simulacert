@@ -68,7 +68,6 @@ public class AttemptController implements AttemptControllerOpenApi {
 
     @Override
     @GetMapping("/{attemptId}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AttemptResponse> getAttempt(@PathVariable UUID attemptId) {
         log.debug("Getting attempt {}", attemptId);
 
