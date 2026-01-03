@@ -8,8 +8,8 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
+      maximum-pool-size: 10
+      minimum-idle: 2
       connection-timeout: 30000
       idle-timeout: 600000
       max-lifetime: 1800000
@@ -72,12 +72,10 @@ info:
     architecture: modular-monolith
     profile: prod
 
-#logging:
-#  level:
-#    root: INFO
-#    br.com.simulacert: INFO
-#    org.springframework.web: ERROR
-#    org.hibernate.SQL: WARN
-#  file:
-#    name: /var/log/simulacert/simulacert.log
+logging:
+  level:
+    root: INFO
+    br.com.simulacert: INFO
+    org.springframework.web: ERROR
+    org.hibernate.SQL: WARN
 
