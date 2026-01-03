@@ -19,17 +19,6 @@ services:
       - simulaaws-network
     restart: unless-stopped
 
-  grafana-lgtm:
-    image: grafana/otel-lgtm:latest
-    container_name: simulaaws-observability
-    ports:
-      - "3000:3000"
-      - "4317:4317"
-      - "4318:4318"
-    networks:
-      - simulaaws-network
-    restart: unless-stopped
-
 networks:
   simulaaws-network:
     driver: bridge
