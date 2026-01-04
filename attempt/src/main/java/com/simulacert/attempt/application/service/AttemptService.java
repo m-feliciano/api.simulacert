@@ -35,7 +35,7 @@ import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
 public class AttemptService implements AttemptUseCase {
 
     private static final int MIN_QUESTION_COUNT = 10;
-    private static final int MAX_QUESTION_COUNT = 65;
+    private static final int MAX_QUESTION_COUNT = 100;
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;

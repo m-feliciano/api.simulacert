@@ -128,7 +128,7 @@ public class ExamService implements ExamUseCase {
                             savedQuestion,
                             opt.key(),
                             opt.text(),
-                            opt.isCorrect()
+                            opt.correct()
                     ))
                     .toList();
 

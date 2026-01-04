@@ -14,7 +14,7 @@ public record OptionImportDto(
         String text,
 
         @NotNull(message = "isCorrect flag is required")
-        Boolean isCorrect
+        Boolean correct
 ) {
 }
 
