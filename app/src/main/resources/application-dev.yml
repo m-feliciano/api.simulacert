@@ -32,6 +32,9 @@ app:
   jwt:
     secret: dev-secret-key-simulacert-development-only-not-for-production-64-bytes-minimum-878xxxxx
     expiration: 86400000
+  import:
+    input-dir: ./data/import/fazer
+    processed-dir: ./data/import/feito
 
 management:
   endpoints:

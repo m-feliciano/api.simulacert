@@ -1,6 +1,8 @@
 package com.simulacert.exam.application.service;
 
 import com.simulacert.exam.application.dto.request.CreateExamRequest;
+import com.simulacert.exam.application.dto.request.ExamImportDto;
+import com.simulacert.exam.application.dto.response.ExamImportResponse;
 import com.simulacert.exam.application.dto.response.ExamResponse;
 import com.simulacert.exam.application.dto.request.UpdateExamRequest;
 import com.simulacert.exam.application.mapper.ExamMapper;
@@ -8,6 +10,9 @@ import com.simulacert.exam.application.port.in.ExamUseCase;
 import com.simulacert.exam.application.port.out.ExamRepositoryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Exam;
+import com.simulacert.exam.domain.Question;
+import com.simulacert.exam.domain.QuestionOption;
+import com.simulacert.exam.infrastructure.persistence.repository.QuestionOptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,7 @@ public class ExamService implements ExamUseCase {
 
     private final ExamRepositoryPort examRepository;
     private final QuestionRepositoryPort questionRepository;
+    private final QuestionOptionRepository questionOptionRepository;
     private final ExamMapper examMapper;
 
     @Override
@@ -94,6 +100,54 @@ public class ExamService implements ExamUseCase {
 
     public boolean hasMinimumQuestions(UUID examId) {
         return questionRepository.countByExamId(examId) >= 10;
+    }
+
+    @Override
+    @Transactional
+    public ExamImportResponse importExam(ExamImportDto examImportDto) {
+        log.info("Starting exam import: {}", examImportDto.title());
+
+        Exam exam = Exam.create(examImportDto.title(), examImportDto.description());
+        Exam savedExam = examRepository.save(exam);
+        log.info("Exam created with id: {}", savedExam.getId());
+
+        int questionsImported = 0;
+
+        for (var questionDto : examImportDto.questions()) {
+            Question question = Question.create(
+                    savedExam.getId(),
+                    questionDto.text(),
+                    questionDto.domain(),
+                    questionDto.difficulty()
+            );
+
+            Question savedQuestion = questionRepository.save(question);
+
+            List<QuestionOption> options = questionDto.options().stream()
+                    .map(opt -> QuestionOption.create(
+                            savedQuestion,
+                            opt.key(),
+                            opt.text(),
+                            opt.correct()
+                    ))
+                    .toList();
+
+            questionOptionRepository.saveAll(options);
+            questionsImported++;
+
+            if (questionsImported % 100 == 0) {
+                log.info("Imported {} questions for exam {}", questionsImported, savedExam.getId());
+            }
+        }
+
+        log.info("Exam import completed: {} with {} questions", savedExam.getId(), questionsImported);
+
+        return new ExamImportResponse(
+                savedExam.getId(),
+                savedExam.getTitle(),
+                questionsImported,
+                "SUCCESS"
+        );
     }
 }
 

@@ -14,6 +14,7 @@ import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
+import com.simulacert.exam.domain.Question;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
 public class AttemptService implements AttemptUseCase {
 
     private static final int MIN_QUESTION_COUNT = 10;
-    private static final int MAX_QUESTION_COUNT = 65;
+    private static final int MAX_QUESTION_COUNT = 100;
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;
@@ -163,16 +164,61 @@ public class AttemptService implements AttemptUseCase {
     private List<UUID> selectQuestions(UUID examId, int questionCount, long seed) {
         log.debug("Selecting {} questions for exam {} with seed {}", questionCount, examId, seed);
 
-        var questionIds = questionQueryPort.findQuestionIdsByExamId(examId);
-        if (questionIds.size() < questionCount) {
-            throw new IllegalStateException("Exam has only " + questionIds.size() + " questions");
+        List<Question> allQuestions = questionRepository.findByExamId(examId);
+
+        if (allQuestions.size() < questionCount) {
+            throw new IllegalStateException("Exam has only " + allQuestions.size() + " questions");
         }
 
-        var shuffled = new ArrayList<>(questionIds);
-        Collections.shuffle(shuffled, new Random(seed));
+        // Distribuição por dificuldade: 30% easy, 50% medium, 20% hard
+        int easyCount = (int) Math.round(questionCount * 0.3);
+        int mediumCount = (int) Math.round(questionCount * 0.5);
+        int hardCount = questionCount - easyCount - mediumCount; // garante soma exata
 
+        // Se não houver perguntas suficientes em uma categoria, redistribui para as outras
+        var hardQuestions = filterByDifficulty(allQuestions, "HARD");
+        if (hardQuestions.size() < hardCount) {
+            int deficit = hardCount - hardQuestions.size();
+            hardCount = hardQuestions.size();
+            mediumCount += deficit;
+        }
+
+        var mediumQuestions = filterByDifficulty(allQuestions, "MEDIUM");
+        if (mediumQuestions.size() < mediumCount) {
+            int deficit = mediumCount - mediumQuestions.size();
+            mediumCount = mediumQuestions.size();
+            easyCount += deficit;
+        }
+
+        var easyQuestions = filterByDifficulty(allQuestions, "EASY");
+        if (easyQuestions.size() < easyCount) {
+            throw new IllegalStateException("Not enough questions to satisfy the difficulty distribution");
+        }
+
+        Random random = new Random(seed);
+
+        List<UUID> selected = new ArrayList<>();
+        selected.addAll(selectRandom(easyQuestions, easyCount, random));
+        selected.addAll(selectRandom(mediumQuestions, mediumCount, random));
+        selected.addAll(selectRandom(hardQuestions, hardCount, random));
+
+        Collections.shuffle(selected, random);
+
+        return selected;
+    }
+
+    private List<Question> filterByDifficulty(List<Question> questions, String difficulty) {
+        return questions.stream()
+                .filter(q -> q.getDifficulty().equalsIgnoreCase(difficulty))
+                .toList();
+    }
+
+    private List<UUID> selectRandom(List<Question> questions, int count, Random random) {
+        var shuffled = new ArrayList<>(questions);
+        Collections.shuffle(shuffled, random);
         return shuffled.stream()
-                .limit(questionCount)
+                .limit(count)
+                .map(Question::getId)
                 .toList();
     }
 }
