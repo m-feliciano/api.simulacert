@@ -66,7 +66,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/login",
+                                // Health checks (ALB / ECS)
                                 "/actuator/health",
+                                "/actuator/health/**",
+                                // OpenAPI / Swagger
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
