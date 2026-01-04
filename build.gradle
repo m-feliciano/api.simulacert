@@ -42,10 +42,19 @@ subprojects {
 
         implementation 'org.mapstruct:mapstruct:1.6.3'
         implementation 'com.github.f4b6a3:uuid-creator:6.1.1'
+        implementation 'org.apache.commons:commons-lang3:3.13.0'
+
+        // Spring Framework Dependencies
+        implementation 'org.springframework:spring-context'
+        implementation 'org.springframework:spring-tx:6.2.1'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
         annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
         annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testImplementation 'org.junit.jupiter:junit-jupiter'
+
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 

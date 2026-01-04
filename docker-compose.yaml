@@ -1,11 +1,13 @@
 version: '3.8'
 
 services:
-  simulacert-app:
+  simulacert-api:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: simulacert-app
+    container_name: simulacert-api
+    env_file:
+      - .env
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}

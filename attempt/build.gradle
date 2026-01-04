@@ -5,10 +5,4 @@ plugins {
 dependencies {
     api project(':common')
     implementation project(':exam')
-
-    implementation 'org.springframework:spring-context'
-    implementation 'org.springframework:spring-tx'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
