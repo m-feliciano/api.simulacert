@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "app.import")
 public class ImportProperties {
-    private String inputDir = "./data/import/fazer";
-    private String processedDir = "./data/import/feito";
+    private String inputDir = "./conteudo/import/fazer";
+    private String processedDir = "./conteudo/import/feito";
 }
 

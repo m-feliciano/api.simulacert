@@ -2,9 +2,9 @@ package com.simulacert.exam.application.service;
 
 import com.simulacert.exam.application.dto.request.CreateExamRequest;
 import com.simulacert.exam.application.dto.request.ExamImportDto;
+import com.simulacert.exam.application.dto.request.UpdateExamRequest;
 import com.simulacert.exam.application.dto.response.ExamImportResponse;
 import com.simulacert.exam.application.dto.response.ExamResponse;
-import com.simulacert.exam.application.dto.request.UpdateExamRequest;
 import com.simulacert.exam.application.mapper.ExamMapper;
 import com.simulacert.exam.application.port.in.ExamUseCase;
 import com.simulacert.exam.application.port.out.ExamRepositoryPort;
@@ -106,6 +106,17 @@ public class ExamService implements ExamUseCase {
     @Transactional
     public ExamImportResponse importExam(ExamImportDto examImportDto) {
         log.info("Starting exam import: {}", examImportDto.title());
+
+        // verifica se ja tem um exam com esse titulo
+        if (examRepository.existsByTitle(examImportDto.title())) {
+            log.warn("Exam with title '{}' already exists", examImportDto.title());
+            return new ExamImportResponse(
+                    null,
+                    examImportDto.title(),
+                    0,
+                    "DUPLICATE_TITLE"
+            );
+        }
 
         Exam exam = Exam.create(examImportDto.title(), examImportDto.description());
         Exam savedExam = examRepository.save(exam);

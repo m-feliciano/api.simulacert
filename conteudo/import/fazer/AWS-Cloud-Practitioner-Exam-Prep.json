@@ -1,5 +1,5 @@
 {
-  "title": "Practice Exam – All (PT-BR)",
+  "title": "AWS Cloud Practitioner Exam Prep (PT-BR)",
   "description": "Banco unificado de questões AWS Cloud Practitioner (PT-BR)",
   "questions": [
     {
@@ -17739,7 +17739,7 @@
     },
     {
       "id": 606,
-      "text": "Uma empresa está considerando usar AWS para um banco de dados auto-hospedado que requer desligamento noturno para manutenção e economia de custos. <br/> Qual serviço a empresa deve usar?",
+      "text": "Uma empresa está considerando usar AWS para um banco de dados auto-hospedado que requer desligamento noturno para manutenção e economia de custos. Qual serviço a empresa deve usar?",
       "options": [
         {
           "key": "A",
@@ -18922,7 +18922,7 @@
     },
     {
       "id": 647,
-      "text": "Uma empresa está procurando uma solução escalável de data warehouse. <br/> Qual das seguintes soluções AWS atenderia às necessidades da empresa?",
+      "text": "Uma empresa está procurando uma solução escalável de data warehouse. Qual das seguintes soluções AWS atenderia às necessidades da empresa?",
       "options": [
         {
           "key": "A",
@@ -19072,7 +19072,7 @@
     },
     {
       "id": 652,
-      "text": "Servidores web executando em Amazon EC2 acessam uma aplicação legada rodando em um data center corporativo. <br/> Qual termo descreveria esse modelo?",
+      "text": "Servidores web executando em Amazon EC2 acessam uma aplicação legada rodando em um data center corporativo. Qual termo descreveria esse modelo?",
       "options": [
         {
           "key": "A",
@@ -20634,7 +20634,7 @@
     },
     {
       "id": 706,
-      "text": "Um administrador precisa implantar rapidamente uma solução de TI popular e começar a usá-la imediatamente. <br/> Onde o administrador pode encontrar assistência?",
+      "text": "Um administrador precisa implantar rapidamente uma solução de TI popular e começar a usá-la imediatamente. Onde o administrador pode encontrar assistência?",
       "options": [
         {
           "key": "A",
@@ -20929,7 +20929,7 @@
     },
     {
       "id": 716,
-      "text": "Uma empresa está migrando uma aplicação que executa cargas de trabalho não interrompíveis por um período de três anos. <br/> Qual modelo de precificação forneceria a solução MAIS econômica?",
+      "text": "Uma empresa está migrando uma aplicação que executa cargas de trabalho não interrompíveis por um período de três anos. Qual modelo de precificação forneceria a solução MAIS econômica?",
       "options": [
         {
           "key": "A",
@@ -21046,7 +21046,7 @@
     },
     {
       "id": 720,
-      "text": "Uma empresa quer reduzir a pegada física de computação que os desenvolvedores usam para executar código. <br/> Qual serviço atenderia essa necessidade habilitando arquiteturas serverless?",
+      "text": "Uma empresa quer reduzir a pegada física de computação que os desenvolvedores usam para executar código. Qual serviço atenderia essa necessidade habilitando arquiteturas serverless?",
       "options": [
         {
           "key": "A",
@@ -21163,7 +21163,7 @@
     },
     {
       "id": 724,
-      "text": "Uma empresa estará migrando de um data center local para a AWS Cloud. <br/> Qual seria uma diferença financeira após a migração?",
+      "text": "Uma empresa estará migrando de um data center local para a AWS Cloud. Qual seria uma diferença financeira após a migração?",
       "options": [
         {
           "key": "A",
@@ -21809,7 +21809,7 @@
     },
     {
       "id": 746,
-      "text": "Uma empresa está projetando uma aplicação hospedada em uma única Região AWS que atende usuários finais espalhados pelo mundo. A empresa deseja fornecer aos usuários finais acesso de baixa latência aos dados da aplicação. <br/> Qual dos seguintes serviços ajudará a cumprir esse requisito?",
+      "text": "Uma empresa está projetando uma aplicação hospedada em uma única Região AWS que atende usuários finais espalhados pelo mundo. A empresa deseja fornecer aos usuários finais acesso de baixa latência aos dados da aplicação. Qual dos seguintes serviços ajudará a cumprir esse requisito?",
       "options": [
         {
           "key": "A",
@@ -23038,7 +23038,7 @@
     },
     {
       "id": 789,
-      "text": "Uma startup está trabalhando em uma nova aplicação que precisa ser lançada rapidamente no mercado. Os requisitos da aplicação podem precisar ser ajustados em um futuro próximo. <br/> Qual das seguintes é uma característica da AWS Cloud que atenderia a essa necessidade específica?",
+      "text": "Uma startup está trabalhando em uma nova aplicação que precisa ser lançada rapidamente no mercado. Os requisitos da aplicação podem precisar ser ajustados em um futuro próximo. Qual das seguintes é uma característica da AWS Cloud que atenderia a essa necessidade específica?",
       "options": [
         {
           "key": "A",
@@ -23473,7 +23473,7 @@
     },
     {
       "id": 804,
-      "text": "Um usuário deseja orientação sobre possíveis economias ao migrar de um ambiente local para a AWS. <br/> Qual ferramenta é adequada para esse cenário?",
+      "text": "Um usuário deseja orientação sobre possíveis economias ao migrar de um ambiente local para a AWS. Qual ferramenta é adequada para esse cenário?",
       "options": [
         {
           "key": "A",
@@ -23623,7 +23623,7 @@
     },
     {
       "id": 809,
-      "text": "Uma empresa quer monitorar o uso da CPU de seus recursos Amazon EC2. <br/> Qual serviço AWS a empresa deve usar?",
+      "text": "Uma empresa quer monitorar o uso da CPU de seus recursos Amazon EC2. Qual serviço AWS a empresa deve usar?",
       "options": [
         {
           "key": "A",
@@ -23768,7 +23768,7 @@
     },
     {
       "id": 814,
-      "text": "Um cliente executa uma instância Amazon Linux EC2 On-Demand por 3 horas, 5 minutos e 6 segundos. <br/> Por quanto tempo o cliente será cobrado?",
+      "text": "Um cliente executa uma instância Amazon Linux EC2 On-Demand por 3 horas, 5 minutos e 6 segundos. Por quanto tempo o cliente será cobrado?",
       "options": [
         {
           "key": "A",
@@ -24241,7 +24241,7 @@
     },
     {
       "id": 830,
-      "text": "Um usuário está executando uma aplicação na AWS e percebe que um ou mais endereços IP pertencentes à AWS estão envolvidos em um ataque distribuído de negação de serviço (DDoS). <br/> Quem o usuário deve contatar PRIMEIRO sobre essa situação?",
+      "text": "Um usuário está executando uma aplicação na AWS e percebe que um ou mais endereços IP pertencentes à AWS estão envolvidos em um ataque distribuído de negação de serviço (DDoS). Quem o usuário deve contatar PRIMEIRO sobre essa situação?",
       "options": [
         {
           "key": "A",
@@ -24760,7 +24760,7 @@
     },
     {
       "id": 848,
-      "text": "Um Cloud Practitioner é questionado sobre como estimar o custo de usar uma nova aplicação na AWS. <br/> Qual é a resposta MAIS apropriada?",
+      "text": "Um Cloud Practitioner é questionado sobre como estimar o custo de usar uma nova aplicação na AWS. Qual é a resposta MAIS apropriada?",
       "options": [
         {
           "key": "A",
@@ -24788,7 +24788,7 @@
     },
     {
       "id": 849,
-      "text": "Uma empresa deseja migrar suas aplicações para uma VPC na AWS. Essas aplicações precisarão acessar recursos on-premises. <br/> Qual combinação de ações permitirá que a empresa alcance esse objetivo? (Escolha dois.)",
+      "text": "Uma empresa deseja migrar suas aplicações para uma VPC na AWS. Essas aplicações precisarão acessar recursos on-premises. Qual combinação de ações permitirá que a empresa alcance esse objetivo? (Escolha dois.)",
       "options": [
         {
           "key": "A",
@@ -24821,7 +24821,7 @@
     },
     {
       "id": 850,
-      "text": "Uma aplicação web rodando na AWS tem sido alvo de spam com requisições maliciosas de um conjunto recorrente de endereços IP. <br/> Qual serviço da AWS pode ajudar a proteger a aplicação e bloquear o tráfego malicioso?",
+      "text": "Uma aplicação web rodando na AWS tem sido alvo de spam com requisições maliciosas de um conjunto recorrente de endereços IP. Qual serviço da AWS pode ajudar a proteger a aplicação e bloquear o tráfego malicioso?",
       "options": [
         {
           "key": "A",
@@ -24877,7 +24877,7 @@
     },
     {
       "id": 852,
-      "text": "Uma empresa requer uma conexão de rede dedicada entre seus servidores on-premises e a AWS Cloud. <br/> Qual serviço da AWS deve ser usado?",
+      "text": "Uma empresa requer uma conexão de rede dedicada entre seus servidores on-premises e a AWS Cloud. Qual serviço da AWS deve ser usado?",
       "options": [
         {
           "key": "A",
@@ -24989,7 +24989,7 @@
     },
     {
       "id": 856,
-      "text": "Um Cloud Practitioner deve determinar se algum grupo de segurança em uma conta AWS foi provisionado para permitir acesso irrestrito para portas específicas. <br/> Qual é a maneira MAIS SIMPLES de fazer isso?",
+      "text": "Um Cloud Practitioner deve determinar se algum grupo de segurança em uma conta AWS foi provisionado para permitir acesso irrestrito para portas específicas. Qual é a maneira MAIS SIMPLES de fazer isso?",
       "options": [
         {
           "key": "A",
@@ -25050,7 +25050,7 @@
     },
     {
       "id": 858,
-      "text": "Um usuário precisa de um relatório automatizado de avaliação de segurança que identifique acessos não intencionais à rede para instâncias Amazon EC2 e vulnerabilidades nessas instâncias. <br/> Qual serviço da AWS fornecerá esse relatório de avaliação?",
+      "text": "Um usuário precisa de um relatório automatizado de avaliação de segurança que identifique acessos não intencionais à rede para instâncias Amazon EC2 e vulnerabilidades nessas instâncias. Qual serviço da AWS fornecerá esse relatório de avaliação?",
       "options": [
         {
           "key": "A",
@@ -25134,7 +25134,7 @@
     },
     {
       "id": 861,
-      "text": "Um Cloud Practitioner precisa armazenar dados por 7 anos para atender a requisitos regulatórios. <br/> Qual serviço da AWS atenderá a esse requisito com o MENOR custo?",
+      "text": "Um Cloud Practitioner precisa armazenar dados por 7 anos para atender a requisitos regulatórios. Qual serviço da AWS atenderá a esse requisito com o MENOR custo?",
       "options": [
         {
           "key": "A",
@@ -25279,7 +25279,7 @@
     },
     {
       "id": 866,
-      "text": "Um sistema na AWS Cloud é projetado para suportar a falha de um ou mais componentes. <br/> O que isso é um exemplo de?",
+      "text": "Um sistema na AWS Cloud é projetado para suportar a falha de um ou mais componentes. O que isso é um exemplo de?",
       "options": [
         {
           "key": "A",
@@ -25307,7 +25307,7 @@
     },
     {
       "id": 867,
-      "text": "Um Cloud Practitioner precisa de uma conexão consistente e dedicada entre recursos AWS e um sistema on-premises. <br/> Qual serviço AWS pode atender a esse requisito?",
+      "text": "Um Cloud Practitioner precisa de uma conexão consistente e dedicada entre recursos AWS e um sistema on-premises. Qual serviço AWS pode atender a esse requisito?",
       "options": [
         {
           "key": "A",
@@ -25513,7 +25513,7 @@
     },
     {
       "id": 874,
-      "text": "Uma empresa quer construir suas novas cargas de trabalho de aplicação na AWS Cloud em vez de usar recursos on-premises. <br/> Qual despesa pode ser reduzida usando a AWS Cloud?",
+      "text": "Uma empresa quer construir suas novas cargas de trabalho de aplicação na AWS Cloud em vez de usar recursos on-premises. Qual despesa pode ser reduzida usando a AWS Cloud?",
       "options": [
         {
           "key": "A",
@@ -26406,7 +26406,7 @@
     },
     {
       "id": 905,
-      "text": "Uma empresa está migrando de data centers locais para a AWS Cloud e busca ajuda prática com o projeto. <br/> Como a empresa pode obter esse suporte? (Escolha duas.)",
+      "text": "Uma empresa está migrando de data centers locais para a AWS Cloud e busca ajuda prática com o projeto. Como a empresa pode obter esse suporte? (Escolha duas.)",
       "options": [
         {
           "key": "A",
@@ -26495,7 +26495,7 @@
     },
     {
       "id": 908,
-      "text": "Um novo serviço usando AWS deve ser altamente disponível. No entanto, devido a requisitos regulatórios, todas as suas instâncias Amazon EC2 devem estar localizadas em uma única área geográfica. <br/> De acordo com as melhores práticas, para atender a esses requisitos, as instâncias EC2 devem ser colocadas em pelo menos duas:",
+      "text": "Um novo serviço usando AWS deve ser altamente disponível. No entanto, devido a requisitos regulatórios, todas as suas instâncias Amazon EC2 devem estar localizadas em uma única área geográfica. De acordo com as melhores práticas, para atender a esses requisitos, as instâncias EC2 devem ser colocadas em pelo menos duas:",
       "options": [
         {
           "key": "A",
@@ -26551,7 +26551,7 @@
     },
     {
       "id": 910,
-      "text": "Uma empresa possui várias contas AWS dentro do AWS Organizations e deseja aplicar o benefício de Amazon EC2 Reserved Instances a apenas uma conta. <br/> Qual ação deve ser tomada?",
+      "text": "Uma empresa possui várias contas AWS dentro do AWS Organizations e deseja aplicar o benefício de Amazon EC2 Reserved Instances a apenas uma conta. Qual ação deve ser tomada?",
       "options": [
         {
           "key": "A",
@@ -26607,7 +26607,7 @@
     },
     {
       "id": 912,
-      "text": "Uma empresa está planejando lançar um site de ecommerce em uma única AWS Region para uma base de usuários mundial. <br/> Quais serviços AWS permitirão que a empresa alcance os usuários e forneça baixa latência e altas velocidades de transferência? (Escolha duas.)",
+      "text": "Uma empresa está planejando lançar um site de ecommerce em uma única AWS Region para uma base de usuários mundial. Quais serviços AWS permitirão que a empresa alcance os usuários e forneça baixa latência e altas velocidades de transferência? (Escolha duas.)",
       "options": [
         {
           "key": "A",
@@ -26889,7 +26889,7 @@
     },
     {
       "id": 921,
-      "text": "Um usuário implanta uma instância de banco de dados Amazon RDS em múltiplas Availability Zones. <br/> Essa estratégia envolve qual pilar do AWS Well-Architected Framework?",
+      "text": "Um usuário implanta uma instância de banco de dados Amazon RDS em múltiplas Availability Zones. Essa estratégia envolve qual pilar do AWS Well-Architected Framework?",
       "options": [
         {
           "key": "A",
@@ -27090,7 +27090,7 @@
     },
     {
       "id": 928,
-      "text": "Uma empresa quer migrar um banco de dados MySQL para a AWS, mas não tem orçamento para Administradores de Banco de Dados para lidar com tarefas rotineiras, incluindo provisionamento, aplicação de patches e realização de backups. <br/> Qual serviço da AWS suportará esse caso de uso?",
+      "text": "Uma empresa quer migrar um banco de dados MySQL para a AWS, mas não tem orçamento para Administradores de Banco de Dados para lidar com tarefas rotineiras, incluindo provisionamento, aplicação de patches e realização de backups. Qual serviço da AWS suportará esse caso de uso?",
       "options": [
         {
           "key": "A",
@@ -27118,7 +27118,7 @@
     },
     {
       "id": 929,
-      "text": "Uma empresa quer expandir de uma AWS Region para uma segunda AWS Region. <br/> O que a empresa precisa fazer para começar a suportar a nova Region?",
+      "text": "Uma empresa quer expandir de uma AWS Region para uma segunda AWS Region. O que a empresa precisa fazer para começar a suportar a nova Region?",
       "options": [
         {
           "key": "A",
@@ -27146,7 +27146,7 @@
     },
     {
       "id": 930,
-      "text": "Um usuário deve atender a requisitos de conformidade e licenciamento de software que afirmam que uma carga de trabalho deve ser hospedada em um servidor físico. <br/> Qual opção de precificação de instância Amazon EC2 atenderá a esses requisitos?",
+      "text": "Um usuário deve atender a requisitos de conformidade e licenciamento de software que afirmam que uma carga de trabalho deve ser hospedada em um servidor físico. Qual opção de precificação de instância Amazon EC2 atenderá a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -27207,7 +27207,7 @@
     },
     {
       "id": 932,
-      "text": "Uma empresa está planejando migrar do ambiente local para a AWS Cloud. <br/> Qual ferramenta ou serviço da AWS fornece relatórios detalhados sobre a economia estimada de custos após a migração?",
+      "text": "Uma empresa está planejando migrar do ambiente local para a AWS Cloud. Qual ferramenta ou serviço da AWS fornece relatórios detalhados sobre a economia estimada de custos após a migração?",
       "options": [
         {
           "key": "A",
@@ -27441,7 +27441,7 @@
     },
     {
       "id": 940,
-      "text": "Uma empresa que faz negócios online precisa entregar rapidamente novas funcionalidades de forma iterativa, minimizando o tempo de lançamento no mercado. <br/> Qual recurso da AWS Cloud pode fornecer isso?",
+      "text": "Uma empresa que faz negócios online precisa entregar rapidamente novas funcionalidades de forma iterativa, minimizando o tempo de lançamento no mercado. Qual recurso da AWS Cloud pode fornecer isso?",
       "options": [
         {
           "key": "A",
@@ -27558,7 +27558,7 @@
     },
     {
       "id": 944,
-      "text": "Uma empresa quer testar uma solução de ecommerce de terceiros antes de decidir usá-la a longo prazo. <br/> Qual serviço ou ferramenta da AWS apoiará esse esforço?",
+      "text": "Uma empresa quer testar uma solução de ecommerce de terceiros antes de decidir usá-la a longo prazo. Qual serviço ou ferramenta da AWS apoiará esse esforço?",
       "options": [
         {
           "key": "A",
@@ -27642,7 +27642,7 @@
     },
     {
       "id": 947,
-      "text": "Uma empresa está hospedando uma aplicação web em um container Docker no Amazon EC2. <br/> A AWS é responsável por qual das seguintes tarefas?",
+      "text": "Uma empresa está hospedando uma aplicação web em um container Docker no Amazon EC2. A AWS é responsável por qual das seguintes tarefas?",
       "options": [
         {
           "key": "A",
@@ -27670,7 +27670,7 @@
     },
     {
       "id": 948,
-      "text": "Usuários estão relatando latência ao conectar-se a um site com uma base global de clientes. <br/> Qual serviço da AWS melhorará a experiência do cliente reduzindo a latência?",
+      "text": "Usuários estão relatando latência ao conectar-se a um site com uma base global de clientes. Qual serviço da AWS melhorará a experiência do cliente reduzindo a latência?",
       "options": [
         {
           "key": "A",
@@ -27759,7 +27759,7 @@
     },
     {
       "id": 951,
-      "text": "Uma empresa quer usar um serviço da AWS para monitorar a saúde dos endpoints da aplicação, com a capacidade de rotear o tráfego para endpoints regionais saudáveis para melhorar a disponibilidade da aplicação. <br/> Qual serviço suportará esses requisitos?",
+      "text": "Uma empresa quer usar um serviço da AWS para monitorar a saúde dos endpoints da aplicação, com a capacidade de rotear o tráfego para endpoints regionais saudáveis para melhorar a disponibilidade da aplicação. Qual serviço suportará esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -27909,7 +27909,7 @@
     },
     {
       "id": 956,
-      "text": "Uma carga de trabalho em lote leva 5 horas para ser concluída em uma instância Amazon EC2. A quantidade de dados a ser processada dobra mensalmente e o tempo de processamento é proporcional. <br/> Qual é a melhor arquitetura em nuvem para atender a essa demanda crescente de forma consistente?",
+      "text": "Uma carga de trabalho em lote leva 5 horas para ser concluída em uma instância Amazon EC2. A quantidade de dados a ser processada dobra mensalmente e o tempo de processamento é proporcional. Qual é a melhor arquitetura em nuvem para atender a essa demanda crescente de forma consistente?",
       "options": [
         {
           "key": "A",
@@ -27937,7 +27937,7 @@
     },
     {
       "id": 957,
-      "text": "Cada departamento dentro de uma empresa tem sua própria conta AWS independente e seu próprio método de pagamento. A nova liderança da empresa deseja centralizar a governança departamental e consolidar os pagamentos. <br/> Como isso pode ser alcançado usando serviços ou recursos AWS?",
+      "text": "Cada departamento dentro de uma empresa tem sua própria conta AWS independente e seu próprio método de pagamento. A nova liderança da empresa deseja centralizar a governança departamental e consolidar os pagamentos. Como isso pode ser alcançado usando serviços ou recursos AWS?",
       "options": [
         {
           "key": "A",
@@ -27993,7 +27993,7 @@
     },
     {
       "id": 959,
-      "text": "Uma empresa de ecommerce prevê um grande aumento no tráfego web para dois feriados de compras muito populares que se aproximam. <br/> Qual serviço ou recurso AWS pode ser configurado para ajustar dinamicamente os recursos para atender a essa mudança na demanda?",
+      "text": "Uma empresa de ecommerce prevê um grande aumento no tráfego web para dois feriados de compras muito populares que se aproximam. Qual serviço ou recurso AWS pode ser configurado para ajustar dinamicamente os recursos para atender a essa mudança na demanda?",
       "options": [
         {
           "key": "A",
@@ -28077,7 +28077,7 @@
     },
     {
       "id": 962,
-      "text": "Uma empresa está executando uma aplicação de ecommerce hospedada na Europa. Para diminuir a latência para usuários que acessam o site de outras partes do mundo, a empresa gostaria de armazenar em cache conteúdo estático acessado com frequência mais próximo dos usuários. <br/> Qual serviço AWS suportará esses requisitos?",
+      "text": "Uma empresa está executando uma aplicação de ecommerce hospedada na Europa. Para diminuir a latência para usuários que acessam o site de outras partes do mundo, a empresa gostaria de armazenar em cache conteúdo estático acessado com frequência mais próximo dos usuários. Qual serviço AWS suportará esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -28222,7 +28222,7 @@
     },
     {
       "id": 967,
-      "text": "Sistemas de TI devem ser projetados para reduzir interdependências, para que uma mudança ou falha em um componente não cause efeito cascata em outros componentes. <br/> Este é um exemplo de qual princípio do design de arquitetura em nuvem?",
+      "text": "Sistemas de TI devem ser projetados para reduzir interdependências, para que uma mudança ou falha em um componente não cause efeito cascata em outros componentes. Este é um exemplo de qual princípio do design de arquitetura em nuvem?",
       "options": [
         {
           "key": "A",
@@ -28283,7 +28283,7 @@
     },
     {
       "id": 969,
-      "text": "Uma aplicação roda em múltiplas instâncias Amazon EC2 que acessam simultaneamente um sistema de arquivos compartilhado. <br/> Qual serviço de armazenamento da AWS deve ser usado?",
+      "text": "Uma aplicação roda em múltiplas instâncias Amazon EC2 que acessam simultaneamente um sistema de arquivos compartilhado. Qual serviço de armazenamento da AWS deve ser usado?",
       "options": [
         {
           "key": "A",
@@ -28311,7 +28311,7 @@
     },
     {
       "id": 970,
-      "text": "Uma aplicação web está hospedada na AWS usando um Elastic Load Balancer, múltiplas instâncias Amazon EC2 e Amazon RDS. <br/> Quais medidas de segurança são responsabilidade da AWS? (Escolha duas.)",
+      "text": "Uma aplicação web está hospedada na AWS usando um Elastic Load Balancer, múltiplas instâncias Amazon EC2 e Amazon RDS. Quais medidas de segurança são responsabilidade da AWS? (Escolha duas.)",
       "options": [
         {
           "key": "A",
@@ -28400,7 +28400,7 @@
     },
     {
       "id": 973,
-      "text": "Uma empresa precisa de um bucket Amazon S3 que não possa ter nenhum objeto público devido a requisitos de conformidade. <br/> Como isso pode ser realizado?",
+      "text": "Uma empresa precisa de um bucket Amazon S3 que não possa ter nenhum objeto público devido a requisitos de conformidade. Como isso pode ser realizado?",
       "options": [
         {
           "key": "A",
@@ -28428,7 +28428,7 @@
     },
     {
       "id": 974,
-      "text": "Um Cloud Practitioner identifica um problema de cobrança após examinar o relatório AWS Cost and Usage no AWS Management Console. <br/> Qual ação pode ser tomada para resolver isso?",
+      "text": "Um Cloud Practitioner identifica um problema de cobrança após examinar o relatório AWS Cost and Usage no AWS Management Console. Qual ação pode ser tomada para resolver isso?",
       "options": [
         {
           "key": "A",
@@ -28863,7 +28863,7 @@
     },
     {
       "id": 989,
-      "text": "Um usuário precisa gerar um relatório que descreva o status das principais verificações de segurança em uma conta AWS. O relatório deve incluir: <br/> (O status das permissões dos buckets do Amazon S3, Se a autenticação multifator está habilitada para o usuário root da conta AWS, Se algum grupo de segurança está configurado para permitir acesso irrestrito.) <br/> Onde todas essas informações podem ser encontradas em um único local?",
+      "text": "Um usuário precisa gerar um relatório que descreva o status das principais verificações de segurança em uma conta AWS. O relatório deve incluir: (O status das permissões dos buckets do Amazon S3, Se a autenticação multifator está habilitada para o usuário root da conta AWS, Se algum grupo de segurança está configurado para permitir acesso irrestrito.) Onde todas essas informações podem ser encontradas em um único local?",
       "options": [
         {
           "key": "A",
@@ -28975,7 +28975,7 @@
     },
     {
       "id": 993,
-      "text": "Um usuário precisa implantar rapidamente um banco de dados não relacional na AWS. O usuário não quer gerenciar o hardware subjacente nem o software do banco de dados. <br/> Qual serviço da AWS pode ser usado para realizar isso?",
+      "text": "Um usuário precisa implantar rapidamente um banco de dados não relacional na AWS. O usuário não quer gerenciar o hardware subjacente nem o software do banco de dados. Qual serviço da AWS pode ser usado para realizar isso?",
       "options": [
         {
           "key": "A",
@@ -29003,7 +29003,7 @@
     },
     {
       "id": 994,
-      "text": "Um Cloud Practitioner está desenvolvendo um plano de recuperação de desastres e pretende replicar dados entre várias áreas geográficas.<br/> Qual das opções a seguir atende a esses requisitos?",
+      "text": "Um Cloud Practitioner está desenvolvendo um plano de recuperação de desastres e pretende replicar dados entre várias áreas geográficas.Qual das opções a seguir atende a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -29242,7 +29242,7 @@
     },
     {
       "id": 1002,
-      "text": "Uma empresa implantou vários bancos de dados relacionais em instâncias Amazon EC2. Todo mês, o fornecedor do software do banco de dados lança novos patches de segurança que precisam ser aplicados aos bancos de dados. <br/> Qual é a maneira MAIS eficiente de aplicar os patches de segurança?",
+      "text": "Uma empresa implantou vários bancos de dados relacionais em instâncias Amazon EC2. Todo mês, o fornecedor do software do banco de dados lança novos patches de segurança que precisam ser aplicados aos bancos de dados. Qual é a maneira MAIS eficiente de aplicar os patches de segurança?",
       "options": [
         {
           "key": "A",
@@ -29270,7 +29270,7 @@
     },
     {
       "id": 1003,
-      "text": "Uma empresa deseja usar o Amazon Elastic Compute Cloud (Amazon EC2) para implantar uma aplicação comercial global. A solução de implantação deve ser construída com a maior redundância e tolerância a falhas. <br/> Com base nessa situação, as instâncias do Amazon EC2 devem ser implantadas:",
+      "text": "Uma empresa deseja usar o Amazon Elastic Compute Cloud (Amazon EC2) para implantar uma aplicação comercial global. A solução de implantação deve ser construída com a maior redundância e tolerância a falhas. Com base nessa situação, as instâncias do Amazon EC2 devem ser implantadas:",
       "options": [
         {
           "key": "A",
@@ -29298,7 +29298,7 @@
     },
     {
       "id": 1004,
-      "text": "Uma empresa possui uma aplicação com usuários na Austrália e no Brasil. Toda a infraestrutura da empresa está atualmente provisionada na Região Ásia Pacífico (Sydney) na Austrália, e os usuários brasileiros estão enfrentando alta latência. <br/> O que a empresa deve fazer para reduzir a latência?",
+      "text": "Uma empresa possui uma aplicação com usuários na Austrália e no Brasil. Toda a infraestrutura da empresa está atualmente provisionada na Região Ásia Pacífico (Sydney) na Austrália, e os usuários brasileiros estão enfrentando alta latência. O que a empresa deve fazer para reduzir a latência?",
       "options": [
         {
           "key": "A",
@@ -29326,7 +29326,7 @@
     },
     {
       "id": 1005,
-      "text": "Uma instância do Amazon EC2 é executada apenas quando necessário, mas deve permanecer ativa durante todo o processo. <br/> Qual é a opção de compra mais apropriada?",
+      "text": "Uma instância do Amazon EC2 é executada apenas quando necessário, mas deve permanecer ativa durante todo o processo. Qual é a opção de compra mais apropriada?",
       "options": [
         {
           "key": "A",
@@ -29667,7 +29667,7 @@
     },
     {
       "id": 1017,
-      "text": "Um usuário gostaria de criptografar dados que são recebidos, armazenados e gerenciados pelo AWS CloudTrail. <br/> Qual serviço da AWS fornecerá essa capacidade?",
+      "text": "Um usuário gostaria de criptografar dados que são recebidos, armazenados e gerenciados pelo AWS CloudTrail. Qual serviço da AWS fornecerá essa capacidade?",
       "options": [
         {
           "key": "A",
@@ -29929,7 +29929,7 @@
     },
     {
       "id": 1026,
-      "text": "Uma empresa distribuiu sua carga de trabalho tanto na AWS Cloud quanto em alguns servidores on-premises. <br/> Que tipo de arquitetura é essa?",
+      "text": "Uma empresa distribuiu sua carga de trabalho tanto na AWS Cloud quanto em alguns servidores on-premises. Que tipo de arquitetura é essa?",
       "options": [
         {
           "key": "A",
@@ -30041,7 +30041,7 @@
     },
     {
       "id": 1030,
-      "text": "Uma empresa precisa de proteção contra ataques distribuídos de negação de serviço (DDoS) ampliados em seu site e assistência de especialistas da AWS durante esses eventos. <br/> Qual serviço gerenciado da AWS atenderá a esses requisitos?",
+      "text": "Uma empresa precisa de proteção contra ataques distribuídos de negação de serviço (DDoS) ampliados em seu site e assistência de especialistas da AWS durante esses eventos. Qual serviço gerenciado da AWS atenderá a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -30069,7 +30069,7 @@
     },
     {
       "id": 1031,
-      "text": "A aplicação de uma empresa tem horários flexíveis de início e término. <br/> Qual modelo de precificação do Amazon EC2 será o MAIS econômico?",
+      "text": "A aplicação de uma empresa tem horários flexíveis de início e término. Qual modelo de precificação do Amazon EC2 será o MAIS econômico?",
       "options": [
         {
           "key": "A",
@@ -30214,7 +30214,7 @@
     },
     {
       "id": 1036,
-      "text": "Uma empresa com um plano de suporte AWS Support nível Developer provisionou um banco de dados Amazon RDS e não consegue se conectar a ele. <br/> Com quem o desenvolvedor deve entrar em contato para esse nível de suporte?",
+      "text": "Uma empresa com um plano de suporte AWS Support nível Developer provisionou um banco de dados Amazon RDS e não consegue se conectar a ele. Com quem o desenvolvedor deve entrar em contato para esse nível de suporte?",
       "options": [
         {
           "key": "A",
@@ -30270,7 +30270,7 @@
     },
     {
       "id": 1038,
-      "text": "Uma empresa deve garantir que seu endpoint para uma instância de banco de dados permaneça o mesmo após uma interrupção de serviço em uma única Availability Zone. A aplicação precisa retomar as operações do banco de dados sem a necessidade de intervenção administrativa manual. <br/> Como esses requisitos podem ser atendidos?",
+      "text": "Uma empresa deve garantir que seu endpoint para uma instância de banco de dados permaneça o mesmo após uma interrupção de serviço em uma única Availability Zone. A aplicação precisa retomar as operações do banco de dados sem a necessidade de intervenção administrativa manual. Como esses requisitos podem ser atendidos?",
       "options": [
         {
           "key": "A",
@@ -30420,7 +30420,7 @@
     },
     {
       "id": 1043,
-      "text": "Uma empresa que opera na AWS Cloud requer faturas separadas para ambientes específicos, como desenvolvimento, teste e produção. <br/> Como isso pode ser alcançado?",
+      "text": "Uma empresa que opera na AWS Cloud requer faturas separadas para ambientes específicos, como desenvolvimento, teste e produção. Como isso pode ser alcançado?",
       "options": [
         {
           "key": "A",
@@ -30509,7 +30509,7 @@
     },
     {
       "id": 1046,
-      "text": "Uma empresa está lançando um site de comércio eletrônico que armazenará e processará dados de cartão de crédito. A empresa requer informações sobre relatórios de conformidade AWS e acordos AWS. <br/> Qual serviço AWS fornece acesso sob demanda a esses itens?",
+      "text": "Uma empresa está lançando um site de comércio eletrônico que armazenará e processará dados de cartão de crédito. A empresa requer informações sobre relatórios de conformidade AWS e acordos AWS. Qual serviço AWS fornece acesso sob demanda a esses itens?",
       "options": [
         {
           "key": "A",
@@ -30593,7 +30593,7 @@
     },
     {
       "id": 1049,
-      "text": "Um usuário precisa auditar e avaliar regularmente a configuração de todos os recursos AWS, identificar contas não conformes e ser notificado quando um recurso mudar. <br/> Qual serviço AWS pode ser usado para atender a esses requisitos?",
+      "text": "Um usuário precisa auditar e avaliar regularmente a configuração de todos os recursos AWS, identificar contas não conformes e ser notificado quando um recurso mudar. Qual serviço AWS pode ser usado para atender a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -30621,7 +30621,7 @@
     },
     {
       "id": 1050,
-      "text": "Um usuário está planejando lançar duas instâncias Amazon EC2 adicionais para aumentar a disponibilidade. <br/> Qual ação o usuário deve tomar?",
+      "text": "Um usuário está planejando lançar duas instâncias Amazon EC2 adicionais para aumentar a disponibilidade. Qual ação o usuário deve tomar?",
       "options": [
         {
           "key": "A",
@@ -30649,7 +30649,7 @@
     },
     {
       "id": 1051,
-      "text": "Uma empresa deve armazenar dados críticos de negócios no Amazon S3 com backup para outra Região AWS. <br/> Como isso pode ser alcançado?",
+      "text": "Uma empresa deve armazenar dados críticos de negócios no Amazon S3 com backup para outra Região AWS. Como isso pode ser alcançado?",
       "options": [
         {
           "key": "A",
@@ -30733,7 +30733,7 @@
     },
     {
       "id": 1054,
-      "text": "Um usuário precisa descobrir, classificar e proteger automaticamente dados sensíveis armazenados no Amazon S3. <br/> Qual serviço AWS pode atender a esses requisitos?",
+      "text": "Um usuário precisa descobrir, classificar e proteger automaticamente dados sensíveis armazenados no Amazon S3. Qual serviço AWS pode atender a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -31084,7 +31084,7 @@
     },
     {
       "id": 1066,
-      "text": "Durante uma revisão de conformidade, um dos auditores exige uma cópia do relatório AWS SOC 2. <br/> Qual serviço deve ser usado para enviar essa solicitação?",
+      "text": "Durante uma revisão de conformidade, um dos auditores exige uma cópia do relatório AWS SOC 2. Qual serviço deve ser usado para enviar essa solicitação?",
       "options": [
         {
           "key": "A",
@@ -31112,7 +31112,7 @@
     },
     {
       "id": 1067,
-      "text": "Uma empresa deseja configurar uma carga de trabalho altamente disponível na AWS com um plano de recuperação de desastres que permita a recuperação em caso de interrupção regional do serviço. <br/> Qual configuração atenderá a esses requisitos?",
+      "text": "Uma empresa deseja configurar uma carga de trabalho altamente disponível na AWS com um plano de recuperação de desastres que permita a recuperação em caso de interrupção regional do serviço. Qual configuração atenderá a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -31140,7 +31140,7 @@
     },
     {
       "id": 1068,
-      "text": "Uma empresa possui um repositório de imagens de 500 TB que precisa ser transportado para a AWS para processamento. <br/> Qual serviço AWS pode importar esses dados da forma MAIS econômica?",
+      "text": "Uma empresa possui um repositório de imagens de 500 TB que precisa ser transportado para a AWS para processamento. Qual serviço AWS pode importar esses dados da forma MAIS econômica?",
       "options": [
         {
           "key": "A",
@@ -31229,7 +31229,7 @@
     },
     {
       "id": 1071,
-      "text": "Uma empresa deseja permitir acesso total a um bucket Amazon S3 para um usuário específico. <br/> Qual elemento na política do bucket S3 contém os detalhes do usuário que descrevem quem precisa de acesso ao bucket S3?",
+      "text": "Uma empresa deseja permitir acesso total a um bucket Amazon S3 para um usuário específico. Qual elemento na política do bucket S3 contém os detalhes do usuário que descrevem quem precisa de acesso ao bucket S3?",
       "options": [
         {
           "key": "A",
@@ -31285,7 +31285,7 @@
     },
     {
       "id": 1073,
-      "text": "Uma empresa está testando um novo aplicativo voltado para o cliente no Amazon Elastic Compute Cloud (Amazon EC2) por um mês. <br/> Qual modelo de precificação é apropriado?",
+      "text": "Uma empresa está testando um novo aplicativo voltado para o cliente no Amazon Elastic Compute Cloud (Amazon EC2) por um mês. Qual modelo de precificação é apropriado?",
       "options": [
         {
           "key": "A",
@@ -31509,7 +31509,7 @@
     },
     {
       "id": 1081,
-      "text": "Um design de arquitetura inclui Amazon EC2, um Elastic Load Balancer e Amazon RDS. <br/> Qual é a MELHOR forma de obter uma estimativa de custo mensal para essa arquitetura?",
+      "text": "Um design de arquitetura inclui Amazon EC2, um Elastic Load Balancer e Amazon RDS. Qual é a MELHOR forma de obter uma estimativa de custo mensal para essa arquitetura?",
       "options": [
         {
           "key": "A",
@@ -31598,7 +31598,7 @@
     },
     {
       "id": 1084,
-      "text": "Uma empresa possui múltiplas fontes de dados em toda a organização e deseja consolidar os dados em um único data warehouse. <br/> Qual serviço AWS pode ser usado para atender a esse requisito?",
+      "text": "Uma empresa possui múltiplas fontes de dados em toda a organização e deseja consolidar os dados em um único data warehouse. Qual serviço AWS pode ser usado para atender a esse requisito?",
       "options": [
         {
           "key": "A",
@@ -31654,7 +31654,7 @@
     },
     {
       "id": 1086,
-      "text": "Um usuário possui recursos locais subutilizados. <br/> Qual conceito da AWS Cloud pode MELHOR resolver esse problema?",
+      "text": "Um usuário possui recursos locais subutilizados. Qual conceito da AWS Cloud pode MELHOR resolver esse problema?",
       "options": [
         {
           "key": "A",
@@ -31682,7 +31682,7 @@
     },
     {
       "id": 1087,
-      "text": "Um usuário tem uma carga de trabalho stateful que será executada no Amazon EC2 pelos próximos 3 anos. <br/> Qual é o modelo de precificação MAIS econômico para essa carga de trabalho?",
+      "text": "Um usuário tem uma carga de trabalho stateful que será executada no Amazon EC2 pelos próximos 3 anos. Qual é o modelo de precificação MAIS econômico para essa carga de trabalho?",
       "options": [
         {
           "key": "A",
@@ -31710,7 +31710,7 @@
     },
     {
       "id": 1088,
-      "text": "Um profissional de cloud precisa que uma instância Amazon EC2 seja iniciada e executada por 7 horas sem interrupções. <br/> Qual é a opção mais adequada e econômica para essa tarefa?",
+      "text": "Um profissional de cloud precisa que uma instância Amazon EC2 seja iniciada e executada por 7 horas sem interrupções. Qual é a opção mais adequada e econômica para essa tarefa?",
       "options": [
         {
           "key": "A",
@@ -31771,7 +31771,7 @@
     },
     {
       "id": 1090,
-      "text": "Um desenvolvedor foi contratado por uma grande empresa e precisa de credenciais AWS. <br/> Quais são as melhores práticas de segurança que devem ser seguidas? (Escolha dois.)",
+      "text": "Um desenvolvedor foi contratado por uma grande empresa e precisa de credenciais AWS. Quais são as melhores práticas de segurança que devem ser seguidas? (Escolha dois.)",
       "options": [
         {
           "key": "A",
@@ -31860,7 +31860,7 @@
     },
     {
       "id": 1093,
-      "text": "Um usuário está planejando migrar uma carga de trabalho de aplicação para a AWS Cloud. <br/> Qual controle se torna responsabilidade da AWS após a conclusão da migração?",
+      "text": "Um usuário está planejando migrar uma carga de trabalho de aplicação para a AWS Cloud. Qual controle se torna responsabilidade da AWS após a conclusão da migração?",
       "options": [
         {
           "key": "A",
@@ -32033,7 +32033,7 @@
     },
     {
       "id": 1099,
-      "text": "Uma empresa possui um banco de dados MySQL rodando em uma única instância Amazon EC2. A empresa agora requer maior disponibilidade em caso de falha. <br/> Qual conjunto de tarefas atenderia a esse requisito?",
+      "text": "Uma empresa possui um banco de dados MySQL rodando em uma única instância Amazon EC2. A empresa agora requer maior disponibilidade em caso de falha. Qual conjunto de tarefas atenderia a esse requisito?",
       "options": [
         {
           "key": "A",
@@ -32061,7 +32061,7 @@
     },
     {
       "id": 1100,
-      "text": "Uma empresa quer garantir que os usuários do AWS Management Console estejam cumprindo os requisitos de complexidade de senha. <br/> Como a empresa pode configurar a complexidade da senha?",
+      "text": "Uma empresa quer garantir que os usuários do AWS Management Console estejam cumprindo os requisitos de complexidade de senha. Como a empresa pode configurar a complexidade da senha?",
       "options": [
         {
           "key": "A",
@@ -32145,7 +32145,7 @@
     },
     {
       "id": 1103,
-      "text": "Uma empresa está construindo uma aplicação que requer a capacidade de enviar, armazenar e receber mensagens entre componentes da aplicação. A empresa tem outro requisito para processar mensagens na ordem first-in, first-out (FIFO). <br/> Qual serviço AWS a empresa deve usar?",
+      "text": "Uma empresa está construindo uma aplicação que requer a capacidade de enviar, armazenar e receber mensagens entre componentes da aplicação. A empresa tem outro requisito para processar mensagens na ordem first-in, first-out (FIFO). Qual serviço AWS a empresa deve usar?",
       "options": [
         {
           "key": "A",
@@ -32173,7 +32173,7 @@
     },
     {
       "id": 1104,
-      "text": "A AnyCompany recentemente adquiriu a Example Corp. Ambas as empresas usam recursos AWS, e a AnyCompany quer uma única fatura agregada. <br/> Qual opção permite que a AnyCompany receba uma única fatura?",
+      "text": "A AnyCompany recentemente adquiriu a Example Corp. Ambas as empresas usam recursos AWS, e a AnyCompany quer uma única fatura agregada. Qual opção permite que a AnyCompany receba uma única fatura?",
       "options": [
         {
           "key": "A",
@@ -32229,7 +32229,7 @@
     },
     {
       "id": 1106,
-      "text": "Um usuário tem conhecimento limitado dos serviços AWS, mas quer implantar rapidamente uma aplicação Node.js escalável na AWS Cloud. <br/> Qual serviço deve ser usado para implantar a aplicação?",
+      "text": "Um usuário tem conhecimento limitado dos serviços AWS, mas quer implantar rapidamente uma aplicação Node.js escalável na AWS Cloud. Qual serviço deve ser usado para implantar a aplicação?",
       "options": [
         {
           "key": "A",
@@ -32285,7 +32285,7 @@
     },
     {
       "id": 1108,
-      "text": "Um desenvolvedor web está preocupado que um ataque DDoS possa visar uma aplicação. <br/> Quais serviços ou recursos AWS podem ajudar a proteger contra esse tipo de ataque? (Escolha dois.)",
+      "text": "Um desenvolvedor web está preocupado que um ataque DDoS possa visar uma aplicação. Quais serviços ou recursos AWS podem ajudar a proteger contra esse tipo de ataque? (Escolha dois.)",
       "options": [
         {
           "key": "A",
@@ -32346,7 +32346,7 @@
     },
     {
       "id": 1110,
-      "text": "Uma empresa quer fornecer a um de seus funcionários acesso ao Amazon RDS. A empresa também quer limitar a interação apenas ao AWS CLI e aos SDKs de desenvolvimento AWS. <br/> Qual combinação de ações a empresa deve tomar para atender a esses requisitos seguindo os princípios do menor privilégio? (Escolha dois.)",
+      "text": "Uma empresa quer fornecer a um de seus funcionários acesso ao Amazon RDS. A empresa também quer limitar a interação apenas ao AWS CLI e aos SDKs de desenvolvimento AWS. Qual combinação de ações a empresa deve tomar para atender a esses requisitos seguindo os princípios do menor privilégio? (Escolha dois.)",
       "options": [
         {
           "key": "A",
@@ -32379,7 +32379,7 @@
     },
     {
       "id": 1111,
-      "text": "Uma empresa tem um requisito de conformidade para registrar e avaliar mudanças de configuração, bem como realizar ações de remediação em recursos AWS. <br/> Qual serviço AWS a empresa deve usar?",
+      "text": "Uma empresa tem um requisito de conformidade para registrar e avaliar mudanças de configuração, bem como realizar ações de remediação em recursos AWS. Qual serviço AWS a empresa deve usar?",
       "options": [
         {
           "key": "A",
@@ -32440,7 +32440,7 @@
     },
     {
       "id": 1113,
-      "text": "Uma carga de trabalho na AWS será executada no futuro previsível usando um número consistente de instâncias Amazon EC2. <br/> Qual modelo de precificação minimizará o custo garantindo que os recursos de computação permaneçam disponíveis?",
+      "text": "Uma carga de trabalho na AWS será executada no futuro previsível usando um número consistente de instâncias Amazon EC2. Qual modelo de precificação minimizará o custo garantindo que os recursos de computação permaneçam disponíveis?",
       "options": [
         {
           "key": "A",
@@ -32552,7 +32552,7 @@
     },
     {
       "id": 1117,
-      "text": "Uma empresa deseja ser notificada quando seus custos ou uso da AWS Cloud excederem limites definidos. <br/> Qual serviço AWS suportará esses requisitos?",
+      "text": "Uma empresa deseja ser notificada quando seus custos ou uso da AWS Cloud excederem limites definidos. Qual serviço AWS suportará esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -32753,7 +32753,7 @@
     },
     {
       "id": 1124,
-      "text": "Uma empresa quer garantir que sua infraestrutura seja projetada para tolerância a falhas e continuidade de negócios no caso de uma interrupção ambiental. <br/> Qual componente da infraestrutura AWS a empresa deve replicar?",
+      "text": "Uma empresa quer garantir que sua infraestrutura seja projetada para tolerância a falhas e continuidade de negócios no caso de uma interrupção ambiental. Qual componente da infraestrutura AWS a empresa deve replicar?",
       "options": [
         {
           "key": "A",
@@ -32842,7 +32842,7 @@
     },
     {
       "id": 1127,
-      "text": "Uma empresa está planejando lançar um site de comércio eletrônico em uma única Região AWS para uma base de usuários mundial. <br/> Quais serviços AWS permitirão que a empresa alcance os usuários e forneça baixa latência e altas velocidades de transferência? (Escolha dois.)",
+      "text": "Uma empresa está planejando lançar um site de comércio eletrônico em uma única Região AWS para uma base de usuários mundial. Quais serviços AWS permitirão que a empresa alcance os usuários e forneça baixa latência e altas velocidades de transferência? (Escolha dois.)",
       "options": [
         {
           "key": "A",
@@ -32875,7 +32875,7 @@
     },
     {
       "id": 1128,
-      "text": "Uma empresa quer se conectar à AWS por meio de uma conexão privada e de baixa latência a partir de seu escritório remoto. <br/> Qual é o método recomendado para atender a esses requisitos?",
+      "text": "Uma empresa quer se conectar à AWS por meio de uma conexão privada e de baixa latência a partir de seu escritório remoto. Qual é o método recomendado para atender a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -32931,7 +32931,7 @@
     },
     {
       "id": 1130,
-      "text": "Uma empresa tem um site hospedado na AWS atrás de um Application Load Balancer. A empresa quer proteger o site contra injeção de SQL ou cross-site scripting. <br/> Qual serviço AWS a empresa deve usar?",
+      "text": "Uma empresa tem um site hospedado na AWS atrás de um Application Load Balancer. A empresa quer proteger o site contra injeção de SQL ou cross-site scripting. Qual serviço AWS a empresa deve usar?",
       "options": [
         {
           "key": "A",
@@ -32987,7 +32987,7 @@
     },
     {
       "id": 1132,
-      "text": "Uma empresa está executando um banco de dados Oracle autogerenciado diretamente no Amazon EC2 para seu banco de dados em estado estável. A empresa quer reduzir custos de computação. <br/> Qual opção a empresa deve usar para maximizar economias em um prazo de 3 anos?",
+      "text": "Uma empresa está executando um banco de dados Oracle autogerenciado diretamente no Amazon EC2 para seu banco de dados em estado estável. A empresa quer reduzir custos de computação. Qual opção a empresa deve usar para maximizar economias em um prazo de 3 anos?",
       "options": [
         {
           "key": "A",
@@ -33015,7 +33015,7 @@
     },
     {
       "id": 1133,
-      "text": "Um auditor externo solicitou que uma empresa forneça uma lista de todos os seus usuários IAM, incluindo o status das credenciais e chaves de acesso dos usuários. <br/> Qual é a maneira MAIS SIMPLES de fornecer essa informação?",
+      "text": "Um auditor externo solicitou que uma empresa forneça uma lista de todos os seus usuários IAM, incluindo o status das credenciais e chaves de acesso dos usuários. Qual é a maneira MAIS SIMPLES de fornecer essa informação?",
       "options": [
         {
           "key": "A",
@@ -33076,7 +33076,7 @@
     },
     {
       "id": 1135,
-      "text": "Uma empresa espera um pico de curto prazo no tráfego da internet para sua aplicação. Durante o aumento do tráfego, a aplicação não pode ser interrompida. A empresa também precisa minimizar custos e maximizar a flexibilidade. <br/> Qual tipo de instância Amazon EC2 a empresa deve usar para atender a esses requisitos?",
+      "text": "Uma empresa espera um pico de curto prazo no tráfego da internet para sua aplicação. Durante o aumento do tráfego, a aplicação não pode ser interrompida. A empresa também precisa minimizar custos e maximizar a flexibilidade. Qual tipo de instância Amazon EC2 a empresa deve usar para atender a esses requisitos?",
       "options": [
         {
           "key": "A",
@@ -33104,7 +33104,7 @@
     },
     {
       "id": 1136,
-      "text": "Uma empresa quer rastrear mudanças na configuração dos recursos AWS por motivos de conformidade. <br/> Qual recurso AWS pode ser usado para atender a esse requisito?",
+      "text": "Uma empresa quer rastrear mudanças na configuração dos recursos AWS por motivos de conformidade. Qual recurso AWS pode ser usado para atender a esse requisito?",
       "options": [
         {
           "key": "A",
@@ -33132,7 +33132,7 @@
     },
     {
       "id": 1137,
-      "text": "Uma empresa está construindo uma aplicação que precisa entregar imagens e vídeos globalmente com latência mínima. <br/> Qual abordagem a empresa pode usar para realizar isso de forma econômica?",
+      "text": "Uma empresa está construindo uma aplicação que precisa entregar imagens e vídeos globalmente com latência mínima. Qual abordagem a empresa pode usar para realizar isso de forma econômica?",
       "options": [
         {
           "key": "A",
@@ -33216,7 +33216,7 @@
     },
     {
       "id": 1140,
-      "text": "Uma empresa farmacêutica opera sua infraestrutura em uma única Região AWS. A empresa possui milhares de VPCs em várias contas AWS que deseja interconectar. <br/> Qual serviço ou recurso AWS a empresa deve usar para ajudar a simplificar a gestão e reduzir custos operacionais?",
+      "text": "Uma empresa farmacêutica opera sua infraestrutura em uma única Região AWS. A empresa possui milhares de VPCs em várias contas AWS que deseja interconectar. Qual serviço ou recurso AWS a empresa deve usar para ajudar a simplificar a gestão e reduzir custos operacionais?",
       "options": [
         {
           "key": "A",
@@ -33297,6 +33297,672 @@
       ],
       "domain": "AWS",
       "difficulty": "MEDIUM"
+    },
+    {
+      "id": 3001,
+      "text": "Uma empresa deseja reduzir custos em workloads com uso contínuo e previsível ao longo de um ano. No entanto, ela também quer manter flexibilidade caso o uso diminua. Qual opção de precificação da AWS atende melhor a esse cenário?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Reserved Instances Standard de 3 anos.",
+          "correct": false
+        },
+        { "key": "B", "text": "Spot Instances.", "correct": false },
+        { "key": "C", "text": "Savings Plans.", "correct": true },
+        { "key": "D", "text": "Dedicated Hosts.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3002,
+      "text": "Uma aplicação precisa continuar funcionando mesmo se uma Availability Zone falhar. Qual princípio de design da AWS atende diretamente a esse requisito?",
+      "options": [
+        { "key": "A", "text": "Escalabilidade vertical.", "correct": false },
+        {
+          "key": "B",
+          "text": "Eliminação de pontos únicos de falha.",
+          "correct": true
+        },
+        { "key": "C", "text": "Uso de serviços globais.", "correct": false },
+        { "key": "D", "text": "Provisionamento manual.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3003,
+      "text": "Uma empresa usa o Amazon RDS para um banco de dados crítico. De acordo com o Modelo de Responsabilidade Compartilhada, qual ação é responsabilidade do cliente?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Aplicar patches no sistema operacional do host.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Garantir alta disponibilidade entre Availability Zones.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "Gerenciar usuários e permissões do banco.",
+          "correct": true
+        },
+        { "key": "D", "text": "Manter o hardware físico.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3004,
+      "text": "Uma startup quer ser alertada antes que seus custos mensais ultrapassem um valor definido. Qual combinação de serviços atende melhor a esse requisito? (Escolha DUAS)",
+      "options": [
+        { "key": "A", "text": "AWS Budgets.", "correct": true },
+        {
+          "key": "B",
+          "text": "Amazon CloudWatch Billing Alarms.",
+          "correct": true
+        },
+        { "key": "C", "text": "AWS Trusted Advisor.", "correct": false },
+        { "key": "D", "text": "AWS Cost Explorer.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3005,
+      "text": "Uma aplicação web global precisa reduzir latência para usuários finais sem replicar o backend em múltiplas Regions. Qual serviço AWS atende melhor a esse cenário?",
+      "options": [
+        { "key": "A", "text": "Amazon CloudFront.", "correct": true },
+        { "key": "B", "text": "Amazon Route 53.", "correct": false },
+        { "key": "C", "text": "AWS Direct Connect.", "correct": false },
+        { "key": "D", "text": "Amazon VPC Peering.", "correct": false }
+      ],
+      "domain": "Technology",
+      "difficulty": "HARD"
+    },
+
+    {
+      "id": 3006,
+      "text": "Qual situação representa a PIOR escolha para uso de Spot Instances?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Processamento em lote tolerante a falhas.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Aplicações críticas que não podem ser interrompidas.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Workloads flexíveis e sem prazo rígido.",
+          "correct": false
+        },
+        { "key": "D", "text": "Jobs de curta duração.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3007,
+      "text": "Qual benefício do uso de múltiplas Availability Zones é mais diretamente relacionado à confiabilidade?",
+      "options": [
+        { "key": "A", "text": "Redução de custos.", "correct": false },
+        { "key": "B", "text": "Isolamento de falhas.", "correct": true },
+        { "key": "C", "text": "Menor latência global.", "correct": false },
+        { "key": "D", "text": "Gerenciamento simplificado.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3008,
+      "text": "Uma empresa precisa armazenar dados raramente acessados, mas que devem ser mantidos por vários anos com o menor custo possível. Qual classe de armazenamento do Amazon S3 atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "S3 Standard.", "correct": false },
+        { "key": "B", "text": "S3 Intelligent-Tiering.", "correct": false },
+        {
+          "key": "C",
+          "text": "S3 Glacier Flexible Retrieval.",
+          "correct": false
+        },
+        { "key": "D", "text": "S3 Glacier Deep Archive.", "correct": true }
+      ],
+      "domain": "Technology",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3009,
+      "text": "Qual ação melhora diretamente a postura de segurança de uma conta AWS recém-criada?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Criar usuários IAM para cada serviço.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Habilitar MFA no usuário root.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Usar Access Keys no usuário root.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Compartilhar credenciais entre equipes.",
+          "correct": false
+        }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3010,
+      "text": "Qual é o principal benefício financeiro do modelo pay-as-you-go da AWS?",
+      "options": [
+        { "key": "A", "text": "Custos fixos previsíveis.", "correct": false },
+        {
+          "key": "B",
+          "text": "Eliminação de despesas operacionais.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "Redução de investimento inicial em infraestrutura.",
+          "correct": true
+        },
+        {
+          "key": "D",
+          "text": "Descontos automáticos em todos os serviços.",
+          "correct": false
+        }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3011,
+      "text": "Uma empresa quer garantir que apenas usuários autorizados possam acessar recursos AWS, aplicando permissões mínimas necessárias. Qual princípio de segurança da AWS atende diretamente a esse objetivo?",
+      "options": [
+        { "key": "A", "text": "Defesa em profundidade.", "correct": false },
+        {
+          "key": "B",
+          "text": "Princípio do menor privilégio.",
+          "correct": true
+        },
+        { "key": "C", "text": "Isolamento de rede.", "correct": false },
+        { "key": "D", "text": "Alta disponibilidade.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3012,
+      "text": "Uma organização precisa analisar como seus custos AWS evoluíram ao longo dos últimos meses e identificar quais serviços mais contribuíram para o aumento. Qual serviço AWS atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "AWS Budgets.", "correct": false },
+        { "key": "B", "text": "AWS Cost Explorer.", "correct": true },
+        { "key": "C", "text": "AWS Trusted Advisor.", "correct": false },
+        { "key": "D", "text": "AWS Pricing Calculator.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3013,
+      "text": "Uma aplicação precisa continuar aceitando requisições mesmo quando um componente downstream falha temporariamente. Qual abordagem arquitetural da AWS ajuda diretamente nesse cenário?",
+      "options": [
+        { "key": "A", "text": "Escalabilidade vertical.", "correct": false },
+        {
+          "key": "B",
+          "text": "Desacoplamento de componentes.",
+          "correct": true
+        },
+        { "key": "C", "text": "Provisionamento manual.", "correct": false },
+        { "key": "D", "text": "Uso de instâncias maiores.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3014,
+      "text": "Uma empresa deseja garantir que seus dados armazenados no Amazon S3 estejam protegidos contra exclusões acidentais ou maliciosas. Qual recurso atende melhor a esse objetivo?",
+      "options": [
+        { "key": "A", "text": "S3 Intelligent-Tiering.", "correct": false },
+        { "key": "B", "text": "S3 Versioning.", "correct": true },
+        { "key": "C", "text": "S3 Transfer Acceleration.", "correct": false },
+        { "key": "D", "text": "Amazon CloudFront.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3015,
+      "text": "Uma empresa precisa garantir conformidade regulatória e acesso a relatórios de auditoria e certificações de segurança da AWS. Qual serviço AWS fornece essas informações?",
+      "options": [
+        { "key": "A", "text": "AWS Shield.", "correct": false },
+        { "key": "B", "text": "AWS Artifact.", "correct": true },
+        { "key": "C", "text": "AWS Inspector.", "correct": false },
+        { "key": "D", "text": "AWS Config.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3016,
+      "text": "Uma empresa deseja reduzir o risco operacional ao lançar mudanças frequentes em sua infraestrutura na AWS. Qual prática recomendada da AWS atende melhor esse objetivo?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Provisionar recursos manualmente.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Automatizar infraestrutura sempre que possível.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Usar apenas uma Availability Zone.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Fixar capacidade máxima de recursos.",
+          "correct": false
+        }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3017,
+      "text": "Uma empresa quer ser notificada quando um serviço AWS apresentar degradação que possa impactar seus recursos específicos. Qual serviço fornece essa visibilidade personalizada?",
+      "options": [
+        { "key": "A", "text": "AWS Trusted Advisor.", "correct": false },
+        { "key": "B", "text": "AWS Health Dashboard.", "correct": true },
+        { "key": "C", "text": "Amazon CloudWatch Logs.", "correct": false },
+        { "key": "D", "text": "AWS Cost Explorer.", "correct": false }
+      ],
+      "domain": "Technology",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3018,
+      "text": "Qual situação mais se beneficia do uso de instâncias On-Demand em vez de instâncias Reserved?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Workloads estáveis e previsíveis.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Aplicações com uso contínuo por vários anos.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "Ambientes de teste temporários e imprevisíveis.",
+          "correct": true
+        },
+        {
+          "key": "D",
+          "text": "Sistemas críticos de produção.",
+          "correct": false
+        }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3019,
+      "text": "Uma empresa quer minimizar o impacto financeiro de picos inesperados de tráfego em sua aplicação. Qual característica da AWS atende melhor esse objetivo?",
+      "options": [
+        { "key": "A", "text": "Escalabilidade elástica.", "correct": true },
+        { "key": "B", "text": "Escalabilidade vertical.", "correct": false },
+        { "key": "C", "text": "Capacidade reservada.", "correct": false },
+        { "key": "D", "text": "Infraestrutura dedicada.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3020,
+      "text": "Uma empresa deseja centralizar logs e métricas para monitorar recursos AWS e reagir rapidamente a falhas operacionais. Qual serviço AWS atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "AWS CloudTrail.", "correct": false },
+        { "key": "B", "text": "Amazon CloudWatch.", "correct": true },
+        { "key": "C", "text": "AWS Config.", "correct": false },
+        { "key": "D", "text": "AWS Trusted Advisor.", "correct": false }
+      ],
+      "domain": "Technology",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3021,
+      "text": "Uma empresa deseja garantir que suas aplicações continuem disponíveis mesmo durante falhas de infraestrutura. Qual conceito da AWS aborda diretamente esse objetivo?",
+      "options": [
+        { "key": "A", "text": "Alta durabilidade.", "correct": false },
+        { "key": "B", "text": "Alta disponibilidade.", "correct": true },
+        { "key": "C", "text": "Escalabilidade vertical.", "correct": false },
+        { "key": "D", "text": "Provisionamento manual.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3022,
+      "text": "Uma empresa deseja controlar quais ações usuários podem executar em serviços AWS. Qual combinação atende melhor a esse requisito? (Escolha DUAS)",
+      "options": [
+        { "key": "A", "text": "Usuários IAM.", "correct": true },
+        { "key": "B", "text": "Políticas IAM.", "correct": true },
+        { "key": "C", "text": "Grupos de segurança.", "correct": false },
+        { "key": "D", "text": "Network ACLs.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3023,
+      "text": "Uma empresa precisa estimar custos futuros antes de migrar uma aplicação para a AWS. Qual ferramenta é mais adequada para esse planejamento?",
+      "options": [
+        { "key": "A", "text": "AWS Cost Explorer.", "correct": false },
+        { "key": "B", "text": "AWS Pricing Calculator.", "correct": true },
+        { "key": "C", "text": "AWS Budgets.", "correct": false },
+        { "key": "D", "text": "AWS Trusted Advisor.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3024,
+      "text": "Uma empresa quer reduzir riscos de segurança associados a credenciais de longo prazo. Qual prática AWS atende melhor esse objetivo?",
+      "options": [
+        { "key": "A", "text": "Usar Access Keys estáticas.", "correct": false },
+        {
+          "key": "B",
+          "text": "Habilitar MFA sempre que possível.",
+          "correct": true
+        },
+        { "key": "C", "text": "Compartilhar usuários IAM.", "correct": false },
+        {
+          "key": "D",
+          "text": "Usar o usuário root para operações diárias.",
+          "correct": false
+        }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3025,
+      "text": "Uma empresa deseja receber recomendações contínuas para otimizar custos, segurança e desempenho de sua conta AWS. Qual serviço atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "AWS Cost Explorer.", "correct": false },
+        { "key": "B", "text": "AWS Trusted Advisor.", "correct": true },
+        { "key": "C", "text": "AWS CloudTrail.", "correct": false },
+        { "key": "D", "text": "AWS Health Dashboard.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3026,
+      "text": "Uma aplicação precisa lidar com variações rápidas de carga sem intervenção manual. Qual característica da AWS atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "Elasticidade.", "correct": true },
+        { "key": "B", "text": "Alta durabilidade.", "correct": false },
+        { "key": "C", "text": "Capacidade reservada.", "correct": false },
+        { "key": "D", "text": "Infraestrutura dedicada.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3027,
+      "text": "Uma empresa deseja registrar todas as chamadas de API feitas em sua conta AWS para fins de auditoria. Qual serviço atende melhor esse objetivo?",
+      "options": [
+        { "key": "A", "text": "Amazon CloudWatch.", "correct": false },
+        { "key": "B", "text": "AWS Config.", "correct": false },
+        { "key": "C", "text": "AWS CloudTrail.", "correct": true },
+        { "key": "D", "text": "AWS Trusted Advisor.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3028,
+      "text": "Qual benefício financeiro está diretamente associado ao uso de Auto Scaling?",
+      "options": [
+        { "key": "A", "text": "Custos fixos previsíveis.", "correct": false },
+        {
+          "key": "B",
+          "text": "Redução de custos ao ajustar capacidade à demanda.",
+          "correct": true
+        },
+        { "key": "C", "text": "Eliminação total de falhas.", "correct": false },
+        { "key": "D", "text": "Descontos automáticos.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3029,
+      "text": "Uma empresa deseja isolar ambientes de produção e desenvolvimento dentro da AWS. Qual abordagem atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "Usar diferentes Regions.", "correct": false },
+        { "key": "B", "text": "Criar contas AWS separadas.", "correct": true },
+        {
+          "key": "C",
+          "text": "Usar diferentes Availability Zones.",
+          "correct": false
+        },
+        { "key": "D", "text": "Usar apenas subnets.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3030,
+      "text": "Uma empresa quer reduzir a latência de entrega de conteúdo estático globalmente. Qual serviço AWS atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "Amazon S3.", "correct": false },
+        { "key": "B", "text": "Amazon CloudFront.", "correct": true },
+        { "key": "C", "text": "AWS Direct Connect.", "correct": false },
+        { "key": "D", "text": "Amazon Route 53.", "correct": false }
+      ],
+      "domain": "Technology",
+      "difficulty": "HARD"
+    },
+
+    {
+      "id": 3031,
+      "text": "Qual prática reduz diretamente o risco de falhas causadas por mudanças manuais em infraestrutura?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Uso de infraestrutura como código.",
+          "correct": true
+        },
+        { "key": "B", "text": "Provisionamento manual.", "correct": false },
+        {
+          "key": "C",
+          "text": "Uso exclusivo de instâncias grandes.",
+          "correct": false
+        },
+        { "key": "D", "text": "Escalabilidade vertical.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3032,
+      "text": "Uma empresa precisa garantir que dados em trânsito entre clientes e serviços AWS estejam protegidos. Qual mecanismo atende melhor esse objetivo?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Criptografia do lado do cliente.",
+          "correct": false
+        },
+        { "key": "B", "text": "HTTPS/TLS.", "correct": true },
+        { "key": "C", "text": "IAM Roles.", "correct": false },
+        { "key": "D", "text": "Security Groups.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3033,
+      "text": "Uma empresa deseja entender quais recursos AWS estão subutilizados para otimizar custos. Qual serviço ajuda diretamente nessa análise?",
+      "options": [
+        { "key": "A", "text": "AWS Trusted Advisor.", "correct": true },
+        { "key": "B", "text": "AWS Artifact.", "correct": false },
+        { "key": "C", "text": "AWS Shield.", "correct": false },
+        { "key": "D", "text": "AWS Health Dashboard.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3034,
+      "text": "Qual cenário se beneficia mais do uso de múltiplas Regions?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Redução de custos operacionais.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Recuperação de desastres em larga escala.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Simplificação da arquitetura.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Menor latência dentro de uma mesma cidade.",
+          "correct": false
+        }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3035,
+      "text": "Uma empresa quer aplicar políticas de conformidade automaticamente quando recursos são criados ou alterados. Qual serviço AWS atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "AWS Config.", "correct": true },
+        { "key": "B", "text": "AWS CloudTrail.", "correct": false },
+        { "key": "C", "text": "AWS Budgets.", "correct": false },
+        { "key": "D", "text": "Amazon CloudWatch.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3036,
+      "text": "Qual vantagem está diretamente relacionada ao uso de serviços gerenciados pela AWS?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Maior controle sobre hardware físico.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Redução de esforço operacional.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Capacidade ilimitada sem custos.",
+          "correct": false
+        },
+        { "key": "D", "text": "Eliminação total de falhas.", "correct": false }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3037,
+      "text": "Uma empresa deseja limitar impactos financeiros de erros humanos ao criar recursos AWS. Qual prática atende melhor esse objetivo?",
+      "options": [
+        {
+          "key": "A",
+          "text": "Uso exclusivo do usuário root.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Aplicação de limites e orçamentos.",
+          "correct": true
+        },
+        { "key": "C", "text": "Provisionamento manual.", "correct": false },
+        { "key": "D", "text": "Uso de uma única conta.", "correct": false }
+      ],
+      "domain": "Billing & Pricing",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3038,
+      "text": "Qual serviço AWS permite definir políticas para rotear usuários para endpoints mais próximos geograficamente?",
+      "options": [
+        { "key": "A", "text": "Amazon CloudFront.", "correct": false },
+        { "key": "B", "text": "Amazon Route 53.", "correct": true },
+        { "key": "C", "text": "AWS Global Accelerator.", "correct": false },
+        { "key": "D", "text": "Amazon VPC.", "correct": false }
+      ],
+      "domain": "Technology",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3039,
+      "text": "Uma empresa quer garantir que apenas tráfego permitido alcance suas instâncias EC2. Qual recurso atende melhor esse requisito?",
+      "options": [
+        { "key": "A", "text": "IAM Policies.", "correct": false },
+        { "key": "B", "text": "Security Groups.", "correct": true },
+        { "key": "C", "text": "AWS Shield.", "correct": false },
+        { "key": "D", "text": "AWS Config.", "correct": false }
+      ],
+      "domain": "Security & Compliance",
+      "difficulty": "HARD"
+    },
+    {
+      "id": 3040,
+      "text": "Qual benefício da computação em nuvem AWS permite que empresas experimentem e inovem mais rapidamente?",
+      "options": [
+        { "key": "A", "text": "Custos fixos elevados.", "correct": false },
+        {
+          "key": "B",
+          "text": "Provisionamento rápido de recursos.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Dependência de contratos longos.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Gerenciamento manual de hardware.",
+          "correct": false
+        }
+      ],
+      "domain": "Cloud Concepts",
+      "difficulty": "HARD"
     }
   ]
 }

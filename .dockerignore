@@ -1,11 +1,18 @@
-# Arquivos de build do Gradle
+# ==========================================
+# Build artifacts
+# ==========================================
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+*.jar
+*.war
+*.class
 
-# Arquivos IDE
+# ==========================================
+# IDE e Editores
+# ==========================================
 .idea/
 *.iml
 *.ipr
@@ -14,20 +21,62 @@ build/
 .project
 .classpath
 .settings/
+*.swp
+*.swo
+*~
 
-# Logs
+# ==========================================
+# Logs e dados temporários
+# ==========================================
 logs/
 *.log
+*.log.*
+*.gz
 
+# ==========================================
 # OS
+# ==========================================
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Dados locais
-data/
+# ==========================================
+# Git e Docker
+# ==========================================
+.git/
+.gitignore
+.gitattributes
+.dockerignore
+Dockerfile*
+docker-compose*.yml
+.env*
+
+# ==========================================
+# Dados locais (usar volumes)
+# ==========================================
 *.db
+*.sqlite
 
-# Variáveis de ambiente
-.env
-.env.local
+# ==========================================
+# Documentação e testes
+# ==========================================
+README.md
+*.md
+!src/**/*.md
+docs/
+insomnia/
+openapi/
 
+# ==========================================
+# CI/CD
+# ==========================================
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# ==========================================
+# Scripts locais
+# ==========================================
+*.ps1
+*.sh
+!gradlew

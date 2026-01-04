@@ -40,6 +40,11 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort {
     public void deleteById(UUID id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public boolean existsByTitle(String title) {
+        return repository.existsByTitle(title);
+    }
 }
 
 

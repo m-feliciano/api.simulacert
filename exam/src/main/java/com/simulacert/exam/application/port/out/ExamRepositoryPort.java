@@ -16,5 +16,7 @@ public interface ExamRepositoryPort {
     Exam save(Exam exam);
 
     void deleteById(UUID id);
+
+    boolean existsByTitle(String title);
 }
 
