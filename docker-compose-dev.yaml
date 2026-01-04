@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  simulacert-db:
+    image: postgres:16-alpine
+    container_name: simulacert-db
+    environment:
+      POSTGRES_DB: simulacert
+      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - simulacert-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  simulacert-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: simulacert-api
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SERVER_PORT: ${SERVER_PORT}
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    networks:
+      - simulacert-network
+    depends_on:
+      simulacert-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  simulacert-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

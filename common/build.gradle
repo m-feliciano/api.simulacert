@@ -5,5 +5,5 @@ plugins {
 description = 'Common module'
 
 dependencies {
-    implementation 'org.springframework:spring-context'
+
 }
