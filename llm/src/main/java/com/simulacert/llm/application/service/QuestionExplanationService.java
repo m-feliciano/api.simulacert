@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 public class QuestionExplanationService implements QuestionExplanationUseCase {
     private static final String PROMPT_VERSION = "v1.0";
     private static final Double TEMPERATURE = 0.25;
-    private static final Integer MAX_TOKENS = 500;
+    private static final Integer MAX_TOKENS = 400;
     private static final Duration EXPIRATION_DURATION = Duration.ofDays(7); // 1 week
 
     private final AttemptRepositoryPort attemptRepository;
@@ -121,11 +122,13 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     }
 
     private String buildPrompt(Question question, String certification, String language) {
-        String correctOption = question.getOptions().stream()
+        List<String> correctList = question.getOptions().stream()
                 .filter(QuestionOption::getIsCorrect)
                 .map(QuestionOption::getOptionKey)
-                .collect(Collectors.joining(", "));
+                .sorted(String::compareTo)
+                .collect(Collectors.toList());
 
+        String correctOption = String.join(", ", correctList);
         if (correctOption.isEmpty()) {
             throw new IllegalStateException("Question has no correct option defined: " + question.getId());
         }
@@ -135,19 +138,25 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 .collect(Collectors.joining("\n"));
 
         return String.format("""
-                Given the following multiple-choice question and its correct answer, explain:
-                1. Why the correct option is correct
-                2. Why each incorrect option is incorrect
+                You are explaining an AWS certification multiple-choice question.
                 
-                Rules:
-                - Use only AWS official concepts
-                - Do not introduce new assumptions
-                - Be concise and technical
+                Task:
+                - Explain why each correct option is correct
+                - Explain why each incorrect option is incorrect
+                
+                Rules (mandatory):
+                - Use only AWS services, features, and behaviors documented by AWS
+                - Do not introduce assumptions beyond the question context
+                - Do not restate the question or options
+                - Do not mention exams strategies or personal opinions
                 - Do not mention that you are an AI
-                - Respond in %s language
-                - It may have multiple correct answers, so be sure to address all correct options
-                - Output suggested: Opção <option_key>: <explanation>, one per line
-                - Response must be in the same language as the question
+                - Write in %s
+                - Cover ALL options listed
+                - Be concise and technical (2–4 sentences per option)
+                
+                Output format (mandatory):
+                - One line per option, in alphabetical order (A → Z)
+                - Format exactly: Opção <OPTION_KEY>: <explanation>
                 
                 Question:
                 %s
@@ -158,7 +167,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 Correct answer(s):
                 %s
                 
-                Exam:
+                Certification:
                 %s
                 """, language, question.getText(), optionsText, correctOption, certification);
     }
