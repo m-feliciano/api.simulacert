@@ -120,5 +120,16 @@ public class AttemptController implements AttemptControllerOpenApi {
 
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    @PostMapping("/{attemptId}/cancel")
+    public ResponseEntity<Void> cancelAttempt(@PathVariable UUID attemptId) {
+        log.info("Cancelling attempt {}", attemptId);
+
+        useCase.cancelAttempt(attemptId);
+
+        log.info("Attempt {} cancelled", attemptId);
+        return ResponseEntity.noContent().build();
+    }
 }
 

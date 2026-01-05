@@ -13,5 +13,6 @@ include 'exam'
 include 'attempt'
 include 'stats'
 include 'llm'
+include 'review'
 include 'app'
 

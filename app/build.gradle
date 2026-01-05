@@ -12,6 +12,7 @@ dependencies {
     implementation project(':attempt')
     implementation project(':stats')
     implementation project(':llm')
+    implementation project(':review')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

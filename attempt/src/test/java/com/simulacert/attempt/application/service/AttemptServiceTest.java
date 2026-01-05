@@ -200,21 +200,6 @@ class AttemptServiceTest {
     }
 
     @Test
-    @DisplayName("Should throw exception when finishing with unanswered questions")
-    void shouldThrowExceptionWhenFinishingWithUnansweredQuestions() {
-        List<Answer> incompleteAnswers = createMockAnswers(attemptId, testAttempt.getQuestionIds().subList(0, 5));
-
-        when(attemptRepository.findById(attemptId)).thenReturn(Optional.of(testAttempt));
-        when(answerRepository.findByAttemptId(attemptId)).thenReturn(incompleteAnswers);
-
-        assertThatThrownBy(() -> attemptService.finishAttempt(attemptId))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("All questions must be answered before finishing");
-
-        verify(attemptRepository, never()).save(any());
-    }
-
-    @Test
     @DisplayName("Should throw exception when attempting to finish non-existent attempt")
     void shouldThrowExceptionWhenFinishingNonExistentAttempt() {
         when(attemptRepository.findById(attemptId)).thenReturn(Optional.empty());

@@ -113,4 +113,12 @@ public class Attempt {
                 .questionIds(new ArrayList<>(questionIds))
                 .build();
     }
+
+    public void cancel(Instant now) {
+        if (this.status != AttemptStatus.IN_PROGRESS) {
+            throw new IllegalStateException("Cannot cancel an attempt that is not in progress");
+        }
+        this.status = AttemptStatus.ABANDONED;
+        this.finishedAt = now;
+    }
 }
