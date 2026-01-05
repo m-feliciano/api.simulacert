@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,12 +51,15 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
         validateExplanationRequest(command, userId);
 
-        String cacheKey = buildCacheKey(command.questionId(), command.language());
-        String cachedContent = cacheService.getExplanation(cacheKey, command.questionId(), command.language());
-
-        if (cachedContent != null) {
-            log.info("Returning cached explanation for question {}", command.questionId());
-            return createExplanationResponse(cachedContent, "cached", command);
+        Optional<QuestionExplanationRun> explanation = explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), command.language());
+        if (explanation.isPresent()) {
+            log.info("Returning existing explanation from DB for question {}", command.questionId());
+            return new ExplanationResponse(
+                    explanation.get().getId(),
+                    explanation.get().getContent(),
+                    explanation.get().getModelName(),
+                    explanation.get().getExpiresAt()
+            );
         }
 
         Question question = questionRepository.findById(command.questionId());
@@ -70,8 +74,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
         LLMResult llmResult = llmProvider.generate(llmRequest);
         log.info("Generated explanation using {} - {}", llmResult.provider(), llmResult.modelName());
-
-        cacheService.putExplanation(cacheKey, llmResult.content());
 
         return createExplanationResponse(llmResult.content(), llmResult.modelName(), command);
     }

@@ -35,7 +35,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -164,9 +163,9 @@ class QuestionExplanationServiceTest {
 
         verify(attemptRepository).findById(attemptId);
         verify(questionRepository, times(2)).findById(questionId); // Called twice: validation + generation
-        verify(cacheService).getExplanation(anyString(), any(), anyString()); // Changed verification
+//        verify(cacheService).getExplanation(anyString(), any(), anyString()); // Changed verification
         verify(llmProvider).generate(any(LLMRequest.class));
-        verify(cacheService).putExplanation(anyString(), eq(generatedContent)); // Changed verification
+//        verify(cacheService).putExplanation(anyString(), eq(generatedContent)); // Changed verification
         verify(explanationRunRepository).save(any(QuestionExplanationRun.class));
     }
 
@@ -184,8 +183,10 @@ class QuestionExplanationServiceTest {
 
         when(attemptRepository.findById(attemptId)).thenReturn(Optional.of(attempt));
         when(questionRepository.findById(questionId)).thenReturn(question);
-        when(cacheService.getExplanation(eq(cacheKey), any(), anyString())).thenReturn(cachedContent);
+//        when(cacheService.getExplanation(eq(cacheKey), any(), anyString())).thenReturn(cachedContent);
         when(explanationRunRepository.save(any(QuestionExplanationRun.class))).thenReturn(savedRun);
+        when(explanationRunRepository.findByQuestionIdAndLanguage(questionId, "pt"))
+                .thenReturn(Optional.of(savedRun));
 
         // When
         ExplanationResponse response = service.requestExplanation(command, userId);
@@ -195,7 +196,7 @@ class QuestionExplanationServiceTest {
         assertThat(response.content()).isEqualTo(cachedContent);
         assertThat(response.model()).isEqualTo("cached");
 
-        verify(cacheService).getExplanation(eq(cacheKey), eq(questionId), eq("pt"));
+//        verify(cacheService).getExplanation(eq(cacheKey), eq(questionId), eq("pt"));
         verify(llmProvider, never()).generate(any(LLMRequest.class));
         verify(cacheService, never()).putExplanation(anyString(), anyString());
     }

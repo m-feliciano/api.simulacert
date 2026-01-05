@@ -10,4 +10,6 @@ public interface QuestionExplanationRunRepositoryPort {
     QuestionExplanationRun save(QuestionExplanationRun explanationRun);
 
     Optional<QuestionExplanationRun> findById(UUID id);
+
+    Optional<QuestionExplanationRun> findByQuestionIdAndLanguage(UUID questionId, String language);
 }

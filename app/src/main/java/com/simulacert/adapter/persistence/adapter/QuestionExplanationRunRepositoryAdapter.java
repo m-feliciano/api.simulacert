@@ -26,4 +26,9 @@ public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanat
     public Optional<QuestionExplanationRun> findById(UUID id) {
         return repository.findById(id);
     }
+
+    @Override
+    public Optional<QuestionExplanationRun> findByQuestionIdAndLanguage(UUID questionId, String language) {
+        return repository.findByQuestionIdAndLanguage(questionId, language, clock.now());
+    }
 }
