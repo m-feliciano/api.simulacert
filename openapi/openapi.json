@@ -45,6 +45,10 @@
       "name": "Exams"
     },
     {
+      "description": "AI-generated explanations for exam questions (Experimental)",
+      "name": "Question Explanations"
+    },
+    {
       "description": "Manage attempt reviews",
       "name": "Reviews"
     }
@@ -1815,6 +1819,84 @@
         ]
       }
     },
+    "/api/v1/explanations/{explanationId}/feedback": {
+      "post": {
+        "description": "Rate and provide feedback on the quality of an AI-generated explanation",
+        "operationId": "submitFeedback",
+        "parameters": [
+          {
+            "description": "Explanation ID",
+            "in": "path",
+            "name": "explanationId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitFeedbackCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Feedback submitted successfully"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid rating or feedback"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Explanation not found"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Submit feedback for an explanation",
+        "tags": [
+          "Question Explanations"
+        ]
+      }
+    },
     "/api/v1/questions": {
       "post": {
         "description": "Creates a new question for an exam",
@@ -2047,6 +2129,115 @@
         "summary": "Get question by ID",
         "tags": [
           "Questions"
+        ]
+      }
+    },
+    "/api/v1/questions/{questionId}/explanations": {
+      "post": {
+        "description": "Generate an AI explanation for why the correct answer is correct and why incorrect options are wrong. This is an experimental feature and requires the exam attempt to be completed.",
+        "operationId": "requestExplanation",
+        "parameters": [
+          {
+            "description": "Question ID",
+            "in": "path",
+            "name": "questionId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestExplanationCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplanationResponse"
+                }
+              }
+            },
+            "description": "Explanation generated successfully"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request or attempt not completed"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplanationResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplanationResponse"
+                }
+              }
+            },
+            "description": "Attempt does not belong to user"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplanationResponse"
+                }
+              }
+            },
+            "description": "Question or attempt not found"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Request AI explanation for a question",
+        "tags": [
+          "Question Explanations"
         ]
       }
     },
@@ -2804,6 +2995,25 @@
           }
         }
       },
+      "ExplanationResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "explanationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "model": {
+            "type": "string"
+          }
+        }
+      },
       "LoginRequest": {
         "type": "object",
         "properties": {
@@ -2980,6 +3190,35 @@
           "password"
         ]
       },
+      "RequestExplanationCommand": {
+        "type": "object",
+        "properties": {
+          "certification": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          },
+          "examAttemptId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 10,
+            "minLength": 2
+          },
+          "questionId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "certification",
+          "examAttemptId",
+          "language",
+          "questionId"
+        ]
+      },
       "ReviewResponse": {
         "type": "object",
         "properties": {
@@ -3032,6 +3271,25 @@
             "type": "string"
           }
         }
+      },
+      "SubmitFeedbackCommand": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          },
+          "rating": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 5,
+            "minimum": 1
+          }
+        },
+        "required": [
+          "rating"
+        ]
       },
       "UpdateExamRequest": {
         "type": "object",
