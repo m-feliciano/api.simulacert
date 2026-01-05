@@ -93,6 +93,13 @@ public class AttemptService implements AttemptUseCase {
         return attempt.toVo();
     }
 
+    public void cancelAttempt(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+        attempt.cancel(clock.now());
+        attemptRepository.save(attempt);
+    }
+
     @Override
     public AttemptVo getAttemptById(UUID attemptId) {
         return attemptRepository.findById(attemptId)

@@ -12,6 +12,8 @@ public interface AttemptUseCase {
 
     AttemptVo finishAttempt(UUID attemptId);
 
+    void cancelAttempt(UUID attemptId);
+
     AttemptVo getAttemptById(UUID attemptId);
 
     List<AttemptVo> getAttemptsByUser(UUID userId);

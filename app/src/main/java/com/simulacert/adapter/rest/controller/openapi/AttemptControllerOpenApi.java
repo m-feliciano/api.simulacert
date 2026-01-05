@@ -179,5 +179,24 @@ public interface AttemptControllerOpenApi {
     ResponseEntity<Void> deleteAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId);
+
+    @Operation(
+            summary = "Cancel exam attempt",
+            description = "Cancels an ongoing exam attempt for the authenticated user",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Attempt cancelled successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Attempt not found"
+            )
+    })
+    ResponseEntity<Void> cancelAttempt(
+            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId
+    );
 }
 
