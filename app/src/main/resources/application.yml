@@ -70,3 +70,12 @@ logging:
   file:
     name: logs/simulacert.log
 
+app:
+  llm:
+    openai:
+      enabled: false  # Set to true to use OpenAI (requires API key)
+      api-key: ${OPENAI_API_KEY:}
+      model: gpt-4o-mini  # or gpt-4, gpt-4-turbo, gpt-3.5-turbo
+      base-url: https://api.openai.com/v1
+      timeout-seconds: 30
+
