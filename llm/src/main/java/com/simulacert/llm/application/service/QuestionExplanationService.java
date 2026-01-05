@@ -126,9 +126,12 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private String buildPrompt(Question question, String certification, String language) {
         String correctOption = question.getOptions().stream()
                 .filter(QuestionOption::getIsCorrect)
-                .findFirst()
                 .map(QuestionOption::getOptionKey)
-                .orElse("N/A");
+                .collect(Collectors.joining(", "));
+
+        if (correctOption.isEmpty()) {
+            throw new IllegalStateException("Question has no correct option defined: " + question.getId());
+        }
 
         String optionsText = question.getOptions().stream()
                 .map(opt -> opt.getOptionKey() + ") " + opt.getOptionText())
@@ -145,6 +148,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 - Be concise and technical
                 - Do not mention that you are an AI
                 - Respond in %s language
+                - It may have multiple correct answers, so be sure to address all correct options
                 - Output suggested: Opção <option_key>: <explanation>, one per line
                 - Response must be in the same language as the question
                 
@@ -154,7 +158,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 Options:
                 %s
                 
-                Correct answer:
+                Correct answer(s):
                 %s
                 
                 Exam:
