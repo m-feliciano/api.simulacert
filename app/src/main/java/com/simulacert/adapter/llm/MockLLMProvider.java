@@ -31,7 +31,9 @@ public class MockLLMProvider implements ExplanationLLMPort {
     private String generateMockExplanation(String userPrompt) {
         return """
                  **************************************
-                 Really impressive output response here
+                 Really impressive output response here!!!
+                 This feature is still in its early stages, but we are working hard to improve it.
+                 Stay tuned for more updates.
                  **************************************
                  """;
     }

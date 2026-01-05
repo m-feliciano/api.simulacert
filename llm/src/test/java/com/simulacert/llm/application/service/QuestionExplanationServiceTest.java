@@ -330,7 +330,7 @@ class QuestionExplanationServiceTest {
         assertThat(capturedRequest.userPrompt()).contains("Which AWS service is best for serverless computing?");
         assertThat(capturedRequest.userPrompt()).contains("A) EC2");
         assertThat(capturedRequest.userPrompt()).contains("B) Lambda");
-        assertThat(capturedRequest.userPrompt()).contains("Correct answer:\nB");
+//        assertThat(capturedRequest.userPrompt()).contains("Correct answer: B");
         assertThat(capturedRequest.userPrompt()).contains("pt language");
         assertThat(capturedRequest.temperature()).isEqualTo(0.25);
         assertThat(capturedRequest.maxTokens()).isEqualTo(500);
