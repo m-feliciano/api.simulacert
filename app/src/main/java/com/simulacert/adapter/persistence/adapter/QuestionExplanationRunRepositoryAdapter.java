@@ -26,9 +26,4 @@ public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanat
     public Optional<QuestionExplanationRun> findById(UUID id) {
         return repository.findById(id);
     }
-
-    @Override
-    public void deleteExpired() {
-        repository.deleteByExpiresAtBefore(clock.now());
-    }
 }
