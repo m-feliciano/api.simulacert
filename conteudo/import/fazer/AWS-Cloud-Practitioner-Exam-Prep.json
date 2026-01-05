@@ -444,7 +444,7 @@
         {
           "key": "A",
           "text": "AWS Budgets.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -2400,7 +2400,7 @@
         {
           "key": "B",
           "text": "Eliminação de Pontos Únicos de Falha (SPOFs).",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -2410,7 +2410,7 @@
         {
           "key": "D",
           "text": "Recursos de computação virtualizados.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -3303,12 +3303,12 @@
     },
     {
       "id": 114,
-      "text": "Amazon Glacier é uma classe de armazenamento do Amazon S3 adequada para armazenar [...] & [...]. (Escolha DUAS)",
+      "text": "Amazon Glacier é uma classe de armazenamento do Amazon S3 adequada para armazenar qual dos seguintes tipos de dados?",
       "options": [
         {
           "key": "A",
           "text": "Arquivos ativos.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -3758,7 +3758,7 @@
         {
           "key": "A",
           "text": "Desenvolvimento de aplicação.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -3768,7 +3768,7 @@
         {
           "key": "C",
           "text": "Análise de negócios.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -4961,7 +4961,7 @@
         {
           "key": "B",
           "text": "Registrar atividade de acesso.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -4971,7 +4971,7 @@
         {
           "key": "D",
           "text": "Manutenção do sistema operacional.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -5004,7 +5004,7 @@
         {
           "key": "D",
           "text": "AWS Migration Hub.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -5177,7 +5177,7 @@
         {
           "key": "C",
           "text": "Controles que se aplicam tanto à camada de infraestrutura quanto às camadas do cliente.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -5472,7 +5472,7 @@
         {
           "key": "B",
           "text": "Usar AWS CloudTrail para registrar atividades dos usuários.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -5983,12 +5983,12 @@
         {
           "key": "B",
           "text": "2 horas, 5 minutos e 9 segundos para a instância Linux e 4 horas, 23 minutos e 7 segundos para a instância CentOS.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "2 horas, 5 minutos e 9 segundos para a instância Linux e 5 horas para a instância CentOS.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
@@ -6680,7 +6680,7 @@
         {
           "key": "B",
           "text": "15 minutos.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -6690,7 +6690,7 @@
         {
           "key": "D",
           "text": "Uma hora.",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -6909,7 +6909,7 @@
         {
           "key": "A",
           "text": "AWS WAF.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -7377,7 +7377,7 @@
         {
           "key": "A",
           "text": "Acesso 24x7 ao serviço de atendimento ao cliente.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -7392,7 +7392,7 @@
         {
           "key": "D",
           "text": "Acesso 24x7 ao recurso TAM.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -8112,7 +8112,7 @@
         {
           "key": "A",
           "text": "A capacidade de fazer lances para obter os preços mais baixos possíveis.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -8519,7 +8519,7 @@
         {
           "key": "A",
           "text": "Configuração do banco de dados.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -8539,7 +8539,7 @@
         {
           "key": "E",
           "text": "Gerenciamento das regras de firewall.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -9493,7 +9493,7 @@
         {
           "key": "C",
           "text": "AWS Federation.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -9882,7 +9882,7 @@
         {
           "key": "D",
           "text": "Muitos serviços AWS são avaliados regularmente para cumprir leis e regulamentos locais.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -10462,7 +10462,7 @@
         {
           "key": "C",
           "text": "A criptografia do lado do servidor é responsabilidade da AWS.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -10897,7 +10897,7 @@
         {
           "key": "A",
           "text": "Implante sua aplicação em várias instâncias EC2.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -11075,7 +11075,7 @@
         {
           "key": "A",
           "text": "Protege os clientes realizando verificações periódicas de segurança nos produtos listados.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -11095,7 +11095,7 @@
         {
           "key": "E",
           "text": "Fornece soluções de software que rodam na AWS ou em qualquer outro fornecedor de Cloud.",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -11530,7 +11530,7 @@
         {
           "key": "B",
           "text": "Solicitar e aguardar aprovação da equipe interna de segurança do cliente e depois realizar os testes.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -11540,7 +11540,7 @@
         {
           "key": "D",
           "text": "Solicitar e aguardar aprovação do suporte da AWS e depois realizar os testes.",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -11853,7 +11853,7 @@
         {
           "key": "D",
           "text": "Lançar as instâncias como EC2 Spot Instances na mesma AWS Region, mas em diferentes Availability Zones.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -13168,7 +13168,7 @@
         {
           "key": "D",
           "text": "Provisionar capacidade extra.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -13308,7 +13308,7 @@
         {
           "key": "B",
           "text": "Amazon EC2.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -13654,22 +13654,22 @@
         {
           "key": "A",
           "text": "Assistência 24/7 via chat ao vivo ou chamada telefônica.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "Suporte de um Gerente Técnico de Conta AWS dedicado.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Número ilimitado de casos e contatos.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Tempo de resposta de 15 minutos para casos de interrupção do sistema de produção.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -13936,7 +13936,7 @@
         {
           "key": "D",
           "text": "Autenticar em repositórios AWS CodeCommit.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -15035,12 +15035,12 @@
         {
           "key": "C",
           "text": "Business.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Enterprise.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -15872,7 +15872,7 @@
         {
           "key": "C",
           "text": "AWS Trusted Advisor.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -17505,7 +17505,7 @@
         {
           "key": "B",
           "text": "Amazon Relational Database Service (Amazon RDS)",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -17604,7 +17604,7 @@
         {
           "key": "D",
           "text": "Pay-as-you-go pricing",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -17670,7 +17670,7 @@
         {
           "key": "E",
           "text": "Um sistema de armazenamento durável",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -17688,7 +17688,7 @@
         {
           "key": "B",
           "text": "Virtual Private Gateway",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -17800,22 +17800,22 @@
         {
           "key": "A",
           "text": "Relatório detalhado de faturamento",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "Tags de alocação de custos",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
           "text": "AWS Simple Monthly Calculator",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
           "text": "AWS Total Cost of Ownership (TCO) Calculator",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -17848,7 +17848,7 @@
         {
           "key": "D",
           "text": "Potenciais descontos por volume, pois o uso em todas as contas é combinado",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -18133,7 +18133,7 @@
         {
           "key": "D",
           "text": "Configurar Network Access Control Lists (ACL)",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -18227,7 +18227,7 @@
         {
           "key": "E",
           "text": "Aplicar força e expiração de senha",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -18260,7 +18260,7 @@
         {
           "key": "E",
           "text": "Amazon EFS",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -18357,7 +18357,7 @@
         {
           "key": "A",
           "text": "Fornecer uma chave para criptografia do lado do cliente do Amazon S3",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -18741,7 +18741,7 @@
         {
           "key": "E",
           "text": "Retenção ajustável",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -18792,7 +18792,7 @@
         {
           "key": "C",
           "text": "Conformidade com soberania de dados",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -18993,7 +18993,7 @@
         {
           "key": "C",
           "text": "Software Development Kits",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -19064,7 +19064,7 @@
         {
           "key": "E",
           "text": "Amazon CloudFront",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -19199,7 +19199,7 @@
         {
           "key": "C",
           "text": "Criptografia de dados",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -19339,12 +19339,12 @@
         {
           "key": "B",
           "text": "Criptografar dados em trânsito",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
           "text": "Atualizar firmware do host Amazon EC2",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -19568,7 +19568,7 @@
         {
           "key": "C",
           "text": "AWS CodeDeploy",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -19639,7 +19639,7 @@
         {
           "key": "E",
           "text": "Projetar para escalabilidade.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -19769,7 +19769,7 @@
         {
           "key": "B",
           "text": "Solicitar e aguardar aprovação da equipe interna de segurança do cliente e depois realizar os testes.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -19779,7 +19779,7 @@
         {
           "key": "D",
           "text": "Solicitar e aguardar aprovação do suporte da AWS e depois realizar os testes.",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -19896,7 +19896,7 @@
         {
           "key": "E",
           "text": "AWS Management Console",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -19957,7 +19957,7 @@
         {
           "key": "E",
           "text": "Ativar autenticação multifator (MFA) para usuários privilegiados.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -20041,7 +20041,7 @@
         {
           "key": "D",
           "text": "Provisionar capacidade extra.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -20214,7 +20214,7 @@
         {
           "key": "D",
           "text": "Subnets",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -20308,7 +20308,7 @@
         {
           "key": "E",
           "text": "Amazon CloudWatch",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -20331,7 +20331,7 @@
         {
           "key": "C",
           "text": "Backup de bancos de dados",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -20509,7 +20509,7 @@
         {
           "key": "D",
           "text": "Reduzir o tráfego no servidor armazenando respostas em cache",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -20766,7 +20766,7 @@
         {
           "key": "D",
           "text": "Reduzir o tráfego no servidor armazenando respostas em cache",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -20827,7 +20827,7 @@
         {
           "key": "D",
           "text": "Amazon CloudFront",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -20883,7 +20883,7 @@
         {
           "key": "C",
           "text": "Garantir que os usuários tenham recebido treinamento de segurança no uso dos serviços AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -20972,7 +20972,7 @@
         {
           "key": "C",
           "text": "redução do gasto operacional (opex).",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -21122,7 +21122,7 @@
         {
           "key": "D",
           "text": "Desempenho",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -21318,7 +21318,7 @@
         {
           "key": "C",
           "text": "Agilidade",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -21328,7 +21328,7 @@
         {
           "key": "E",
           "text": "Despesas de capital",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -21397,22 +21397,22 @@
         {
           "key": "A",
           "text": "Verifica que as cargas de trabalho hospedadas estão automaticamente em conformidade com os controles dos frameworks de conformidade suportados.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "A AWS é responsável pela manutenção da documentação comum dos frameworks de conformidade.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Assegura aos clientes que a AWS está mantendo a segurança física e a proteção de dados.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
           "text": "Garante o uso de frameworks de conformidade que estão sendo usados por outros provedores de nuvem.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -21458,7 +21458,7 @@
         {
           "key": "A",
           "text": "Gerenciamento de segurança do data center",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -21473,7 +21473,7 @@
         {
           "key": "D",
           "text": "Gerenciamento de usuários e acesso",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -21486,7 +21486,7 @@
         {
           "key": "A",
           "text": "Desenvolvimento de software",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -21501,7 +21501,7 @@
         {
           "key": "D",
           "text": "Servidores físicos",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -21524,7 +21524,7 @@
         {
           "key": "B",
           "text": "Gerenciar as listas de controle de acesso da rede VPC.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -21539,7 +21539,7 @@
         {
           "key": "E",
           "text": "Implantar hardware em diferentes Availability Zones.",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -21552,7 +21552,7 @@
         {
           "key": "A",
           "text": "Escalar o número de instâncias Amazon EC2 com base no tráfego.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -21567,7 +21567,7 @@
         {
           "key": "D",
           "text": "Usar documentos de conformidade da AWS para acelerar o processo de conformidade.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -21613,17 +21613,17 @@
         {
           "key": "A",
           "text": "Disponibilidade da instância Amazon EC2",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "Consumo de energia do data center",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Custos de mão de obra para substituir servidores antigos",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -21633,7 +21633,7 @@
         {
           "key": "E",
           "text": "Capacidade do mecanismo de banco de dados",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -21875,7 +21875,7 @@
         {
           "key": "B",
           "text": "A AWS realiza varreduras de descoberta de infraestrutura em nome do cliente.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -21885,7 +21885,7 @@
         {
           "key": "D",
           "text": "Os usuários podem coletar metadados de ativos de forma confiável com algumas chamadas de API.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -21954,22 +21954,22 @@
         {
           "key": "A",
           "text": "Habilitar autenticação multifator para o usuário root da conta AWS.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "Criar contas separadas para cada departamento.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Usar Reserved Instances sempre que possível.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Usar tags para associar cada instância a um departamento específico.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -22076,22 +22076,22 @@
         {
           "key": "B",
           "text": "Gerenciamento de hardware",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
           "text": "Gerenciamento de criptografia",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
           "text": "Gerenciamento de instalações",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
           "text": "Gerenciamento de firewall",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -22305,22 +22305,22 @@
         {
           "key": "B",
           "text": "Habilitar a Autenticação Multifator (MFA)",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Usar o Amazon Cognito para gerenciar o acesso",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Configurar uma política de senha forte",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
           "text": "Habilitar o AWS Organizations",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -22534,7 +22534,7 @@
         {
           "key": "B",
           "text": "Amazon EC2",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -22796,12 +22796,12 @@
         {
           "key": "D",
           "text": "Planejado",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
           "text": "Custo variável",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -22814,7 +22814,7 @@
         {
           "key": "A",
           "text": "Load balancers públicos com capacidades AWS Application Auto Scaling",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -22824,7 +22824,7 @@
         {
           "key": "C",
           "text": "Classic Load Balancers",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -23099,12 +23099,12 @@
         {
           "key": "A",
           "text": "AWS WAF",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "Amazon DynamoDB",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -23147,12 +23147,12 @@
         {
           "key": "D",
           "text": "Custos de transferência de dados",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
           "text": "Custos de infraestrutura de rede",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -23208,7 +23208,7 @@
         {
           "key": "D",
           "text": "Administração do sistema operacional",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -23249,7 +23249,7 @@
         {
           "key": "A",
           "text": "AWS TCO Calculator",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -23259,7 +23259,7 @@
         {
           "key": "C",
           "text": "AWS Cost Explorer API",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
@@ -23445,12 +23445,12 @@
         {
           "key": "A",
           "text": "AWS Elastic Beanstalk",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "AWS CodeCommit",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -23460,12 +23460,12 @@
         {
           "key": "D",
           "text": "AWS CloudFormation",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
           "text": "AWS Config",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -23506,7 +23506,7 @@
         {
           "key": "A",
           "text": "Projetar para recuperação automática de falhas",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -23521,7 +23521,7 @@
         {
           "key": "D",
           "text": "Testar para demanda moderada para garantir confiabilidade",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -23549,7 +23549,7 @@
         {
           "key": "C",
           "text": "Mover recursos para uma Região AWS diferente.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
@@ -23559,7 +23559,7 @@
         {
           "key": "E",
           "text": "Contatar o Suporte AWS.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -23704,7 +23704,7 @@
         {
           "key": "E",
           "text": "Os clientes podem reservar capacidade em uma Availability Zone.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -23806,7 +23806,7 @@
         {
           "key": "B",
           "text": "Amazon Elastic Container Service (Amazon ECS)",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -23877,7 +23877,7 @@
         {
           "key": "D",
           "text": "AWS Storage Gateway",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -23956,12 +23956,12 @@
         {
           "key": "A",
           "text": "Amazon VPC",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "AWS Direct Connect",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -24017,7 +24017,7 @@
         {
           "key": "B",
           "text": "O AWS Marketplace permite que o usuário lance aplicações com 1-Click.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -24093,7 +24093,7 @@
         {
           "key": "E",
           "text": "Configuração do grupo de segurança",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -24284,7 +24284,7 @@
         {
           "key": "C",
           "text": "Os usuários têm a capacidade de provisionar recursos sob demanda.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -24429,7 +24429,7 @@
         {
           "key": "C",
           "text": "Amazon CloudFront possui múltiplas edge locations ao redor do mundo para reduzir a latência.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -24551,7 +24551,7 @@
         {
           "key": "D",
           "text": "reduz despesas operacionais.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -24625,12 +24625,12 @@
         {
           "key": "B",
           "text": "Segurança física",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Configuração de firewall",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
@@ -24686,7 +24686,7 @@
         {
           "key": "C",
           "text": "Segurança",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -24808,7 +24808,7 @@
         {
           "key": "D",
           "text": "Conectar o data center on-premises da empresa à AWS usando AWS Direct Connect.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -25037,7 +25037,7 @@
         {
           "key": "D",
           "text": "A AWS pode acomodar facilmente mudanças na demanda da aplicação.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -25172,17 +25172,17 @@
         {
           "key": "B",
           "text": "Despesas de capital são substituídas por despesas variáveis.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Controle do usuário sobre a infraestrutura.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Aumento da agilidade.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -25434,7 +25434,7 @@
         {
           "key": "C",
           "text": "Pelo número de requisições feitas para uma função Lambda.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -25477,7 +25477,7 @@
         {
           "key": "E",
           "text": "Existem mais Availability Zones do que AWS Regions.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -25556,7 +25556,7 @@
         {
           "key": "C",
           "text": "Comprar software de terceiros que roda na AWS.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -25701,7 +25701,7 @@
         {
           "key": "C",
           "text": "Aumento da velocidade para o mercado",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -25734,7 +25734,7 @@
         {
           "key": "C",
           "text": "O custo de administrar a infraestrutura, incluindo instalações de sistema operacional e software, patches, backups e recuperação de falhas.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -26327,7 +26327,7 @@
         {
           "key": "C",
           "text": "Recursos distribuídos em múltiplas Availability Zones",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -26383,7 +26383,7 @@
         {
           "key": "B",
           "text": "Impedir que os usuários IAM reutilizem senhas anteriores",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -26426,7 +26426,7 @@
         {
           "key": "D",
           "text": "Selecionar um parceiro da AWS Partner Network (APN) para auxiliar na migração",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -26556,7 +26556,7 @@
         {
           "key": "A",
           "text": "Comprar as Reserved Instances na conta master payer e desativar o compartilhamento de Reserved Instances.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -26566,7 +26566,7 @@
         {
           "key": "C",
           "text": "Comprar as Reserved Instances nas contas vinculadas individuais e desativar o compartilhamento de Reserved Instances no nível do pagador.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -26627,7 +26627,7 @@
         {
           "key": "D",
           "text": "Amazon CloudFront",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -26688,7 +26688,7 @@
         {
           "key": "D",
           "text": "Internet gateways",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -26711,12 +26711,12 @@
         {
           "key": "B",
           "text": "enviar um alerta quando a utilização de Reserved Instances cair abaixo de uma certa porcentagem",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "definir limites de recursos em contas AWS para evitar gastos excessivos",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
@@ -26754,7 +26754,7 @@
         {
           "key": "E",
           "text": "Password policies",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -26777,7 +26777,7 @@
         {
           "key": "C",
           "text": "Autenticação multifator habilitada no usuário root da conta AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -26838,7 +26838,7 @@
         {
           "key": "C",
           "text": "Detecta potenciais vulnerabilidades de segurança causadas por configurações de permissões em recursos da conta",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -26871,7 +26871,7 @@
         {
           "key": "C",
           "text": "AWS gerencia o planejamento de capacidade para servidores físicos",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -26937,7 +26937,7 @@
         {
           "key": "D",
           "text": "AWS Direct Connect",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -27199,7 +27199,7 @@
         {
           "key": "E",
           "text": "AWS CloudHSM",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -27255,7 +27255,7 @@
         {
           "key": "D",
           "text": "AWS Partner Network (APN)",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -27321,7 +27321,7 @@
         {
           "key": "E",
           "text": "Gerenciamento de patches do sistema operacional de uma instância Amazon EC2",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -27489,7 +27489,7 @@
         {
           "key": "D",
           "text": "Alertas de faturamento e alarmes do Amazon CloudWatch",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -27718,7 +27718,7 @@
         {
           "key": "D",
           "text": "Rotacionar as chaves de acesso regularmente",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -27802,7 +27802,7 @@
         {
           "key": "C",
           "text": "Usar AWS CloudTrail para registrar chamadas de API da AWS em um arquivo de log auditável",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -27868,7 +27868,7 @@
         {
           "key": "D",
           "text": "Implemente as regras menos permissivas para grupos de segurança",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -27896,7 +27896,7 @@
         {
           "key": "D",
           "text": "AWS Database Migration Service (AWS DMS)",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -28176,7 +28176,7 @@
         {
           "key": "C",
           "text": "Eles ajustam automaticamente a capacidade.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -28214,7 +28214,7 @@
         {
           "key": "E",
           "text": "Configuração de grupos de segurança",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -28275,7 +28275,7 @@
         {
           "key": "E",
           "text": "Network ACLs",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -28326,7 +28326,7 @@
         {
           "key": "C",
           "text": "Instalar os patches de segurança mais recentes na instância RDS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -28489,12 +28489,12 @@
         {
           "key": "A",
           "text": "A equipe de produto da AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "O Administrador de Banco de Dados do cliente",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -28537,7 +28537,7 @@
         {
           "key": "E",
           "text": "Amazon Redshift",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -28565,7 +28565,7 @@
         {
           "key": "D",
           "text": "Redução da latência para acessar aplicações implantadas na AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -28626,7 +28626,7 @@
         {
           "key": "D",
           "text": "Dividir a aplicação em componentes fracamente acoplados",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -28705,7 +28705,7 @@
         {
           "key": "C",
           "text": "Criar orçamentos e receber notificações se o uso atual ou previsto exceder os orçamentos.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -28952,12 +28952,12 @@
         {
           "key": "A",
           "text": "Segurança",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "Excelência operacional",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -29056,7 +29056,7 @@
         {
           "key": "E",
           "text": "Aplicar a governança das contas AWS",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -29168,7 +29168,7 @@
         {
           "key": "D",
           "text": "AWS VPN",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -29196,7 +29196,7 @@
         {
           "key": "C",
           "text": "Configurações de rede e firewall",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -29285,12 +29285,12 @@
         {
           "key": "C",
           "text": "em múltiplas Availability Zones em uma Região AWS",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "em múltiplas Availability Zones em duas Regiões AWS",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -29626,7 +29626,7 @@
         {
           "key": "D",
           "text": "AWS OpsWorks",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -29738,7 +29738,7 @@
         {
           "key": "C",
           "text": "Um secret access key",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -29776,7 +29776,7 @@
         {
           "key": "D",
           "text": "AWS Batch",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -29794,7 +29794,7 @@
         {
           "key": "A",
           "text": "Adicionar tags específicas do departamento a cada recurso",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -29809,7 +29809,7 @@
         {
           "key": "D",
           "text": "Usar AWS Organizations",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -30122,7 +30122,7 @@
         {
           "key": "E",
           "text": "Autenticação da integridade dos dados",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -30346,7 +30346,7 @@
         {
           "key": "D",
           "text": "Performance",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -30374,7 +30374,7 @@
         {
           "key": "C",
           "text": "Alterar planos de suporte AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -30641,7 +30641,7 @@
         {
           "key": "D",
           "text": "Lançar as instâncias como EC2 Spot Instances na mesma Região AWS, mas em diferentes Availability Zones.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -30664,7 +30664,7 @@
         {
           "key": "C",
           "text": "Configurar o serviço AWS Backup para fazer backup dos dados para outra Região AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -30883,7 +30883,7 @@
         {
           "key": "A",
           "text": "Amazon S3",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -30972,7 +30972,7 @@
         {
           "key": "B",
           "text": "Amazon Elasticsearch Service",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -30982,7 +30982,7 @@
         {
           "key": "D",
           "text": "Amazon DynamoDB",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
@@ -31000,22 +31000,22 @@
         {
           "key": "A",
           "text": "AWS VPN",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "NAT gateway",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
           "text": "AWS Direct Connect",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
           "text": "Amazon Connect",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -31048,7 +31048,7 @@
         {
           "key": "D",
           "text": "A conta pagadora deve ser usada para remover a conta vinculada da organização.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -31061,7 +31061,7 @@
         {
           "key": "A",
           "text": "Elasticidade",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -31076,7 +31076,7 @@
         {
           "key": "D",
           "text": "Escalabilidade",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -31201,22 +31201,22 @@
         {
           "key": "A",
           "text": "Usar tags em recursos",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "Usar múltiplas contas AWS",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
           "text": "Usar um gerente de conta",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Usar AWS Trusted Advisor",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -31542,7 +31542,7 @@
         {
           "key": "A",
           "text": "Backups automatizados",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -31552,17 +31552,17 @@
         {
           "key": "C",
           "text": "Indexação de tabelas",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "Aplicação de patches de software",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
           "text": "Gerenciamento de extração, transformação e carga (ETL)",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -31743,7 +31743,7 @@
         {
           "key": "A",
           "text": "Fornecer orquestração de contêineres de alto desempenho",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
@@ -31753,7 +31753,7 @@
         {
           "key": "C",
           "text": "Detectar recursos subutilizados para economizar custos",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -31776,12 +31776,12 @@
         {
           "key": "A",
           "text": "Conceder ao desenvolvedor acesso apenas aos recursos AWS necessários para realizar o trabalho.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "Compartilhar as credenciais do usuário root da conta AWS com o desenvolvedor.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -31875,7 +31875,7 @@
         {
           "key": "C",
           "text": "Proteger comunicações e manter a segurança da zona",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -31893,12 +31893,12 @@
         {
           "key": "A",
           "text": "AWS Elastic Beanstalk",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "AWS Config",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
@@ -32020,12 +32020,12 @@
         {
           "key": "C",
           "text": "Partial Upfront Reserved Instance",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
           "text": "No Upfront Reserved Instance",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -32290,7 +32290,7 @@
         {
           "key": "A",
           "text": "AWS Shield",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
@@ -32305,7 +32305,7 @@
         {
           "key": "D",
           "text": "AWS Support Center",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
@@ -32351,12 +32351,12 @@
         {
           "key": "A",
           "text": "Criar um usuário IAM e fornecer acesso apenas ao AWS Management Console.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "B",
           "text": "Criar um usuário IAM e fornecer acesso programático apenas.",
-          "correct": false
+          "correct": true
         },
         {
           "key": "C",
@@ -32366,12 +32366,12 @@
         {
           "key": "D",
           "text": "Criar uma política IAM com acesso de administrador e anexá-la ao usuário IAM.",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
           "text": "Criar uma política IAM com acesso ao Amazon RDS e anexá-la ao usuário IAM.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -32427,12 +32427,12 @@
         {
           "key": "D",
           "text": "Aumentar a disponibilidade da aplicação",
-          "correct": false
+          "correct": true
         },
         {
           "key": "E",
           "text": "Aumentar a carga da aplicação",
-          "correct": true
+          "correct": false
         }
       ],
       "domain": "AWS",
@@ -32544,7 +32544,7 @@
         {
           "key": "D",
           "text": "Criptografia do código",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -32669,17 +32669,17 @@
         {
           "key": "A",
           "text": "Amazon EC2",
-          "correct": false
+          "correct": true
         },
         {
           "key": "B",
           "text": "Amazon S3",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
           "text": "Amazon Elastic Block Store (Amazon EBS)",
-          "correct": true
+          "correct": false
         },
         {
           "key": "D",
@@ -32689,7 +32689,7 @@
         {
           "key": "E",
           "text": "AWS Lambda",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -32763,12 +32763,12 @@
         {
           "key": "B",
           "text": "Availability Zones",
-          "correct": true
+          "correct": false
         },
         {
           "key": "C",
           "text": "Regions",
-          "correct": false
+          "correct": true
         },
         {
           "key": "D",
@@ -32829,12 +32829,12 @@
         {
           "key": "D",
           "text": "Adotar um modelo de consumo",
-          "correct": true
+          "correct": false
         },
         {
           "key": "E",
           "text": "Recuperar automaticamente de falhas",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -32979,7 +32979,7 @@
         {
           "key": "D",
           "text": "Implantar a aplicação em uma instância Amazon EC2 em um grupo de Auto Scaling.",
-          "correct": false
+          "correct": true
         }
       ],
       "domain": "AWS",
@@ -33307,9 +33307,21 @@
           "text": "Reserved Instances Standard de 3 anos.",
           "correct": false
         },
-        { "key": "B", "text": "Spot Instances.", "correct": false },
-        { "key": "C", "text": "Savings Plans.", "correct": true },
-        { "key": "D", "text": "Dedicated Hosts.", "correct": false }
+        {
+          "key": "B",
+          "text": "Spot Instances.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "Savings Plans.",
+          "correct": true
+        },
+        {
+          "key": "D",
+          "text": "Dedicated Hosts.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33318,14 +33330,26 @@
       "id": 3002,
       "text": "Uma aplicação precisa continuar funcionando mesmo se uma Availability Zone falhar. Qual princípio de design da AWS atende diretamente a esse requisito?",
       "options": [
-        { "key": "A", "text": "Escalabilidade vertical.", "correct": false },
+        {
+          "key": "A",
+          "text": "Escalabilidade vertical.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Eliminação de pontos únicos de falha.",
           "correct": true
         },
-        { "key": "C", "text": "Uso de serviços globais.", "correct": false },
-        { "key": "D", "text": "Provisionamento manual.", "correct": false }
+        {
+          "key": "C",
+          "text": "Uso de serviços globais.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Provisionamento manual.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33349,7 +33373,11 @@
           "text": "Gerenciar usuários e permissões do banco.",
           "correct": true
         },
-        { "key": "D", "text": "Manter o hardware físico.", "correct": false }
+        {
+          "key": "D",
+          "text": "Manter o hardware físico.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33358,14 +33386,26 @@
       "id": 3004,
       "text": "Uma startup quer ser alertada antes que seus custos mensais ultrapassem um valor definido. Qual combinação de serviços atende melhor a esse requisito? (Escolha DUAS)",
       "options": [
-        { "key": "A", "text": "AWS Budgets.", "correct": true },
+        {
+          "key": "A",
+          "text": "AWS Budgets.",
+          "correct": true
+        },
         {
           "key": "B",
           "text": "Amazon CloudWatch Billing Alarms.",
           "correct": true
         },
-        { "key": "C", "text": "AWS Trusted Advisor.", "correct": false },
-        { "key": "D", "text": "AWS Cost Explorer.", "correct": false }
+        {
+          "key": "C",
+          "text": "AWS Trusted Advisor.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Cost Explorer.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33374,15 +33414,30 @@
       "id": 3005,
       "text": "Uma aplicação web global precisa reduzir latência para usuários finais sem replicar o backend em múltiplas Regions. Qual serviço AWS atende melhor a esse cenário?",
       "options": [
-        { "key": "A", "text": "Amazon CloudFront.", "correct": true },
-        { "key": "B", "text": "Amazon Route 53.", "correct": false },
-        { "key": "C", "text": "AWS Direct Connect.", "correct": false },
-        { "key": "D", "text": "Amazon VPC Peering.", "correct": false }
+        {
+          "key": "A",
+          "text": "Amazon CloudFront.",
+          "correct": true
+        },
+        {
+          "key": "B",
+          "text": "Amazon Route 53.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "AWS Direct Connect.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Amazon VPC Peering.",
+          "correct": false
+        }
       ],
       "domain": "Technology",
       "difficulty": "HARD"
     },
-
     {
       "id": 3006,
       "text": "Qual situação representa a PIOR escolha para uso de Spot Instances?",
@@ -33402,7 +33457,11 @@
           "text": "Workloads flexíveis e sem prazo rígido.",
           "correct": false
         },
-        { "key": "D", "text": "Jobs de curta duração.", "correct": false }
+        {
+          "key": "D",
+          "text": "Jobs de curta duração.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33411,10 +33470,26 @@
       "id": 3007,
       "text": "Qual benefício do uso de múltiplas Availability Zones é mais diretamente relacionado à confiabilidade?",
       "options": [
-        { "key": "A", "text": "Redução de custos.", "correct": false },
-        { "key": "B", "text": "Isolamento de falhas.", "correct": true },
-        { "key": "C", "text": "Menor latência global.", "correct": false },
-        { "key": "D", "text": "Gerenciamento simplificado.", "correct": false }
+        {
+          "key": "A",
+          "text": "Redução de custos.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Isolamento de falhas.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Menor latência global.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Gerenciamento simplificado.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33423,14 +33498,26 @@
       "id": 3008,
       "text": "Uma empresa precisa armazenar dados raramente acessados, mas que devem ser mantidos por vários anos com o menor custo possível. Qual classe de armazenamento do Amazon S3 atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "S3 Standard.", "correct": false },
-        { "key": "B", "text": "S3 Intelligent-Tiering.", "correct": false },
+        {
+          "key": "A",
+          "text": "S3 Standard.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "S3 Intelligent-Tiering.",
+          "correct": false
+        },
         {
           "key": "C",
           "text": "S3 Glacier Flexible Retrieval.",
           "correct": false
         },
-        { "key": "D", "text": "S3 Glacier Deep Archive.", "correct": true }
+        {
+          "key": "D",
+          "text": "S3 Glacier Deep Archive.",
+          "correct": true
+        }
       ],
       "domain": "Technology",
       "difficulty": "HARD"
@@ -33467,7 +33554,11 @@
       "id": 3010,
       "text": "Qual é o principal benefício financeiro do modelo pay-as-you-go da AWS?",
       "options": [
-        { "key": "A", "text": "Custos fixos previsíveis.", "correct": false },
+        {
+          "key": "A",
+          "text": "Custos fixos previsíveis.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Eliminação de despesas operacionais.",
@@ -33491,14 +33582,26 @@
       "id": 3011,
       "text": "Uma empresa quer garantir que apenas usuários autorizados possam acessar recursos AWS, aplicando permissões mínimas necessárias. Qual princípio de segurança da AWS atende diretamente a esse objetivo?",
       "options": [
-        { "key": "A", "text": "Defesa em profundidade.", "correct": false },
+        {
+          "key": "A",
+          "text": "Defesa em profundidade.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Princípio do menor privilégio.",
           "correct": true
         },
-        { "key": "C", "text": "Isolamento de rede.", "correct": false },
-        { "key": "D", "text": "Alta disponibilidade.", "correct": false }
+        {
+          "key": "C",
+          "text": "Isolamento de rede.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Alta disponibilidade.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33507,10 +33610,26 @@
       "id": 3012,
       "text": "Uma organização precisa analisar como seus custos AWS evoluíram ao longo dos últimos meses e identificar quais serviços mais contribuíram para o aumento. Qual serviço AWS atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "AWS Budgets.", "correct": false },
-        { "key": "B", "text": "AWS Cost Explorer.", "correct": true },
-        { "key": "C", "text": "AWS Trusted Advisor.", "correct": false },
-        { "key": "D", "text": "AWS Pricing Calculator.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Budgets.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "AWS Cost Explorer.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Trusted Advisor.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Pricing Calculator.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33519,14 +33638,26 @@
       "id": 3013,
       "text": "Uma aplicação precisa continuar aceitando requisições mesmo quando um componente downstream falha temporariamente. Qual abordagem arquitetural da AWS ajuda diretamente nesse cenário?",
       "options": [
-        { "key": "A", "text": "Escalabilidade vertical.", "correct": false },
+        {
+          "key": "A",
+          "text": "Escalabilidade vertical.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Desacoplamento de componentes.",
           "correct": true
         },
-        { "key": "C", "text": "Provisionamento manual.", "correct": false },
-        { "key": "D", "text": "Uso de instâncias maiores.", "correct": false }
+        {
+          "key": "C",
+          "text": "Provisionamento manual.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Uso de instâncias maiores.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33535,10 +33666,26 @@
       "id": 3014,
       "text": "Uma empresa deseja garantir que seus dados armazenados no Amazon S3 estejam protegidos contra exclusões acidentais ou maliciosas. Qual recurso atende melhor a esse objetivo?",
       "options": [
-        { "key": "A", "text": "S3 Intelligent-Tiering.", "correct": false },
-        { "key": "B", "text": "S3 Versioning.", "correct": true },
-        { "key": "C", "text": "S3 Transfer Acceleration.", "correct": false },
-        { "key": "D", "text": "Amazon CloudFront.", "correct": false }
+        {
+          "key": "A",
+          "text": "S3 Intelligent-Tiering.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "S3 Versioning.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "S3 Transfer Acceleration.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Amazon CloudFront.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33547,10 +33694,26 @@
       "id": 3015,
       "text": "Uma empresa precisa garantir conformidade regulatória e acesso a relatórios de auditoria e certificações de segurança da AWS. Qual serviço AWS fornece essas informações?",
       "options": [
-        { "key": "A", "text": "AWS Shield.", "correct": false },
-        { "key": "B", "text": "AWS Artifact.", "correct": true },
-        { "key": "C", "text": "AWS Inspector.", "correct": false },
-        { "key": "D", "text": "AWS Config.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Shield.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "AWS Artifact.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Inspector.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Config.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33587,10 +33750,26 @@
       "id": 3017,
       "text": "Uma empresa quer ser notificada quando um serviço AWS apresentar degradação que possa impactar seus recursos específicos. Qual serviço fornece essa visibilidade personalizada?",
       "options": [
-        { "key": "A", "text": "AWS Trusted Advisor.", "correct": false },
-        { "key": "B", "text": "AWS Health Dashboard.", "correct": true },
-        { "key": "C", "text": "Amazon CloudWatch Logs.", "correct": false },
-        { "key": "D", "text": "AWS Cost Explorer.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Trusted Advisor.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "AWS Health Dashboard.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Amazon CloudWatch Logs.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Cost Explorer.",
+          "correct": false
+        }
       ],
       "domain": "Technology",
       "difficulty": "HARD"
@@ -33627,10 +33806,26 @@
       "id": 3019,
       "text": "Uma empresa quer minimizar o impacto financeiro de picos inesperados de tráfego em sua aplicação. Qual característica da AWS atende melhor esse objetivo?",
       "options": [
-        { "key": "A", "text": "Escalabilidade elástica.", "correct": true },
-        { "key": "B", "text": "Escalabilidade vertical.", "correct": false },
-        { "key": "C", "text": "Capacidade reservada.", "correct": false },
-        { "key": "D", "text": "Infraestrutura dedicada.", "correct": false }
+        {
+          "key": "A",
+          "text": "Escalabilidade elástica.",
+          "correct": true
+        },
+        {
+          "key": "B",
+          "text": "Escalabilidade vertical.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "Capacidade reservada.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Infraestrutura dedicada.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33639,10 +33834,26 @@
       "id": 3020,
       "text": "Uma empresa deseja centralizar logs e métricas para monitorar recursos AWS e reagir rapidamente a falhas operacionais. Qual serviço AWS atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "AWS CloudTrail.", "correct": false },
-        { "key": "B", "text": "Amazon CloudWatch.", "correct": true },
-        { "key": "C", "text": "AWS Config.", "correct": false },
-        { "key": "D", "text": "AWS Trusted Advisor.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS CloudTrail.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Amazon CloudWatch.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Config.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Trusted Advisor.",
+          "correct": false
+        }
       ],
       "domain": "Technology",
       "difficulty": "HARD"
@@ -33651,10 +33862,26 @@
       "id": 3021,
       "text": "Uma empresa deseja garantir que suas aplicações continuem disponíveis mesmo durante falhas de infraestrutura. Qual conceito da AWS aborda diretamente esse objetivo?",
       "options": [
-        { "key": "A", "text": "Alta durabilidade.", "correct": false },
-        { "key": "B", "text": "Alta disponibilidade.", "correct": true },
-        { "key": "C", "text": "Escalabilidade vertical.", "correct": false },
-        { "key": "D", "text": "Provisionamento manual.", "correct": false }
+        {
+          "key": "A",
+          "text": "Alta durabilidade.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Alta disponibilidade.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Escalabilidade vertical.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Provisionamento manual.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33663,10 +33890,26 @@
       "id": 3022,
       "text": "Uma empresa deseja controlar quais ações usuários podem executar em serviços AWS. Qual combinação atende melhor a esse requisito? (Escolha DUAS)",
       "options": [
-        { "key": "A", "text": "Usuários IAM.", "correct": true },
-        { "key": "B", "text": "Políticas IAM.", "correct": true },
-        { "key": "C", "text": "Grupos de segurança.", "correct": false },
-        { "key": "D", "text": "Network ACLs.", "correct": false }
+        {
+          "key": "A",
+          "text": "Usuários IAM.",
+          "correct": true
+        },
+        {
+          "key": "B",
+          "text": "Políticas IAM.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "Grupos de segurança.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Network ACLs.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33675,10 +33918,26 @@
       "id": 3023,
       "text": "Uma empresa precisa estimar custos futuros antes de migrar uma aplicação para a AWS. Qual ferramenta é mais adequada para esse planejamento?",
       "options": [
-        { "key": "A", "text": "AWS Cost Explorer.", "correct": false },
-        { "key": "B", "text": "AWS Pricing Calculator.", "correct": true },
-        { "key": "C", "text": "AWS Budgets.", "correct": false },
-        { "key": "D", "text": "AWS Trusted Advisor.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Cost Explorer.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "AWS Pricing Calculator.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Budgets.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Trusted Advisor.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33687,13 +33946,21 @@
       "id": 3024,
       "text": "Uma empresa quer reduzir riscos de segurança associados a credenciais de longo prazo. Qual prática AWS atende melhor esse objetivo?",
       "options": [
-        { "key": "A", "text": "Usar Access Keys estáticas.", "correct": false },
+        {
+          "key": "A",
+          "text": "Usar Access Keys estáticas.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Habilitar MFA sempre que possível.",
           "correct": true
         },
-        { "key": "C", "text": "Compartilhar usuários IAM.", "correct": false },
+        {
+          "key": "C",
+          "text": "Compartilhar usuários IAM.",
+          "correct": false
+        },
         {
           "key": "D",
           "text": "Usar o usuário root para operações diárias.",
@@ -33707,10 +33974,26 @@
       "id": 3025,
       "text": "Uma empresa deseja receber recomendações contínuas para otimizar custos, segurança e desempenho de sua conta AWS. Qual serviço atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "AWS Cost Explorer.", "correct": false },
-        { "key": "B", "text": "AWS Trusted Advisor.", "correct": true },
-        { "key": "C", "text": "AWS CloudTrail.", "correct": false },
-        { "key": "D", "text": "AWS Health Dashboard.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Cost Explorer.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "AWS Trusted Advisor.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS CloudTrail.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Health Dashboard.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33719,10 +34002,26 @@
       "id": 3026,
       "text": "Uma aplicação precisa lidar com variações rápidas de carga sem intervenção manual. Qual característica da AWS atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "Elasticidade.", "correct": true },
-        { "key": "B", "text": "Alta durabilidade.", "correct": false },
-        { "key": "C", "text": "Capacidade reservada.", "correct": false },
-        { "key": "D", "text": "Infraestrutura dedicada.", "correct": false }
+        {
+          "key": "A",
+          "text": "Elasticidade.",
+          "correct": true
+        },
+        {
+          "key": "B",
+          "text": "Alta durabilidade.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "Capacidade reservada.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Infraestrutura dedicada.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33731,10 +34030,26 @@
       "id": 3027,
       "text": "Uma empresa deseja registrar todas as chamadas de API feitas em sua conta AWS para fins de auditoria. Qual serviço atende melhor esse objetivo?",
       "options": [
-        { "key": "A", "text": "Amazon CloudWatch.", "correct": false },
-        { "key": "B", "text": "AWS Config.", "correct": false },
-        { "key": "C", "text": "AWS CloudTrail.", "correct": true },
-        { "key": "D", "text": "AWS Trusted Advisor.", "correct": false }
+        {
+          "key": "A",
+          "text": "Amazon CloudWatch.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "AWS Config.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "AWS CloudTrail.",
+          "correct": true
+        },
+        {
+          "key": "D",
+          "text": "AWS Trusted Advisor.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33743,14 +34058,26 @@
       "id": 3028,
       "text": "Qual benefício financeiro está diretamente associado ao uso de Auto Scaling?",
       "options": [
-        { "key": "A", "text": "Custos fixos previsíveis.", "correct": false },
+        {
+          "key": "A",
+          "text": "Custos fixos previsíveis.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Redução de custos ao ajustar capacidade à demanda.",
           "correct": true
         },
-        { "key": "C", "text": "Eliminação total de falhas.", "correct": false },
-        { "key": "D", "text": "Descontos automáticos.", "correct": false }
+        {
+          "key": "C",
+          "text": "Eliminação total de falhas.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Descontos automáticos.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33759,14 +34086,26 @@
       "id": 3029,
       "text": "Uma empresa deseja isolar ambientes de produção e desenvolvimento dentro da AWS. Qual abordagem atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "Usar diferentes Regions.", "correct": false },
-        { "key": "B", "text": "Criar contas AWS separadas.", "correct": true },
+        {
+          "key": "A",
+          "text": "Usar diferentes Regions.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Criar contas AWS separadas.",
+          "correct": true
+        },
         {
           "key": "C",
           "text": "Usar diferentes Availability Zones.",
           "correct": false
         },
-        { "key": "D", "text": "Usar apenas subnets.", "correct": false }
+        {
+          "key": "D",
+          "text": "Usar apenas subnets.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33775,15 +34114,30 @@
       "id": 3030,
       "text": "Uma empresa quer reduzir a latência de entrega de conteúdo estático globalmente. Qual serviço AWS atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "Amazon S3.", "correct": false },
-        { "key": "B", "text": "Amazon CloudFront.", "correct": true },
-        { "key": "C", "text": "AWS Direct Connect.", "correct": false },
-        { "key": "D", "text": "Amazon Route 53.", "correct": false }
+        {
+          "key": "A",
+          "text": "Amazon S3.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Amazon CloudFront.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Direct Connect.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Amazon Route 53.",
+          "correct": false
+        }
       ],
       "domain": "Technology",
       "difficulty": "HARD"
     },
-
     {
       "id": 3031,
       "text": "Qual prática reduz diretamente o risco de falhas causadas por mudanças manuais em infraestrutura?",
@@ -33793,13 +34147,21 @@
           "text": "Uso de infraestrutura como código.",
           "correct": true
         },
-        { "key": "B", "text": "Provisionamento manual.", "correct": false },
+        {
+          "key": "B",
+          "text": "Provisionamento manual.",
+          "correct": false
+        },
         {
           "key": "C",
           "text": "Uso exclusivo de instâncias grandes.",
           "correct": false
         },
-        { "key": "D", "text": "Escalabilidade vertical.", "correct": false }
+        {
+          "key": "D",
+          "text": "Escalabilidade vertical.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33813,9 +34175,21 @@
           "text": "Criptografia do lado do cliente.",
           "correct": false
         },
-        { "key": "B", "text": "HTTPS/TLS.", "correct": true },
-        { "key": "C", "text": "IAM Roles.", "correct": false },
-        { "key": "D", "text": "Security Groups.", "correct": false }
+        {
+          "key": "B",
+          "text": "HTTPS/TLS.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "IAM Roles.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Security Groups.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33824,10 +34198,26 @@
       "id": 3033,
       "text": "Uma empresa deseja entender quais recursos AWS estão subutilizados para otimizar custos. Qual serviço ajuda diretamente nessa análise?",
       "options": [
-        { "key": "A", "text": "AWS Trusted Advisor.", "correct": true },
-        { "key": "B", "text": "AWS Artifact.", "correct": false },
-        { "key": "C", "text": "AWS Shield.", "correct": false },
-        { "key": "D", "text": "AWS Health Dashboard.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Trusted Advisor.",
+          "correct": true
+        },
+        {
+          "key": "B",
+          "text": "AWS Artifact.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "AWS Shield.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Health Dashboard.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33864,10 +34254,26 @@
       "id": 3035,
       "text": "Uma empresa quer aplicar políticas de conformidade automaticamente quando recursos são criados ou alterados. Qual serviço AWS atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "AWS Config.", "correct": true },
-        { "key": "B", "text": "AWS CloudTrail.", "correct": false },
-        { "key": "C", "text": "AWS Budgets.", "correct": false },
-        { "key": "D", "text": "Amazon CloudWatch.", "correct": false }
+        {
+          "key": "A",
+          "text": "AWS Config.",
+          "correct": true
+        },
+        {
+          "key": "B",
+          "text": "AWS CloudTrail.",
+          "correct": false
+        },
+        {
+          "key": "C",
+          "text": "AWS Budgets.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Amazon CloudWatch.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33891,7 +34297,11 @@
           "text": "Capacidade ilimitada sem custos.",
           "correct": false
         },
-        { "key": "D", "text": "Eliminação total de falhas.", "correct": false }
+        {
+          "key": "D",
+          "text": "Eliminação total de falhas.",
+          "correct": false
+        }
       ],
       "domain": "Cloud Concepts",
       "difficulty": "HARD"
@@ -33910,8 +34320,16 @@
           "text": "Aplicação de limites e orçamentos.",
           "correct": true
         },
-        { "key": "C", "text": "Provisionamento manual.", "correct": false },
-        { "key": "D", "text": "Uso de uma única conta.", "correct": false }
+        {
+          "key": "C",
+          "text": "Provisionamento manual.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Uso de uma única conta.",
+          "correct": false
+        }
       ],
       "domain": "Billing & Pricing",
       "difficulty": "HARD"
@@ -33920,10 +34338,26 @@
       "id": 3038,
       "text": "Qual serviço AWS permite definir políticas para rotear usuários para endpoints mais próximos geograficamente?",
       "options": [
-        { "key": "A", "text": "Amazon CloudFront.", "correct": false },
-        { "key": "B", "text": "Amazon Route 53.", "correct": true },
-        { "key": "C", "text": "AWS Global Accelerator.", "correct": false },
-        { "key": "D", "text": "Amazon VPC.", "correct": false }
+        {
+          "key": "A",
+          "text": "Amazon CloudFront.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Amazon Route 53.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Global Accelerator.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "Amazon VPC.",
+          "correct": false
+        }
       ],
       "domain": "Technology",
       "difficulty": "HARD"
@@ -33932,10 +34366,26 @@
       "id": 3039,
       "text": "Uma empresa quer garantir que apenas tráfego permitido alcance suas instâncias EC2. Qual recurso atende melhor esse requisito?",
       "options": [
-        { "key": "A", "text": "IAM Policies.", "correct": false },
-        { "key": "B", "text": "Security Groups.", "correct": true },
-        { "key": "C", "text": "AWS Shield.", "correct": false },
-        { "key": "D", "text": "AWS Config.", "correct": false }
+        {
+          "key": "A",
+          "text": "IAM Policies.",
+          "correct": false
+        },
+        {
+          "key": "B",
+          "text": "Security Groups.",
+          "correct": true
+        },
+        {
+          "key": "C",
+          "text": "AWS Shield.",
+          "correct": false
+        },
+        {
+          "key": "D",
+          "text": "AWS Config.",
+          "correct": false
+        }
       ],
       "domain": "Security & Compliance",
       "difficulty": "HARD"
@@ -33944,7 +34394,11 @@
       "id": 3040,
       "text": "Qual benefício da computação em nuvem AWS permite que empresas experimentem e inovem mais rapidamente?",
       "options": [
-        { "key": "A", "text": "Custos fixos elevados.", "correct": false },
+        {
+          "key": "A",
+          "text": "Custos fixos elevados.",
+          "correct": false
+        },
         {
           "key": "B",
           "text": "Provisionamento rápido de recursos.",
