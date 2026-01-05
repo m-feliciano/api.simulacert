@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuestionExplanationService implements QuestionExplanationUseCase {
-
     private static final String PROMPT_VERSION = "v1.0";
     private static final Double TEMPERATURE = 0.25;
     private static final Integer MAX_TOKENS = 500;
@@ -50,6 +49,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         log.info("Requesting explanation for question {} by user {}", command.questionId(), userId);
 
         validateExplanationRequest(command, userId);
+        // Limit user requests to prevent abuse
+        validateUserRequestLimit(userId);
 
         Optional<QuestionExplanationRun> explanation = explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), command.language());
         if (explanation.isPresent()) {
@@ -113,10 +114,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         if (question == null) {
             throw new IllegalArgumentException("Question not found: " + command.questionId());
         }
-    }
-
-    private String buildCacheKey(UUID questionId, String language) {
-        return questionId + ":" + language + ":" + PROMPT_VERSION;
     }
 
     private String getSystemPrompt(String certification) {
@@ -195,6 +192,19 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 saved.getModelName(),
                 saved.getExpiresAt()
         );
+    }
+
+    private void validateUserRequestLimit(UUID userId) {
+        Integer requestCount = cacheService.getRequestCount(userId, 0);
+
+        if (requestCount == null) requestCount = 0;
+
+        int MAX_REQUESTS_PER_HOUR = 15;
+        if (requestCount >= MAX_REQUESTS_PER_HOUR) {
+            throw new IllegalStateException("User has exceeded the maximum number of explanation requests per hour");
+        }
+
+        cacheService.putRequestCount(userId, requestCount + 1);
     }
 }
 

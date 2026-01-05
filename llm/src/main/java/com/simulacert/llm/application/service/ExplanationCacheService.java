@@ -1,6 +1,7 @@
 package com.simulacert.llm.application.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -23,5 +24,21 @@ public class ExplanationCacheService {
         log.debug("Caching explanation for key: {}", cacheKey);
         return content;
     }
-}
 
+    @CacheEvict(value = "requests", allEntries = true)
+    public void evictRequests() {
+        log.info("Evicting all entries from requests cache");
+    }
+
+    @Cacheable(value = "requests", key = "#userId")
+    public Integer getRequestCount(UUID userId, Integer count) {
+        log.info("Cache miss for key: {} (count: {})", userId, count);
+        // Spring Cache will store the generated count when returned.
+        return null;
+    }
+
+    @CachePut(value = "requests", key = "#userId")
+    public void putRequestCount(UUID userId, Integer count) {
+        log.info("Caching request count for user: {} with count: {}", userId, count);
+    }
+}
