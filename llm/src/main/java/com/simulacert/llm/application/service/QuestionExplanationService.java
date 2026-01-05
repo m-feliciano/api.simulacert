@@ -152,7 +152,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 - Do not mention that you are an AI
                 - Write in %s
                 - Cover ALL options listed
-                - Be concise and technical (2–4 sentences per option)
+                - Be concise and technical (2–6 sentences per option)
                 
                 Output format (mandatory):
                 - One line per option, in alphabetical order (A → Z)
