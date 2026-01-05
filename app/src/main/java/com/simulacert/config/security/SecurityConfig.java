@@ -1,6 +1,9 @@
 package com.simulacert.config.security;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -23,6 +26,7 @@ import java.util.List;
 /**
  * Security Configuration for simulacert Application
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -30,8 +34,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    private Environment environment;
+    private final Environment environment;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -43,12 +46,16 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         if (environment != null && Arrays.asList(environment.getActiveProfiles()).contains("prod")) {
+            log.info("CORS Configuration for PROD environment");
+
             configuration.setAllowedOrigins(
                     Arrays.asList(
                             "https://app.simulacert.com",
                             "https://admin.simulacert.com"
                     ));
         } else {
+            log.info("CORS Configuration for DEV environment");
+
             configuration.setAllowedOriginPatterns(List.of("*"));
         }
 
@@ -63,20 +70,26 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        // Allow health check endpoints for ECS / ALB
+                        .requestMatchers("/actuator/health/liveness").permitAll()
+                        // Disable all other actuator endpoints
+                        .requestMatchers("/actuator/**").denyAll()
                         .requestMatchers(
                                 "/api/v1/auth/register",
-                                "/api/v1/auth/login",
-                                // Health checks (ALB / ECS)
-                                "/actuator/health",
-                                "/actuator/health/**",
-                                // OpenAPI / Swagger
-                                "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/api/v1/auth/login"
+//                                // Health checks (ALB / ECS)
+//                                "/actuator/health",
+//                                "/actuator/health/**",
+//                                // OpenAPI / Swagger
+//                                "/v3/api-docs",
+//                                "/v3/api-docs/**",
+//                                "/swagger-ui/**",
+//                                "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers("/actuator/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        // All other API endpoints require authentication
+                        .requestMatchers("/api/**").authenticated()
+                        // Deny all other requests
+                        .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

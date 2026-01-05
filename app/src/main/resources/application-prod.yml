@@ -56,7 +56,7 @@ management:
 
 springdoc:
   api-docs:
-    enabled: true
+    enabled: false
     path: /v3/api-docs
   swagger-ui:
     enabled: false
