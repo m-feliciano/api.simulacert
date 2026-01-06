@@ -18,7 +18,6 @@ EXPOSE 8080
 
 ENTRYPOINT ["java", \
   "-XX:MaxRAMPercentage=85", \
-  "-XX:InitialRAMPercentage=50", \
   "-XX:+UseG1GC", \
   "-XX:+ExitOnOutOfMemoryError", \
   "-jar", "app.jar"]
