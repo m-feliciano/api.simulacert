@@ -172,10 +172,13 @@ public class AttemptService implements AttemptUseCase {
         log.debug("Selecting {} questions for exam {} with seed {}", questionCount, examId, seed);
 
         List<Question> allQuestions = questionRepository.findByExamId(examId);
-
         if (allQuestions.size() < questionCount) {
             throw new IllegalStateException("Exam has only " + allQuestions.size() + " questions");
         }
+
+        // Embaralha todas as perguntas com a semente fornecida
+        List<Question> shuffledQuestions = new ArrayList<>(allQuestions);
+        Collections.shuffle(shuffledQuestions, new Random(seed));
 
         // Distribuição por dificuldade: 30% easy, 50% medium, 20% hard
         int easyCount = (int) Math.round(questionCount * 0.3);
@@ -183,21 +186,21 @@ public class AttemptService implements AttemptUseCase {
         int hardCount = questionCount - easyCount - mediumCount; // garante soma exata
 
         // Se não houver perguntas suficientes em uma categoria, redistribui para as outras
-        var hardQuestions = filterByDifficulty(allQuestions, "HARD");
+        var hardQuestions = filterByDifficulty(shuffledQuestions, "HARD");
         if (hardQuestions.size() < hardCount) {
             int deficit = hardCount - hardQuestions.size();
             hardCount = hardQuestions.size();
             mediumCount += deficit;
         }
 
-        var mediumQuestions = filterByDifficulty(allQuestions, "MEDIUM");
+        var mediumQuestions = filterByDifficulty(shuffledQuestions, "MEDIUM");
         if (mediumQuestions.size() < mediumCount) {
             int deficit = mediumCount - mediumQuestions.size();
             mediumCount = mediumQuestions.size();
             easyCount += deficit;
         }
 
-        var easyQuestions = filterByDifficulty(allQuestions, "EASY");
+        var easyQuestions = filterByDifficulty(shuffledQuestions, "EASY");
         if (easyQuestions.size() < easyCount) {
             throw new IllegalStateException("Not enough questions to satisfy the difficulty distribution");
         }
