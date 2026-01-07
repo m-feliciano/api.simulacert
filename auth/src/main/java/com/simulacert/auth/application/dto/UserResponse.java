@@ -11,7 +11,7 @@ public record UserResponse(
         String name,
         UserRole role,
         boolean active,
-        Instant createdAt
-) {
+        Instant createdAt,
+        Boolean supporter) {
 }
 
