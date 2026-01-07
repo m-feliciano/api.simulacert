@@ -1,5 +1,6 @@
 package com.simulacert.auth.application.port.out;
 
+import com.simulacert.auth.domain.AuthProvider;
 import com.simulacert.auth.domain.User;
 
 import java.util.Optional;
@@ -14,6 +15,8 @@ public interface UserRepositoryPort {
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    Optional<User> findByProviderAndProviderId(AuthProvider provider, String providerId);
 }
 
 

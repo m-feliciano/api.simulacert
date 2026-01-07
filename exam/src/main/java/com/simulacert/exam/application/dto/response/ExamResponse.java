@@ -5,7 +5,10 @@ import java.util.UUID;
 public record ExamResponse(
         UUID id,
         String title,
-        String description
+        String description,
+        Double durationMinutes,
+        Long totalQuestions,
+        String difficultyLevel
 ) {
 }
 

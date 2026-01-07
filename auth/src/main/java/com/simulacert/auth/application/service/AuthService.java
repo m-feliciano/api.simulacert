@@ -41,11 +41,16 @@ public class AuthService implements AuthUseCase {
             throw new IllegalArgumentException("Email already registered");
         }
 
+        String name = request.name();
+        if (name == null || name.isEmpty()) {
+            name = request.email().split("@")[0];
+        }
+
         String passwordHash = passwordEncoder.encode(request.password());
 
         User user = User.create(
                 request.email(),
-                request.name(),
+                name,
                 passwordHash,
                 clock.now()
         );
@@ -71,7 +76,12 @@ public class AuthService implements AuthUseCase {
             throw new IllegalArgumentException("Account is deactivated");
         }
 
-        if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
+        if (user.getProvider() != com.simulacert.auth.domain.AuthProvider.LOCAL) {
+            log.warn("User registered with OAuth provider attempted password login: {}", request.email());
+            throw new IllegalArgumentException("This account uses " + user.getProvider() + " authentication");
+        }
+
+        if (user.getPasswordHash() == null || !passwordEncoder.matches(request.password(), user.getPasswordHash())) {
             log.warn("Invalid password for email: {}", request.email());
             throw new IllegalArgumentException("Invalid email or password");
         }
@@ -112,7 +122,12 @@ public class AuthService implements AuthUseCase {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
 
-        if (!passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
+        if (user.getProvider() != com.simulacert.auth.domain.AuthProvider.LOCAL) {
+            log.warn("OAuth user attempted to change password: {}", userId);
+            throw new IllegalArgumentException("Cannot change password for OAuth accounts");
+        }
+
+        if (user.getPasswordHash() == null || !passwordEncoder.matches(request.currentPassword(), user.getPasswordHash())) {
             log.warn("Current password is invalid for user: {}", userId);
             throw new IllegalArgumentException("Current password is incorrect");
         }

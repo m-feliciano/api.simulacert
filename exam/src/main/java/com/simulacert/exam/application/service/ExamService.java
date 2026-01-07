@@ -34,7 +34,8 @@ public class ExamService implements ExamUseCase {
     @Override
     public ExamResponse getExamById(UUID examId) {
         return examRepository.findById(examId)
-                .map(examMapper::toResponse)
+                // FIXME forçando dificuldade "EASY" e duração nula por enquanto
+                .map(e -> examMapper.toResponseComplete(e, countTotalQuestions(e.getId()), null, "EASY"))
                 .orElse(null);
     }
 
@@ -47,7 +48,8 @@ public class ExamService implements ExamUseCase {
     public List<ExamResponse> getAllExams() {
         return examRepository.findAll()
                 .stream()
-                .map(examMapper::toResponse)
+                // FIXME forçando dificuldade "EASY" e duração nula por enquanto
+                .map(e -> examMapper.toResponseComplete(e, countTotalQuestions(e.getId()), null, "EASY"))
                 .toList();
     }
 
@@ -160,5 +162,10 @@ public class ExamService implements ExamUseCase {
                 "SUCCESS"
         );
     }
+
+    private Long countTotalQuestions(UUID id) {
+        return questionRepository.countByExamId(id);
+    }
+
 }
 

@@ -68,25 +68,15 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow health check endpoints for ECS / ALB
                         .requestMatchers("/actuator/health/liveness").permitAll()
-                        // Disable all other actuator endpoints
                         .requestMatchers("/actuator/**").denyAll()
                         .requestMatchers(
                                 "/api/v1/auth/register",
-                                "/api/v1/auth/login"
-//                                // Health checks (ALB / ECS)
-//                                "/actuator/health",
-//                                "/actuator/health/**",
-//                                // OpenAPI / Swagger
-//                                "/v3/api-docs",
-//                                "/v3/api-docs/**",
-//                                "/swagger-ui/**",
-//                                "/swagger-ui.html"
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/oauth/google",
+                                "/api/v1/auth/oauth/google/exchange"
                         ).permitAll()
-                        // All other API endpoints require authentication
                         .requestMatchers("/api/**").authenticated()
-                        // Deny all other requests
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
