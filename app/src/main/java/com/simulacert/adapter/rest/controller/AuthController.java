@@ -7,11 +7,14 @@ import com.simulacert.auth.application.dto.LoginRequest;
 import com.simulacert.auth.application.dto.RegisterRequest;
 import com.simulacert.auth.application.dto.UserResponse;
 import com.simulacert.auth.application.port.in.AuthUseCase;
+import com.simulacert.auth.domain.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -106,6 +109,19 @@ public class AuthController implements AuthControllerOpenApi {
         authUseCase.deactivateUser(userId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        log.debug("Get current authenticated user");
+
+        User user = (User) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        UserResponse response = authUseCase.getUserById(user.getId());
+        return ResponseEntity.ok(response);
     }
 }
 
