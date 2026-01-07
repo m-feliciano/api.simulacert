@@ -13,6 +13,5 @@ public class QuestionScheduler {
 
     @Scheduled(fixedRate = 60000 * 60) // Every hour
     public void clearCache() {
-        cacheService.evictRequests();
     }
 }

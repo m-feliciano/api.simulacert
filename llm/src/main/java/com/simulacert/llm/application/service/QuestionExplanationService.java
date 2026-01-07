@@ -50,8 +50,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         log.info("Requesting explanation for question {} by user {}", command.questionId(), userId);
 
         validateExplanationRequest(command, userId);
-        // Limit user requests to prevent abuse
-        validateUserRequestLimit(userId);
 
         Optional<QuestionExplanationRun> explanation = explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), command.language());
         if (explanation.isPresent()) {
@@ -201,19 +199,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 saved.getModelName(),
                 saved.getExpiresAt()
         );
-    }
-
-    private void validateUserRequestLimit(UUID userId) {
-        Integer requestCount = cacheService.getRequestCount(userId, 0);
-
-        if (requestCount == null) requestCount = 0;
-
-        int MAX_REQUESTS_PER_HOUR = 15;
-        if (requestCount >= MAX_REQUESTS_PER_HOUR) {
-            throw new IllegalStateException("User has exceeded the maximum number of explanation requests per hour");
-        }
-
-        cacheService.putRequestCount(userId, requestCount + 1);
     }
 }
 

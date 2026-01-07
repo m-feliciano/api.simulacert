@@ -12,11 +12,11 @@ import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
-import com.simulacert.exam.application.port.out.QuestionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +41,22 @@ public class AttemptService implements AttemptUseCase {
     private final AnswerRepositoryPort answerRepository;
     private final AttemptQueryPort attemptQueryPort;
     private final ExamQueryPort examQueryPort;
-    private final QuestionQueryPort questionQueryPort;
     private final QuestionRepositoryPort questionRepository;
     private final QuestionOptionQueryPort questionOptionQueryPort;
     private final ClockPort clock;
+
+    @Scheduled(cron = "0 0 * * * ?") // runs every hour
+    public void cleanUpOldInProgressAttempts() {
+        log.info("Starting cleanup of old in-progress attempts");
+
+        var cutoff = clock.now().minusSeconds(3600 * 4);
+        var oldAttempts = attemptRepository.findByStatusAndStartedAtBefore(IN_PROGRESS, cutoff);
+        for (var attempt : oldAttempts) {
+            log.info("Cancelling old in-progress attempt: {}", attempt.getId());
+            attempt.cancel(clock.now());
+            attemptRepository.save(attempt);
+        }
+    }
 
     @Override
     public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount) {

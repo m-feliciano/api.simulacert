@@ -7,6 +7,7 @@ import com.simulacert.attempt.infrastructure.persistence.repository.AttemptRepos
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +36,11 @@ public class AttemptRepositoryAdapter implements AttemptRepositoryPort {
     @Override
     public List<Attempt> findByUserIdOrderByStartedAtDesc(UUID userId) {
         return repository.findByUserIdOrderByStartedAtDesc(userId);
+    }
+
+    @Override
+    public List<Attempt> findByStatusAndStartedAtBefore(AttemptStatus attemptStatus, Instant cutoff) {
+        return repository.findByStatusAndStartedAtBefore(attemptStatus, cutoff);
     }
 }
 
