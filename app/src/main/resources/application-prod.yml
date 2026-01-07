@@ -50,6 +50,15 @@ app:
       model: ${OPENAI_MODEL:gpt-4o-mini}
       base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
       timeout-seconds: ${OPENAI_TIMEOUT:30}
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+      client-secret: ${GOOGLE_CLIENT_SECRET:}
+      auth-uri: https://accounts.google.com/o/oauth2/v2/auth
+      token-uri: https://oauth2.googleapis.com/token
+      jwks-uri: https://www.googleapis.com/oauth2/v3/certs
+    frontend-callback-url: ${FRONTEND_CALLBACK_URL:https://app.simulacert.com/auth/callback}
+    state-expiration-minutes: 5
 
 management:
   endpoints:

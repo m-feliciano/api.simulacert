@@ -1,5 +1,6 @@
 package com.simulacert.auth.infrastructure.persistence.repository;
 
+import com.simulacert.auth.domain.AuthProvider;
 import com.simulacert.auth.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    Optional<User> findByProviderAndProviderId(AuthProvider provider, String providerId);
 }

@@ -33,16 +33,24 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String name;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     @Builder.Default
     private UserRole role = UserRole.USER;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private AuthProvider provider = AuthProvider.LOCAL;
+
+    @Column(name = "provider_id", length = 255)
+    private String providerId;
 
     @Column(nullable = false)
     @Builder.Default
@@ -70,7 +78,26 @@ public class User {
                 .name(name.trim())
                 .passwordHash(passwordHash)
                 .role(UserRole.USER)
+                .provider(AuthProvider.LOCAL)
                 .active(false)
+                .createdAt(createdAt)
+                .build();
+    }
+
+    public static User createFromOAuth(String email, String name, AuthProvider provider, String providerId, Instant createdAt) {
+        Objects.requireNonNull(email, "email cannot be null");
+        Objects.requireNonNull(name, "name cannot be null");
+        Objects.requireNonNull(provider, "provider cannot be null");
+        Objects.requireNonNull(providerId, "providerId cannot be null");
+
+        return User.builder()
+                .id(UuidCreator.getTimeOrdered())
+                .email(email.toLowerCase().trim())
+                .name(name.trim())
+                .provider(provider)
+                .providerId(providerId)
+                .role(UserRole.USER)
+                .active(true)
                 .createdAt(createdAt)
                 .build();
     }

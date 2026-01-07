@@ -32,6 +32,15 @@ app:
   jwt:
     secret: dev-secret-key-simulacert-development-only-not-for-production-64-bytes-minimum-878xxxxx
     expiration: 86400000
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+      client-secret: ${GOOGLE_CLIENT_SECRET:}
+      auth-uri: https://accounts.google.com/o/oauth2/v2/auth
+      token-uri: https://oauth2.googleapis.com/token
+      jwks-uri: https://www.googleapis.com/oauth2/v3/certs
+    frontend-callback-url: ${FRONTEND_CALLBACK_URL:http://localhost:4200/auth/callback}
+    state-expiration-minutes: 5
   import:
     input-dir: ./conteudo/import/fazer
     processed-dir: ./conteudo/import/feito

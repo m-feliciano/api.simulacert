@@ -17439,7 +17439,7 @@
     },
     {
       "id": 596,
-      "text": "Um cliente gostaria de projetar e construir uma nova carga de trabalho na AWS Cloud, mas não possui a expertise técnica de software relacionada à AWS internamente. <br/>Qual dos seguintes programas da AWS um cliente pode aproveitar para alcançar esse resultado?",
+      "text": "Um cliente gostaria de projetar e construir uma nova carga de trabalho na AWS Cloud, mas não possui a expertise técnica de software relacionada à AWS internamente. Qual dos seguintes programas da AWS um cliente pode aproveitar para alcançar esse resultado?",
       "options": [
         {
           "key": "A",
@@ -18296,7 +18296,7 @@
     },
     {
       "id": 625,
-      "text": "Um cliente precisa executar um banco de dados MySQL que escale facilmente.<br/>Qual serviço da AWS ele deve usar?",
+      "text": "Um cliente precisa executar um banco de dados MySQL que escale facilmente.Qual serviço da AWS ele deve usar?",
       "options": [
         {
           "key": "A",
@@ -18688,7 +18688,7 @@
     },
     {
       "id": 639,
-      "text": "Um cliente está usando múltiplas contas AWS com faturamento separado. <br/>Como o cliente pode aproveitar descontos por volume com impacto mínimo nos recursos AWS?",
+      "text": "Um cliente está usando múltiplas contas AWS com faturamento separado. Como o cliente pode aproveitar descontos por volume com impacto mínimo nos recursos AWS?",
       "options": [
         {
           "key": "A",
@@ -18777,7 +18777,7 @@
     },
     {
       "id": 642,
-      "text": "Um cliente está implantando uma nova aplicação e precisa escolher uma Região AWS. <br/>Quais dos seguintes fatores podem influenciar a decisão do cliente? (Selecione DUAS.)",
+      "text": "Um cliente está implantando uma nova aplicação e precisa escolher uma Região AWS. Quais dos seguintes fatores podem influenciar a decisão do cliente? (Selecione DUAS.)",
       "options": [
         {
           "key": "A",
@@ -21781,7 +21781,7 @@
     },
     {
       "id": 745,
-      "text": "Uma empresa possui várias contas AWS e deseja simplificar e consolidar seu processo de faturamento. <br/>Qual serviço AWS realizará isso?",
+      "text": "Uma empresa possui várias contas AWS e deseja simplificar e consolidar seu processo de faturamento. Qual serviço AWS realizará isso?",
       "options": [
         {
           "key": "A",
@@ -22239,7 +22239,7 @@
     },
     {
       "id": 761,
-      "text": "Um diretor foi encarregado de investigar arquitetura de nuvem híbrida. A empresa atualmente acessa a AWS pela internet pública.<br/>Qual serviço facilitará a conectividade híbrida privada?",
+      "text": "Um diretor foi encarregado de investigar arquitetura de nuvem híbrida. A empresa atualmente acessa a AWS pela internet pública.Qual serviço facilitará a conectividade híbrida privada?",
       "options": [
         {
           "key": "A",
@@ -22720,7 +22720,7 @@
     },
     {
       "id": 778,
-      "text": "Uma empresa está considerando migrar suas aplicações para AWS. A empresa quer comparar o custo de executar a carga de trabalho on-premises com o custo de executar a carga de trabalho equivalente na plataforma AWS. <br/>Qual ferramenta pode ser usada para realizar essa comparação?",
+      "text": "Uma empresa está considerando migrar suas aplicações para AWS. A empresa quer comparar o custo de executar a carga de trabalho on-premises com o custo de executar a carga de trabalho equivalente na plataforma AWS. Qual ferramenta pode ser usada para realizar essa comparação?",
       "options": [
         {
           "key": "A",

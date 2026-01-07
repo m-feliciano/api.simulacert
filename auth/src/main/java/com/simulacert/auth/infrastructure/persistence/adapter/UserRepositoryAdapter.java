@@ -1,6 +1,7 @@
 package com.simulacert.auth.infrastructure.persistence.adapter;
 
 import com.simulacert.auth.application.port.out.UserRepositoryPort;
+import com.simulacert.auth.domain.AuthProvider;
 import com.simulacert.auth.domain.User;
 import com.simulacert.auth.infrastructure.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public boolean existsByEmail(String email) {
         return repository.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findByProviderAndProviderId(AuthProvider provider, String providerId) {
+        return repository.findByProviderAndProviderId(provider, providerId);
     }
 }
 

@@ -9,4 +9,6 @@ import org.mapstruct.MappingConstants;
 public interface ExamMapper {
 
     ExamResponse toResponse(Exam exam);
+
+    ExamResponse toResponseComplete(Exam exam, Long totalQuestions, Double durationMinutes, String difficultyLevel);
 }
