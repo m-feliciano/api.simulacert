@@ -2,9 +2,7 @@ version: '3.8'
 
 services:
   simulacert-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest
     container_name: simulacert-api
     env_file:
       - .env
@@ -14,7 +12,11 @@ services:
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
-      SERVER_PORT: ${SERVER_PORT}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_ENABLED: ${OPENAI_ENABLED}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
     networks:
