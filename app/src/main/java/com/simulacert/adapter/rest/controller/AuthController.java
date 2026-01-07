@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -75,6 +76,16 @@ public class AuthController implements AuthControllerOpenApi {
         log.debug("Get user by email: {}", email);
 
         UserResponse response = authUseCase.getUserByEmail(email);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/users/")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        log.debug("Get all users");
+
+        List<UserResponse> response = authUseCase.getUsers();
 
         return ResponseEntity.ok(response);
     }

@@ -792,6 +792,159 @@
         ]
       }
     },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "getCurrentUser",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/oauth/google": {
+      "get": {
+        "operationId": "initiateGoogleLogin",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "tags": [
+          "o-auth-controller"
+        ]
+      }
+    },
+    "/api/v1/auth/oauth/google/exchange": {
+      "post": {
+        "operationId": "exchangeGoogleCode",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OAuthExchangeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "tags": [
+          "o-auth-controller"
+        ]
+      }
+    },
     "/api/v1/auth/register": {
       "post": {
         "description": "Creates a new user account with USER role",
@@ -849,6 +1002,59 @@
           }
         },
         "summary": "Register new user",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/users/": {
+      "get": {
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  }
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
         "tags": [
           "Authentication"
         ]
@@ -2986,12 +3192,23 @@
           "description": {
             "type": "string"
           },
+          "difficultyLevel": {
+            "type": "string"
+          },
+          "durationMinutes": {
+            "type": "number",
+            "format": "double"
+          },
           "id": {
             "type": "string",
             "format": "uuid"
           },
           "title": {
             "type": "string"
+          },
+          "totalQuestions": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -3030,6 +3247,21 @@
         "required": [
           "email",
           "password"
+        ]
+      },
+      "OAuthExchangeRequest": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "state"
         ]
       },
       "PageMetadata": {
@@ -3174,9 +3406,7 @@
             "minLength": 1
           },
           "name": {
-            "type": "string",
-            "maxLength": 100,
-            "minLength": 3
+            "type": "string"
           },
           "password": {
             "type": "string",
@@ -3186,7 +3416,6 @@
         },
         "required": [
           "email",
-          "name",
           "password"
         ]
       },
@@ -3335,6 +3564,9 @@
               "USER",
               "ADMIN"
             ]
+          },
+          "supporter": {
+            "type": "boolean"
           }
         }
       },
