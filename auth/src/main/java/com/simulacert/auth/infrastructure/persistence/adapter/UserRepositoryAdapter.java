@@ -7,6 +7,7 @@ import com.simulacert.auth.infrastructure.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +40,11 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public Optional<User> findByProviderAndProviderId(AuthProvider provider, String providerId) {
         return repository.findByProviderAndProviderId(provider, providerId);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return repository.findAll();
     }
 }
 

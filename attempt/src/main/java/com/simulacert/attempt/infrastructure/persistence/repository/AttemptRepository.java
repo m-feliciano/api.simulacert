@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,5 +21,11 @@ public interface AttemptRepository extends JpaRepository<Attempt, UUID> {
     );
 
     List<Attempt> findByUserIdOrderByStartedAtDesc(UUID userId);
+
+    @Query("SELECT a FROM Attempt a WHERE a.status = :status AND a.startedAt < :cutoff")
+    List<Attempt> findByStatusAndStartedAtBefore(
+            @Param("status") AttemptStatus status,
+            @Param("cutoff") Instant cutoff
+    );
 }
 

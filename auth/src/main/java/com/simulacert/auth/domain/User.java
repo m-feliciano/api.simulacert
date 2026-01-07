@@ -67,6 +67,9 @@ public class User {
     @Version
     private long version;
 
+    @Column(name = "supporter")
+    private Boolean supporter;
+
     public static User create(String email, String name, String passwordHash, Instant createdAt) {
         Objects.requireNonNull(email, "email cannot be null");
         Objects.requireNonNull(name, "name cannot be null");

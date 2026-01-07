@@ -71,6 +71,25 @@ logging:
     name: logs/simulacert.log
 
 app:
+  rate-limit:
+    enabled: true
+    default-config:
+      capacity: 100
+      refill-tokens: 100
+      refill-period: 60s
+    anonymous:
+      capacity: 20
+      refill-tokens: 20
+      refill-period: 60s
+    auth:
+      capacity: 5
+      refill-tokens: 5
+      refill-period: 60s
+    expensive:
+      capacity: 5
+      refill-tokens: 5
+      refill-period: 1h
+
   llm:
     openai:
       enabled: false  # Set to true to use OpenAI (requires API key)

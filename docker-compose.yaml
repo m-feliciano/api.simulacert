@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   simulacert-api:
     image: 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest
