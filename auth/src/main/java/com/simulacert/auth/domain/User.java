@@ -79,7 +79,7 @@ public class User {
                 .passwordHash(passwordHash)
                 .role(UserRole.USER)
                 .provider(AuthProvider.LOCAL)
-                .active(false)
+                .active(true)
                 .createdAt(createdAt)
                 .build();
     }
