@@ -26,7 +26,7 @@ WORKDIR /app
 
 FROM eclipse-temurin:21-jre-jammy AS runtime
 COPY --from=build /app/app/build/libs/app-*.jar app.jar
-COPY conteudo/ /app/conteudo/
+COPY conteudo/ /conteudo/
 
 EXPOSE 8080
 
