@@ -80,7 +80,7 @@ public class AuthController implements AuthControllerOpenApi {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/users/")
+    @GetMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getUsers() {
         log.debug("Get all users");
