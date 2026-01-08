@@ -7,28 +7,30 @@ spring:
       name: ${SPRING_SECURITY_USER_NAME:admin}
       password: ${SPRING_SECURITY_USER_PASSWORD:admin123}
 
-#  datasource:
-#    url: jdbc:h2:mem:simulacert
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-#
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/simulacert}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
-#  jpa:
-#    database-platform: org.hibernate.dialect.H2Dialect
-#    hibernate:
-#      ddl-auto: create-drop
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-
-#  flyway:
-#    enabled: false
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
 
 server:
   port: 8080
