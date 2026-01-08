@@ -8,25 +8,10 @@ info:
 
 spring:
   profiles:
-    active: dev
+    active: prod
 
   application:
     name: simulacert
-
-  datasource:
-    url: jdbc:postgresql://localhost:5432/simulacert
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: true
 
   flyway:
     enabled: true
@@ -50,7 +35,7 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
-    enabled: true
+    enabled: false
     path: /swagger-ui
     operations-sorter: method
   writer-with-order-by-keys: true
