@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.AuthControllerOpenApi;
+import com.simulacert.adapter.rest.dto.RefreshTokenRequest;
 import com.simulacert.auth.application.dto.AuthResponse;
 import com.simulacert.auth.application.dto.ChangePasswordRequest;
 import com.simulacert.auth.application.dto.LoginRequest;
@@ -155,10 +156,10 @@ public class AuthController implements AuthControllerOpenApi {
 
     // refresh-token
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody String refreshToken) {
+    public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest req) {
         log.info("Refresh token request");
 
-        AuthResponse response = authUseCase.refreshToken(refreshToken);
+        AuthResponse response = authUseCase.refreshToken(req.refreshToken());
         return ResponseEntity.ok(response);
     }
 }

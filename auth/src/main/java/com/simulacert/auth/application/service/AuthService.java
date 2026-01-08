@@ -224,7 +224,7 @@ public class AuthService implements AuthUseCase {
             throw new IllegalArgumentException("Invalid refresh token");
         }
 
-        UUID userId = tokenProvider.validateAndExtractUserId(refreshToken);
+        UUID userId = tokenProvider.extractUserIdRefreshToken(refreshToken);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {
                     log.warn("User not found for refresh token with user id: {}", userId);

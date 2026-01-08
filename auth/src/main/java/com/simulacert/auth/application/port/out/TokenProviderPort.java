@@ -12,8 +12,8 @@ public interface TokenProviderPort {
 
     String extractUserId(String token);
 
-    boolean validateToken(String token);
+    boolean validateAccessToken(String token);
 
-    UUID validateAndExtractUserId(String refreshToken);
+    UUID extractUserIdRefreshToken(String refreshToken);
 }
 

@@ -30,7 +30,7 @@ server:
 
 app:
   jwt:
-    secret: dev-secret-key-simulacert-development-only-not-for-production-64-bytes-minimum-878xxxxx
+    secret: OXJwKzhTYzQzUTJad291akJpT2djaHJtcTBZN0s1QzdoOVlTRERpQ2pwQkl5cmU1M0NubG5hZzhTQXZuRjFBNVRuN2l5V3RSNUlidkZyZ2lIa2NUSUE9PQ==
     expiration: 86400000
   oauth:
     google:

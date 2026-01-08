@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -37,29 +38,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = extractJwtFromRequest(request);
 
-            if (jwt != null && tokenProvider.validateToken(jwt)) {
-                String userIdStr = tokenProvider.extractUserId(jwt);
-                UUID userId = UUID.fromString(userIdStr);
-
-                userRepository.findById(userId)
-                        .filter(User::isActive)
-                        .ifPresent(user -> {
-                            var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
-
-                            UsernamePasswordAuthenticationToken authentication =
-                                    new UsernamePasswordAuthenticationToken(user, null, authorities);
-                            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                            SecurityContextHolder.getContext().setAuthentication(authentication);
-                            log.debug("Set authentication for user: {} with role: {}", user.getEmail(), user.getRole());
-                        });
+            if (jwt == null) {
+                filterChain.doFilter(request, response);
+                return;
             }
+
+            if (!tokenProvider.validateAccessToken(jwt)) {
+                SecurityContextHolder.clearContext();
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            UUID userId = UUID.fromString(tokenProvider.extractUserId(jwt));
+
+            User user = userRepository.findById(userId)
+                    .filter(User::isActive)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found or inactive"));
+
+            var authorities = List.of(
+                    new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+            );
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(user, null, authorities);
+
+            authentication.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request)
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
         } catch (Exception ex) {
-            log.error("Could not set user authentication in security context", ex);
+            SecurityContextHolder.clearContext();
+            log.warn("JWT authentication failed: {}", ex.getMessage());
         }
 
         filterChain.doFilter(request, response);
     }
+
 
     private String extractJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
