@@ -61,7 +61,7 @@ app:
     expensive:
       capacity: 10
       refill-tokens: 10
-      refill-period: 1h
+      refill-period: 2h
 
   llm:
     openai:
