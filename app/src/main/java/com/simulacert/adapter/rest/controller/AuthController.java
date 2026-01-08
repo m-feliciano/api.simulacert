@@ -8,12 +8,13 @@ import com.simulacert.auth.application.dto.RegisterRequest;
 import com.simulacert.auth.application.dto.UserResponse;
 import com.simulacert.auth.application.port.in.AuthUseCase;
 import com.simulacert.auth.domain.User;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ import java.util.UUID;
 public class AuthController implements AuthControllerOpenApi {
 
     private final AuthUseCase authUseCase;
+    private final MeterRegistry meterRegistry;
 
     @Override
     @PostMapping("/register")
@@ -94,7 +96,7 @@ public class AuthController implements AuthControllerOpenApi {
     public ResponseEntity<Void> changePassword(
             @PathVariable UUID userId,
             @Valid @RequestBody ChangePasswordRequest request) {
-        log.info("Change password request for user: {}", userId);
+        log.info("Change dummyPassword request for user: {}", userId);
 
         authUseCase.changePassword(userId, request);
 
@@ -132,6 +134,31 @@ public class AuthController implements AuthControllerOpenApi {
                 .getPrincipal();
 
         UserResponse response = authUseCase.getUserById(user.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/users/anonymous")
+    public ResponseEntity<AuthResponse> createAnonymousUser() {
+        log.debug("Create anonymous user request");
+
+        UserResponse anonymous = authUseCase.createAnonymousUser();
+
+        Counter.builder("rate_limit.blocked")
+                .tag("policy", "auth.anonymous_users.created")
+                .register(meterRegistry)
+                .increment();
+
+        AuthResponse response = authUseCase.loginAnonymous(anonymous.id(), anonymous.dummyPassword());
+
+        return ResponseEntity.ok(response);
+    }
+
+    // refresh-token
+    @PostMapping("/refresh-token")
+    public ResponseEntity<AuthResponse> refreshToken(@RequestBody String refreshToken) {
+        log.info("Refresh token request");
+
+        AuthResponse response = authUseCase.refreshToken(refreshToken);
         return ResponseEntity.ok(response);
     }
 }

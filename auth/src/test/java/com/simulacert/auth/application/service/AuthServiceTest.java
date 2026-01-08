@@ -66,7 +66,7 @@ class AuthServiceTest {
     @Test
     @DisplayName("Should register new user successfully")
     void shouldRegisterNewUserSuccessfully() {
-        RegisterRequest request = new RegisterRequest("new@example.com", "New User", "password123");
+        RegisterRequest request = new RegisterRequest("new@example.com", "New User", "password123", null);
         UserResponse expectedResponse = new UserResponse(
                 testUser.getId(),
                 "new@example.com",
@@ -94,7 +94,7 @@ class AuthServiceTest {
     @Test
     @DisplayName("Should throw exception when email already exists")
     void shouldThrowExceptionWhenEmailAlreadyExists() {
-        RegisterRequest request = new RegisterRequest("existing@example.com", "User", "password123");
+        RegisterRequest request = new RegisterRequest("existing@example.com", "User", "password123", null);
 
         when(userRepository.existsByEmail(request.email())).thenReturn(true);
 
@@ -114,7 +114,7 @@ class AuthServiceTest {
         AuthResponse expectedResponse = new AuthResponse(token, "Bearer ", new UserResponse(
                 testUser.getId(),
                 "mock", "mock", UserRole.USER, true, now
-        ));
+        ), null);
 
         when(userRepository.findByEmail(request.email())).thenReturn(Optional.of(testUser));
         when(passwordEncoder.matches(request.password(), testUser.getPasswordHash())).thenReturn(true);

@@ -83,7 +83,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
             return policies.auth();
         }
 
-        if (path.startsWith("/questions/") && path.endsWith("/explanations")) {
+
+        if (path.startsWith("/questions/") && path.contains("/explanations")) {
+            return policies.llm();
+        }
+
+        if (path.startsWith("/api/v1/auth/users/anonymous")) {
             return policies.expensive();
         }
 

@@ -794,6 +794,7 @@
     },
     "/api/v1/auth/me": {
       "get": {
+        "description": "Retrieves information about the currently authenticated user",
         "operationId": "getCurrentUser",
         "responses": {
           "200": {
@@ -804,7 +805,7 @@
                 }
               }
             },
-            "description": "OK"
+            "description": "Current user retrieved successfully"
           },
           "400": {
             "content": {
@@ -815,6 +816,16 @@
               }
             },
             "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Unauthorized - Invalid or missing token"
           },
           "500": {
             "content": {
@@ -837,6 +848,12 @@
             "description": "Not Implemented"
           }
         },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get current authenticated user",
         "tags": [
           "Authentication"
         ]
@@ -945,6 +962,66 @@
         ]
       }
     },
+    "/api/v1/auth/refresh-token": {
+      "post": {
+        "operationId": "refreshToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
     "/api/v1/auth/register": {
       "post": {
         "description": "Creates a new user account with USER role",
@@ -1007,7 +1084,7 @@
         ]
       }
     },
-    "/api/v1/auth/users/": {
+    "/api/v1/auth/users": {
       "get": {
         "operationId": "getUsers",
         "responses": {
@@ -1055,6 +1132,63 @@
             "description": "Not Implemented"
           }
         },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/users/anonymous": {
+      "post": {
+        "description": "Creates a new anonymous user account",
+        "operationId": "createAnonymousUser",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            },
+            "description": "Anonymous user created successfully"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Create anonymous user",
         "tags": [
           "Authentication"
         ]
@@ -1365,7 +1499,7 @@
     },
     "/api/v1/auth/users/{userId}/password": {
       "put": {
-        "description": "Allows user to change their own password",
+        "description": "Allows user to change their own dummyPassword",
         "operationId": "changePassword",
         "parameters": [
           {
@@ -1401,7 +1535,7 @@
                 }
               }
             },
-            "description": "Invalid old password"
+            "description": "Invalid old dummyPassword"
           },
           "404": {
             "description": "User not found"
@@ -1432,7 +1566,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Change user password",
+        "summary": "Change user dummyPassword",
         "tags": [
           "Authentication"
         ]
@@ -3038,6 +3172,9 @@
       "AuthResponse": {
         "type": "object",
         "properties": {
+          "refreshToken": {
+            "type": "string"
+          },
           "token": {
             "type": "string"
           },
@@ -3405,6 +3542,10 @@
             "format": "email",
             "minLength": 1
           },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
           "name": {
             "type": "string"
           },
@@ -3548,6 +3689,9 @@
             "type": "string",
             "format": "date-time"
           },
+          "dummyPassword": {
+            "type": "string"
+          },
           "email": {
             "type": "string"
           },
@@ -3567,6 +3711,9 @@
           },
           "supporter": {
             "type": "boolean"
+          },
+          "type": {
+            "type": "string"
           }
         }
       },

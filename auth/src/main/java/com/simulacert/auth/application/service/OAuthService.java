@@ -92,9 +92,10 @@ public class OAuthService implements OAuthUseCase {
         User user = findOrCreateUser(userInfo);
 
         String token = tokenProvider.generateToken(user);
+        String refreshToken = tokenProvider.generateRefreshToken(user);
         UserResponse userResponse = userMapper.toResponse(user);
 
-        return AuthResponse.of(token, userResponse);
+        return AuthResponse.of(token, userResponse, refreshToken);
     }
 
     private User findOrCreateUser(GoogleUserInfo userInfo) {

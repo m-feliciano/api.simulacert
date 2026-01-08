@@ -30,7 +30,7 @@ public class User {
     @Id
     private UUID id;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(unique = true, length = 100)
     private String email;
 
     @Column(length = 100)
@@ -70,6 +70,9 @@ public class User {
     @Column(name = "supporter")
     private Boolean supporter;
 
+    @Column(name = "type")
+    private String type = "AUTHENTICATED"; // or anonymous
+
     public static User create(String email, String name, String passwordHash, Instant createdAt) {
         Objects.requireNonNull(email, "email cannot be null");
         Objects.requireNonNull(name, "name cannot be null");
@@ -81,9 +84,25 @@ public class User {
                 .name(name.trim())
                 .passwordHash(passwordHash)
                 .role(UserRole.USER)
+                .type("AUTHENTICATED")
                 .provider(AuthProvider.LOCAL)
                 .active(true)
                 .createdAt(createdAt)
+                .build();
+    }
+
+    public static User createAnon(String passwordHash) {
+        String hash = UUID.randomUUID().toString().substring(10).replace("-", "");
+
+        return User.builder()
+                .id(UuidCreator.getTimeOrdered())
+                .role(UserRole.USER)
+                .email("anon_" + hash + "@example.com")
+                .passwordHash(passwordHash)
+                .provider(AuthProvider.LOCAL)
+                .active(true)
+                .type("ANONYMOUS")
+                .createdAt(Instant.now())
                 .build();
     }
 
@@ -103,6 +122,14 @@ public class User {
                 .active(true)
                 .createdAt(createdAt)
                 .build();
+    }
+
+    public void register(String email, String name, String passwordHash, Instant updatedAt) {
+        this.email = email.toLowerCase().trim();
+        this.name = name.trim();
+        this.passwordHash = passwordHash;
+        this.type = "AUTHENTICATED";
+        this.updatedAt = updatedAt;
     }
 
     public void updatePassword(String newPasswordHash) {
@@ -126,6 +153,10 @@ public class User {
 
     public boolean isAdmin() {
         return role == UserRole.ADMIN;
+    }
+
+    public boolean isAnonymous() {
+        return "ANONYMOUS".equalsIgnoreCase(this.type);
     }
 }
 

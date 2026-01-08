@@ -10,5 +10,9 @@ public record ExamResponse(
         Long totalQuestions,
         String difficultyLevel
 ) {
+
+    public ExamResponse(UUID uid, String title, String description) {
+        this(uid, title, description, null, null, null);
+    }
 }
 

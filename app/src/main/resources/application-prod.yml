@@ -62,6 +62,10 @@ app:
       capacity: 10
       refill-tokens: 10
       refill-period: 2h
+    llm:
+      capacity: 10
+      refill-tokens: 10
+      refill-period: 2h
 
   llm:
     openai:

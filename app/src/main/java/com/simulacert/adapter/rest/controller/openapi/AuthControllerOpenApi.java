@@ -178,5 +178,37 @@ public interface AuthControllerOpenApi {
             @Parameter(description = "User ID", required = true)
             @PathVariable UUID userId
     );
+
+    @Operation(
+            summary = "Get current authenticated user",
+            description = "Retrieves information about the currently authenticated user",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Current user retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized - Invalid or missing token"
+            )
+    })
+    ResponseEntity<UserResponse> getCurrentUser();
+
+    @Operation(
+            summary = "Create anonymous user",
+            description = "Creates a new anonymous user account",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Anonymous user created successfully",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            )
+    })
+    ResponseEntity<AuthResponse> createAnonymousUser();
 }
 

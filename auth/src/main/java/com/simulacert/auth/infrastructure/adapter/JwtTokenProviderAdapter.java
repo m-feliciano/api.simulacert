@@ -14,6 +14,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -49,6 +50,19 @@ public class JwtTokenProviderAdapter implements TokenProviderPort {
     }
 
     @Override
+    public String generateRefreshToken(User user) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationMs * 14); // Refresh token valid for 14 times longer
+
+        return Jwts.builder()
+                .setSubject(user.getId().toString())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    @Override
     public String extractUserId(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -71,6 +85,15 @@ public class JwtTokenProviderAdapter implements TokenProviderPort {
             log.error("Invalid JWT token: {}", ex.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public UUID validateAndExtractUserId(String refreshToken) {
+        if (!validateToken(refreshToken)) {
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+        String userIdStr = extractUserId(refreshToken);
+        return UUID.fromString(userIdStr);
     }
 }
 
