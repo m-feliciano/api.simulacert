@@ -15,8 +15,8 @@ public class RateLimitPolicies {
 
     private PolicyConfig defaultConfig = new PolicyConfig(100, 100, Duration.ofSeconds(60));
     private PolicyConfig anonymous = new PolicyConfig(20, 20, Duration.ofSeconds(60));
-    private PolicyConfig auth = new PolicyConfig(5, 5, Duration.ofSeconds(60));
-    private PolicyConfig expensive = new PolicyConfig(3, 3, Duration.ofHours(1));
+    private PolicyConfig auth = new PolicyConfig(10, 10, Duration.ofSeconds(60));
+    private PolicyConfig expensive = new PolicyConfig(5, 5, Duration.ofHours(1));
     private PolicyConfig llm = new PolicyConfig(10, 10, Duration.ofMinutes(2));
 
     public RateLimitPolicy defaultPolicy() {
