@@ -2,6 +2,11 @@ spring:
   application:
     name: simulacert-dev
 
+  security:
+    user:
+      name: ${SPRING_SECURITY_USER_NAME:admin}
+      password: ${SPRING_SECURITY_USER_PASSWORD:admin123}
+
 #  datasource:
 #    url: jdbc:h2:mem:simulacert
 #    username: sa
