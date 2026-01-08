@@ -144,7 +144,7 @@ public class AuthController implements AuthControllerOpenApi {
 
         UserResponse anonymous = authUseCase.createAnonymousUser();
 
-        Counter.builder("rate_limit.blocked")
+        Counter.builder("events.policy.executed")
                 .tag("policy", "auth.anonymous_users.created")
                 .register(meterRegistry)
                 .increment();
