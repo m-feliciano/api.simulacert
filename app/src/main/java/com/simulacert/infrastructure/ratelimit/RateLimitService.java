@@ -14,7 +14,7 @@ public class RateLimitService {
     public RateLimitService() {
         this.buckets = Caffeine.newBuilder()
                 .expireAfterAccess(1, TimeUnit.HOURS)
-                .maximumSize(100_000)
+                .maximumSize(50_000)
                 .build();
     }
 
