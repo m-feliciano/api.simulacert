@@ -2,6 +2,11 @@ spring:
   application:
     name: simulacert-prod
 
+  security:
+    user:
+      name: ${SPRING_SECURITY_USER_NAME}
+      password: ${SPRING_SECURITY_USER_PASSWORD}
+
   datasource:
     url: ${SPRING_DATASOURCE_URL}
     username: ${SPRING_DATASOURCE_USERNAME}
@@ -51,17 +56,21 @@ app:
       refill-tokens: 100
       refill-period: 60s
     anonymous:
-      capacity: 10
-      refill-tokens: 10
+      capacity: 20
+      refill-tokens: 20
       refill-period: 60s
     auth:
-      capacity: 3
-      refill-tokens: 3
+      capacity: 5
+      refill-tokens: 5
       refill-period: 60s
     expensive:
       capacity: 10
       refill-tokens: 10
-      refill-period: 1h
+      refill-period: 2h
+    llm:
+      capacity: 10
+      refill-tokens: 10
+      refill-period: 2h
 
   llm:
     openai:

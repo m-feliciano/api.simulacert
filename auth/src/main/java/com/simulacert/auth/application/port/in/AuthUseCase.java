@@ -26,5 +26,11 @@ public interface AuthUseCase {
     void activateUser(UUID userId);
 
     List<UserResponse> getUsers();
+
+    UserResponse createAnonymousUser();
+
+    AuthResponse loginAnonymous(UUID anonymousUserId, String dummyPassword);
+
+    AuthResponse refreshToken(String refreshToken);
 }
 

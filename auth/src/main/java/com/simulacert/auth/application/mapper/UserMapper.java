@@ -12,6 +12,8 @@ public interface UserMapper {
 
     UserResponse toResponse(User user);
 
+    UserResponse toResponseWithPass(User user, String dummyPassword);
+
     List<UserResponse> toResponseList(List<User> users);
 }
 

@@ -12,6 +12,17 @@ public record UserResponse(
         UserRole role,
         boolean active,
         Instant createdAt,
-        Boolean supporter) {
+        String dummyPassword,
+        Boolean supporter,
+        String type) {
+
+    public UserResponse(UUID id,
+                        String email,
+                        String name,
+                        UserRole role,
+                        boolean active,
+                        Instant createdAt) {
+        this(id, email, name, role, active, createdAt, null, null, null);
+    }
 }
 

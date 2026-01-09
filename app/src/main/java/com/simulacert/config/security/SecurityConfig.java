@@ -1,11 +1,13 @@
 package com.simulacert.config.security;
 
 import com.simulacert.infrastructure.ratelimit.RateLimitFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -68,21 +70,30 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException)
+                                -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException)
+                                -> response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health/liveness").permitAll()
                         .requestMatchers("/actuator/**").denyAll()
                         .requestMatchers(
-                                "/api/v1/auth/register",
                                 "/api/v1/auth/login",
-                                "/api/v1/auth/oauth/google",
-                                "/api/v1/auth/oauth/google/exchange"
+                                "/api/v1/auth/register",
+                                "/api/v1/auth/refresh-token",
+                                "/api/v1/auth/oauth/**",
+                                "/api/v1/auth/users/anonymous"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/exams").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(rateLimitFilter, JwtAuthenticationFilter.class);
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, RateLimitFilter.class);
 
         return http.build();
     }

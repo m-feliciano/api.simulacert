@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,24 +43,13 @@ public class AuthService implements AuthUseCase {
             throw new IllegalArgumentException("Email already registered");
         }
 
-        String name = request.name();
-        if (name == null || name.isEmpty()) {
-            name = request.email().split("@")[0];
+        if (request.id() != null) {
+            log.debug("User already registered for {}", request.id());
+            return updateAnonymousUser(request);
         }
 
-        String passwordHash = passwordEncoder.encode(request.password());
-
-        User user = User.create(
-                request.email(),
-                name,
-                passwordHash,
-                clock.now()
-        );
-
-        user = userRepository.save(user);
-        log.info("User registered successfully with id: {}", user.getId());
-
-        return userMapper.toResponse(user);
+        log.debug("New user registration for email: {}", request.email());
+        return registerUser(request);
     }
 
     @Override
@@ -90,9 +80,10 @@ public class AuthService implements AuthUseCase {
         log.info("User logged in successfully: {}", user.getId());
 
         String token = tokenProvider.generateToken(user);
+        String refreshToken = tokenProvider.generateRefreshToken(user);
 
         UserResponse userResponse = userMapper.toResponse(user);
-        return AuthResponse.of(token, userResponse);
+        return AuthResponse.of(token, userResponse, refreshToken);
     }
 
     @Override
@@ -176,6 +167,116 @@ public class AuthService implements AuthUseCase {
         List<User> users = userRepository.findAll();
 
         return userMapper.toResponseList(users);
+    }
+
+    @Override
+    public UserResponse createAnonymousUser() {
+        log.info("Creating anonymous user");
+
+        String hash = UUID.randomUUID().toString().substring(0, 12).replace("-", "");
+        String dummyPassword = Base64.getEncoder().encodeToString(hash.getBytes());
+        User user = User.createAnon(dummyPassword);
+        user = userRepository.save(user);
+
+        log.info("Anonymous user created with id: {}", user.getId());
+
+        return userMapper.toResponseWithPass(user, dummyPassword);
+    }
+
+    @Override
+    public AuthResponse loginAnonymous(UUID anonymousUserId, String dummyPassword) {
+        log.info("Anonymous login attempt for user id: {}", anonymousUserId);
+
+        User user = userRepository.findById(anonymousUserId)
+                .orElseThrow(() -> {
+                    log.warn("Anonymous user not found with id: {}", anonymousUserId);
+                    return new IllegalArgumentException("Anonymous user not found");
+                });
+
+        if (!user.isAnonymous() || !user.isActive()) {
+            log.warn("User with id {} is not an active anonymous user", anonymousUserId);
+            throw new IllegalArgumentException("Invalid anonymous user credentials");
+        }
+
+        if (dummyPassword == null || dummyPassword.isEmpty()) {
+            log.warn("Dummy  is null for anonymous user id: {}", anonymousUserId);
+            throw new IllegalArgumentException("Invalid anonymous user credentials");
+        }
+
+        if (!dummyPassword.equals(user.getPasswordHash())) {
+            log.warn("Invalid  for anonymous user id: {}", anonymousUserId);
+            throw new IllegalArgumentException("Invalid anonymous user credentials");
+        }
+
+        String token = tokenProvider.generateToken(user);
+        String refreshToken = tokenProvider.generateRefreshToken(user);
+
+        UserResponse userResponse = userMapper.toResponseWithPass(user, dummyPassword);
+        return AuthResponse.of(token, userResponse, refreshToken);
+    }
+
+    @Override
+    public AuthResponse refreshToken(String refreshToken) {
+        log.info("Refreshing token");
+
+        if (refreshToken == null || refreshToken.isEmpty()) {
+            log.warn("Refresh token is null or empty");
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+
+        UUID userId = tokenProvider.extractUserIdRefreshToken(refreshToken);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.warn("User not found for refresh token with user id: {}", userId);
+                    return new IllegalArgumentException("Invalid refresh token");
+                });
+        if (!user.isActive()) {
+            log.warn("User account is deactivated for user id: {}", userId);
+            throw new IllegalArgumentException("Account is deactivated");
+        }
+
+        String newToken = tokenProvider.generateToken(user);
+        String newRefreshToken = tokenProvider.generateRefreshToken(user);
+
+        UserResponse userResponse = userMapper.toResponse(user);
+        return AuthResponse.of(newToken, userResponse, newRefreshToken);
+    }
+
+    private UserResponse registerUser(RegisterRequest request) {
+        String name = request.name();
+        if (name == null || name.isEmpty()) {
+            name = request.email().split("@")[0];
+        }
+
+        String passwordHash = passwordEncoder.encode(request.password());
+        User user = User.create(request.email(), name, passwordHash, clock.now());
+
+        user = userRepository.save(user);
+        log.info("User registered successfully with id: {}", user.getId());
+
+        return userMapper.toResponse(user);
+    }
+
+    private UserResponse updateAnonymousUser(RegisterRequest request) {
+        User anonUser = userRepository.findById(request.id())
+                .orElseThrow(() -> {
+                    log.warn("Anonymous user not found with id: {}", request.id());
+                    return new IllegalArgumentException("Anonymous user not found");
+                });
+
+        if (!anonUser.isAnonymous()) {
+            log.warn("User with id {} is not anonymous", request.id());
+            throw new IllegalArgumentException("User ID is not associated with an anonymous user");
+        }
+
+        String passwordHash = passwordEncoder.encode(request.password());
+        String name = request.name() != null && !request.name().isEmpty() ? request.name() : request.email().split("@")[0];
+
+        anonUser.register(request.email(), name, passwordHash, clock.now());
+        anonUser = userRepository.save(anonUser);
+        log.info("Anonymous user registered successfully with id: {}", anonUser.getId());
+
+        return userMapper.toResponse(anonUser);
     }
 }
 

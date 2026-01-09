@@ -15,8 +15,9 @@ public class RateLimitPolicies {
 
     private PolicyConfig defaultConfig = new PolicyConfig(100, 100, Duration.ofSeconds(60));
     private PolicyConfig anonymous = new PolicyConfig(20, 20, Duration.ofSeconds(60));
-    private PolicyConfig auth = new PolicyConfig(5, 5, Duration.ofSeconds(60));
-    private PolicyConfig expensive = new PolicyConfig(10, 10, Duration.ofHours(1));
+    private PolicyConfig auth = new PolicyConfig(10, 10, Duration.ofSeconds(30));
+    private PolicyConfig expensive = new PolicyConfig(5, 5, Duration.ofHours(1));
+    private PolicyConfig llm = new PolicyConfig(10, 10, Duration.ofMinutes(1));
 
     public RateLimitPolicy defaultPolicy() {
         return RateLimitPolicy.of("default", defaultConfig.capacity, defaultConfig.refillTokens, defaultConfig.refillPeriod);
@@ -32,6 +33,10 @@ public class RateLimitPolicies {
 
     public RateLimitPolicy expensive() {
         return RateLimitPolicy.of("expensive", expensive.capacity, expensive.refillTokens, expensive.refillPeriod);
+    }
+
+    public RateLimitPolicy llm() {
+        return RateLimitPolicy.of("llm", llm.capacity, llm.refillTokens, llm.refillPeriod);
     }
 
     @Setter

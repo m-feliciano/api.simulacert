@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
 
@@ -62,6 +64,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
         String key = keyResolver.resolve(request);
 
         if (!rateLimitService.allow(key, policy)) {
+            log.warn("Rate limit exceeded: key={}, policy={}, capacity={}", key, policy.name(), policy.capacity());
             recordBlocked(policy);
             write429Response(response, policy);
             return;
@@ -83,7 +86,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
             return policies.auth();
         }
 
-        if (path.startsWith("/questions/") && path.endsWith("/explanations")) {
+
+        if (path.startsWith("/questions/") && path.contains("/explanations")) {
+            return policies.llm();
+        }
+
+        if (path.startsWith("/api/v1/auth/users/anonymous")) {
             return policies.expensive();
         }
 
