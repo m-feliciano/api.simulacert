@@ -8,11 +8,12 @@ public record ExamResponse(
         String description,
         Double durationMinutes,
         Long totalQuestions,
-        String difficultyLevel
+        String difficultyLevel,
+        String slug
 ) {
 
     public ExamResponse(UUID uid, String title, String description) {
-        this(uid, title, description, null, null, null);
+        this(uid, title, description, null, null, null, null);
     }
 }
 

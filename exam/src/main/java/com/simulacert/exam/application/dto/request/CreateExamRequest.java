@@ -9,6 +9,9 @@ public record CreateExamRequest(
         String title,
 
         @Size(max = 1000, message = "Description must not exceed 1000 characters")
-        String description
+        String description,
+
+        @Size(max = 100, message = "Slug must not exceed 100 characters")
+        String slug
 ) {
 }

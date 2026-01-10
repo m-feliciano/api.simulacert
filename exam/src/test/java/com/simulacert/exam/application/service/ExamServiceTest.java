@@ -28,6 +28,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -58,14 +59,14 @@ class ExamServiceTest {
 
     @BeforeEach
     void setUp() {
-        testExam = Exam.create("Test Exam", "Test Description");
+        testExam = Exam.create("Test Exam", "Test Description", "test-slug");
         examId = testExam.getId();
     }
 
     @Test
     @DisplayName("Should create exam successfully")
     void shouldCreateExamSuccessfully() {
-        CreateExamRequest request = new CreateExamRequest("New Exam", "Description");
+        CreateExamRequest request = new CreateExamRequest("New Exam", "Description", "Slug");
         ExamResponse expectedResponse = new ExamResponse(examId, "New Exam", "Description");
 
         when(examRepository.save(any(Exam.class))).thenReturn(testExam);
@@ -85,7 +86,8 @@ class ExamServiceTest {
         ExamResponse expectedResponse = new ExamResponse(examId, "Test Exam", "Test Description");
 
         when(examRepository.findById(examId)).thenReturn(Optional.of(testExam));
-        when(examMapper.toResponse(testExam)).thenReturn(expectedResponse);
+        when(examMapper.toResponseComplete(any(Exam.class), anyLong(), any(), any()))
+                .thenReturn(expectedResponse);
 
         ExamResponse response = examService.getExamById(examId);
 
@@ -108,19 +110,18 @@ class ExamServiceTest {
     @Test
     @DisplayName("Should get all exams")
     void shouldGetAllExams() {
-        Exam exam2 = Exam.create("Exam 2", "Description 2");
+        Exam exam2 = Exam.create("Exam 2", "Description 2", "exam-2-slug");
 
         when(examRepository.findAll()).thenReturn(List.of(testExam, exam2));
-        when(examMapper.toResponse(any(Exam.class))).thenReturn(
-                new ExamResponse(examId, "Test Exam", "Test Description"),
-                new ExamResponse(exam2.getId(), "Exam 2", "Description 2")
-        );
+        when(examMapper.toResponseComplete(any(Exam.class), anyLong(), any(), any()))
+                .thenReturn(new ExamResponse(testExam.getId(), testExam.getTitle(), testExam.getDescription()))
+                .thenReturn(new ExamResponse(exam2.getId(), exam2.getTitle(), exam2.getDescription()));
 
         List<ExamResponse> responses = examService.getAllExams();
 
         assertThat(responses).hasSize(2);
         verify(examRepository).findAll();
-        verify(examMapper, times(2)).toResponse(any(Exam.class));
+        verify(examMapper, times(2)).toResponseComplete(any(Exam.class), anyLong(), any(), any());
     }
 
     @Test
@@ -226,7 +227,7 @@ class ExamServiceTest {
                 new QuestionImportDto("Question 2?", "MEDIUM", "AWS", options)
         );
 
-        ExamImportDto importDto = new ExamImportDto("Imported Exam", "Description", questions);
+        ExamImportDto importDto = new ExamImportDto("Imported Exam", "Description", "imported-exam-slug", questions);
 
         Question mockQuestion = Question.create(examId, "Question 1?", "AWS", "EASY");
 

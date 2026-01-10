@@ -2,8 +2,8 @@ package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.ExamControllerOpenApi;
 import com.simulacert.exam.application.dto.request.CreateExamRequest;
-import com.simulacert.exam.application.dto.response.ExamResponse;
 import com.simulacert.exam.application.dto.request.UpdateExamRequest;
+import com.simulacert.exam.application.dto.response.ExamResponse;
 import com.simulacert.exam.application.port.in.ExamUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -109,6 +109,21 @@ public class ExamController implements ExamControllerOpenApi {
         examUseCase.deleteExam(examId);
         log.info("Exam deleted: {}", examId);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<ExamResponse> getExamBySlug(@PathVariable String slug) {
+        log.debug("Getting exam by slug {}", slug);
+
+        ExamResponse response = examUseCase.getExamBySlug(slug);
+
+        if (response == null) {
+            log.warn("Exam with slug {} not found", slug);
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 }
 
