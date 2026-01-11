@@ -84,11 +84,12 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register",
+                                "/api/v1/auth/password-reset/**",
                                 "/api/v1/auth/refresh-token",
                                 "/api/v1/auth/oauth/**",
                                 "/api/v1/auth/users/anonymous"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/exams").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/exams", "/api/v1/exams/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().denyAll()
                 )

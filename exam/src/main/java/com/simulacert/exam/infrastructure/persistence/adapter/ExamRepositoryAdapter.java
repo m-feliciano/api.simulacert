@@ -45,6 +45,11 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort {
     public boolean existsByTitle(String title) {
         return repository.existsByTitle(title);
     }
+
+    @Override
+    public Optional<Exam> findBySlug(String slug) {
+        return repository.findBySlug(slug);
+    }
 }
 
 

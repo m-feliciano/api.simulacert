@@ -2,6 +2,10 @@ services:
   simulacert-api:
     image: 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest
     container_name: simulacert-api
+
+    mem_limit: 2g
+    mem_reservation: 1400m
+
     env_file:
       - .env
     environment:
@@ -15,11 +19,9 @@ services:
       OPENAI_ENABLED: ${OPENAI_ENABLED}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
-    networks:
-      - simulacert-network
-    restart: unless-stopped
 
 networks:
   simulacert-network:

@@ -18,5 +18,7 @@ public interface ExamRepositoryPort {
     void deleteById(UUID id);
 
     boolean existsByTitle(String title);
+
+    Optional<Exam> findBySlug(String slug);
 }
 

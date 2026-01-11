@@ -58,7 +58,7 @@ public class ExamService implements ExamUseCase {
     public ExamResponse createExam(CreateExamRequest request) {
         log.info("Creating exam with title: {}", request.title());
 
-        Exam exam = Exam.create(request.title(), request.description());
+        Exam exam = Exam.create(request.title(), request.description(), request.slug());
         Exam savedExam = examRepository.save(exam);
 
         log.info("Exam created with id: {}", savedExam.getId());
@@ -120,7 +120,7 @@ public class ExamService implements ExamUseCase {
             );
         }
 
-        Exam exam = Exam.create(examImportDto.title(), examImportDto.description());
+        Exam exam = Exam.create(examImportDto.title(), examImportDto.description(), examImportDto.slug());
         Exam savedExam = examRepository.save(exam);
         log.info("Exam created with id: {}", savedExam.getId());
 
@@ -161,6 +161,14 @@ public class ExamService implements ExamUseCase {
                 questionsImported,
                 "SUCCESS"
         );
+    }
+
+    @Override
+    public ExamResponse getExamBySlug(String slug) {
+        return examRepository.findBySlug(slug)
+                // FIXME forçando dificuldade "EASY" e duração nula por enquanto
+                .map(e -> examMapper.toResponseComplete(e, countTotalQuestions(e.getId()), null, "EASY"))
+                .orElse(null);
     }
 
     private Long countTotalQuestions(UUID id) {

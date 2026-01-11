@@ -24,22 +24,29 @@ public class Exam {
     @Id
     private UUID id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String title;
 
     @Column(length = 1000)
     private String description;
 
-    public static Exam create(String title, String description) {
+    @Column(nullable = false, unique = true)
+    private String slug;
+
+    public static Exam create(String title, String description, String slug) {
         Objects.requireNonNull(title, "title cannot be null");
         if (title.trim().isEmpty()) {
             throw new IllegalArgumentException("title cannot be empty");
         }
 
+        Objects.requireNonNull(description, "description cannot be null");
+        Objects.requireNonNull(slug, "slug cannot be null");
+
         return Exam.builder()
                 .id(UuidCreator.getTimeOrdered())
                 .title(title.trim())
-                .description(description != null ? description.trim() : null)
+                .description(description.trim())
+                .slug(slug.trim())
                 .build();
     }
 
