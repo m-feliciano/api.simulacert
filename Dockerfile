@@ -35,7 +35,7 @@ EXPOSE 8080
 
 ENTRYPOINT ["java", \
   "-XX:+UseContainerSupport", \
-  "-XX:MaxRAMPercentage=60", \
+  "-XX:MaxRAMPercentage=75", \
   "-XX:+UseG1GC", \
   "-XX:MaxGCPauseMillis=200", \
   "-XX:InitiatingHeapOccupancyPercent=30", \
