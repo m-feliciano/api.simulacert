@@ -78,28 +78,25 @@ public class RateLimitFilter extends OncePerRequestFilter {
     }
 
     private RateLimitPolicy resolvePolicy(String path) {
-        if (path.startsWith("/api/v1/auth/login") || path.startsWith("/api/v1/auth/register")) {
+        if (path.startsWith("/api/v1/auth/login")
+            || path.startsWith("/api/v1/auth/register")
+            || path.startsWith("/api/v1/auth/oauth")) {
             return policies.auth();
-        }
-
-        if (path.startsWith("/api/v1/auth/oauth")) {
-            return policies.auth();
-        }
-
-
-        if (path.startsWith("/questions/") && path.contains("/explanations")) {
-            return policies.llm();
         }
 
         if (path.startsWith("/api/v1/auth/users/anonymous")) {
             return policies.expensive();
         }
 
+        if (path.startsWith("/questions/") && path.contains("/explanations")) {
+            return policies.llm();
+        }
+
         if (path.startsWith("/api")) {
             return policies.defaultPolicy();
         }
 
-        return policies.anonymous();
+        return policies.unknown();
     }
 
     private void write429Response(HttpServletResponse response, RateLimitPolicy policy) throws IOException {

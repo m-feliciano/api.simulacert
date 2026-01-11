@@ -1,5 +1,6 @@
 package com.simulacert.infrastructure.ratelimit;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,18 +14,28 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "app.rate-limit")
 public class RateLimitPolicies {
 
-    private PolicyConfig defaultConfig = new PolicyConfig(100, 100, Duration.ofSeconds(60));
-    private PolicyConfig anonymous = new PolicyConfig(20, 20, Duration.ofSeconds(60));
-    private PolicyConfig auth = new PolicyConfig(10, 10, Duration.ofSeconds(30));
+    /**
+     * There's a nginx rate limit in front of the application as well:
+     * burst=3 for auth endpoints, burst=10 for overall traffic
+     * <p>
+     * Default policy: 50 requests per minute
+     * Anonymous policy: 20 requests per minute
+     * Authenticated policy: 5 requests per 30 seconds
+     * Expensive operations policy: 5 requests per hour
+     * LLM operations policy: 10 requests per minute
+     */
+    private PolicyConfig defaultConfig = new PolicyConfig(60, 60, Duration.ofSeconds(60));
+    private PolicyConfig unknown = new PolicyConfig(20, 20, Duration.ofSeconds(60));
+    private PolicyConfig auth = new PolicyConfig(5, 5, Duration.ofSeconds(30));
     private PolicyConfig expensive = new PolicyConfig(5, 5, Duration.ofHours(1));
-    private PolicyConfig llm = new PolicyConfig(10, 10, Duration.ofMinutes(1));
+    private PolicyConfig llm = new PolicyConfig(10, 10, Duration.ofHours(2));
 
     public RateLimitPolicy defaultPolicy() {
         return RateLimitPolicy.of("default", defaultConfig.capacity, defaultConfig.refillTokens, defaultConfig.refillPeriod);
     }
 
-    public RateLimitPolicy anonymous() {
-        return RateLimitPolicy.of("anonymous", anonymous.capacity, anonymous.refillTokens, anonymous.refillPeriod);
+    public RateLimitPolicy unknown() {
+        return RateLimitPolicy.of("unknown", unknown.capacity, unknown.refillTokens, unknown.refillPeriod);
     }
 
     public RateLimitPolicy auth() {
@@ -42,16 +53,11 @@ public class RateLimitPolicies {
     @Setter
     @Getter
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class PolicyConfig {
         private int capacity;
         private int refillTokens;
         private Duration refillPeriod;
-
-        public PolicyConfig(int capacity, int refillTokens, Duration refillPeriod) {
-            this.capacity = capacity;
-            this.refillTokens = refillTokens;
-            this.refillPeriod = refillPeriod;
-        }
     }
 }
 

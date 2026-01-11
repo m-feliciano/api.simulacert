@@ -55,7 +55,7 @@ app:
       capacity: 100
       refill-tokens: 100
       refill-period: 60s
-    anonymous:
+    unknown:
       capacity: 20
       refill-tokens: 20
       refill-period: 60s
