@@ -8,7 +8,7 @@ public record ExamResponse(
         String description,
         Double durationMinutes,
         Long totalQuestions,
-        String difficultyLevel,
+        String difficulty,
         String slug
 ) {
 
