@@ -170,6 +170,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional
     public UserResponse createAnonymousUser() {
         log.info("Creating anonymous user");
 
