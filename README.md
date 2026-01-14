@@ -102,3 +102,12 @@ Endpoints úteis
 - Swagger UI (quando habilitado): /swagger-ui
 - Actuator health: /actuator/health
 - Actuator info: /actuator/info
+
+Licença e contato
+
+Proprietary - © 2026 SimulaCert
+
+Website: https://simulacert.com
+API: https://api.simulacert.com
+
+Última atualização: 2026-01-11
