@@ -108,6 +108,6 @@ Licença e contato
 Proprietary - © 2026 SimulaCert
 
 Website: https://simulacert.com
-API: https://api.simulacert.com
+Open API https://tinyurl.com/2s4kp83e
 
 Última atualização: 2026-01-11
