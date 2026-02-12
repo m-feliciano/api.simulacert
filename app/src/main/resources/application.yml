@@ -62,18 +62,22 @@ app:
       capacity: 100
       refill-tokens: 100
       refill-period: 60s
-    anonymous:
-      capacity: 20
-      refill-tokens: 20
+    unknown:
+      capacity: 40
+      refill-tokens: 40
       refill-period: 60s
     auth:
-      capacity: 5
-      refill-tokens: 5
-      refill-period: 60s
+      capacity: 10
+      refill-tokens: 10
+      refill-period: 30s
     expensive:
       capacity: 5
       refill-tokens: 5
       refill-period: 1h
+    llm:
+      capacity: 10
+      refill-tokens: 10
+      refill-period: 2h
 
   llm:
     openai:

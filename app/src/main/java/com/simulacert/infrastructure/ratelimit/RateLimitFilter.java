@@ -64,7 +64,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
         String key = keyResolver.resolve(request);
 
         if (!rateLimitService.allow(key, policy)) {
-            log.warn("Rate limit exceeded: key={}, policy={}, capacity={}", key, policy.name(), policy.capacity());
+            log.warn("Rate limit exceeded: key={}, policy={}, capacity={}, path={}",
+                    key, policy.name(), policy.capacity(), path);
             recordBlocked(policy);
             write429Response(response, policy);
             return;
@@ -78,24 +79,29 @@ public class RateLimitFilter extends OncePerRequestFilter {
     }
 
     private RateLimitPolicy resolvePolicy(String path) {
-        if (path.startsWith("/api/v1/auth/login")
-            || path.startsWith("/api/v1/auth/register")
-            || path.startsWith("/api/v1/auth/oauth")) {
+        // Auth endpoints - most restrictive
+        if (path.contains("/auth/login")
+            || path.contains("/auth/register")
+            || path.contains("/auth/oauth")) {
             return policies.auth();
         }
 
-        if (path.startsWith("/api/v1/auth/users/anonymous")) {
+        // Expensive operations
+        if (path.contains("/users/anonymous")) {
             return policies.expensive();
         }
 
-        if (path.startsWith("/questions/") && path.contains("/explanations")) {
+        // LLM operations
+        if (path.contains("/questions/") && path.contains("/explanations")) {
             return policies.llm();
         }
 
-        if (path.startsWith("/api")) {
+        // All API endpoints - default policy
+        if (path.startsWith("/api/")) {
             return policies.defaultPolicy();
         }
 
+        // Static resources, health checks, or bot scans - unknown policy
         return policies.unknown();
     }
 

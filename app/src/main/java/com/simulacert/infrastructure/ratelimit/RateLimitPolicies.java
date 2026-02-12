@@ -18,15 +18,15 @@ public class RateLimitPolicies {
      * There's a nginx rate limit in front of the application as well:
      * burst=3 for auth endpoints, burst=10 for overall traffic
      * <p>
-     * Default policy: 50 requests per minute
-     * Anonymous policy: 20 requests per minute
-     * Authenticated policy: 5 requests per 30 seconds
-     * Expensive operations policy: 5 requests per hour
-     * LLM operations policy: 10 requests per minute
+     * Default policy: 100 requests per minute (for authenticated API calls)
+     * Unknown policy: 40 requests per minute (for non-API paths - bots, scanners, etc.)
+     * Auth policy: 10 requests per 30 seconds (login, register, oauth)
+     * Expensive operations policy: 5 requests per hour (anonymous user creation)
+     * LLM operations policy: 10 requests per 2 hours (AI explanations)
      */
-    private PolicyConfig defaultConfig = new PolicyConfig(60, 60, Duration.ofSeconds(60));
-    private PolicyConfig unknown = new PolicyConfig(20, 20, Duration.ofSeconds(60));
-    private PolicyConfig auth = new PolicyConfig(5, 5, Duration.ofSeconds(30));
+    private PolicyConfig defaultConfig = new PolicyConfig(100, 100, Duration.ofMinutes(1));
+    private PolicyConfig unknown = new PolicyConfig(40, 40, Duration.ofMinutes(1));
+    private PolicyConfig auth = new PolicyConfig(10, 10, Duration.ofSeconds(30));
     private PolicyConfig expensive = new PolicyConfig(5, 5, Duration.ofHours(1));
     private PolicyConfig llm = new PolicyConfig(10, 10, Duration.ofHours(2));
 

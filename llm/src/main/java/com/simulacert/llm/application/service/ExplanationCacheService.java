@@ -14,7 +14,6 @@ public class ExplanationCacheService {
     @Cacheable(value = "explanations", key = "#cacheKey")
     public String getExplanation(String cacheKey, UUID questionId, String language) {
         log.debug("Cache miss for key: {} (question: {}, language: {})", cacheKey, questionId, language);
-        // Spring Cache will store the generated content when returned.
         return null;
     }
 

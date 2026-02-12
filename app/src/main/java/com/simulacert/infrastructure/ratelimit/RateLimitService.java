@@ -19,7 +19,8 @@ public class RateLimitService {
     }
 
     public boolean allow(String key, RateLimitPolicy policy) {
-        TokenBucket bucket = buckets.get(key, k -> createBucket(policy));
+        String cacheKey = key + ":" + policy.name();
+        TokenBucket bucket = buckets.get(cacheKey, k -> createBucket(policy));
         return bucket.tryConsume();
     }
 

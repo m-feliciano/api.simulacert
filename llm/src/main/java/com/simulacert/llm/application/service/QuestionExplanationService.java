@@ -54,11 +54,13 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         Optional<QuestionExplanationRun> explanation = explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), command.language());
         if (explanation.isPresent()) {
             log.info("Returning existing explanation from DB for question {}", command.questionId());
+
+            QuestionExplanationRun run = explanation.get();
             return new ExplanationResponse(
-                    explanation.get().getId(),
-                    explanation.get().getContent(),
-                    explanation.get().getModelName(),
-                    explanation.get().getExpiresAt()
+                    run.getId(),
+                    run.getContent(),
+                    run.getModelName(),
+                    run.getExpiresAt()
             );
         }
 
@@ -150,7 +152,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 - Do not mention that you are an AI
                 - Write in %s
                 - Cover ALL options listed
-                - Be concise and technical (2–6 sentences per option)
+                - Be concise and technical (4–8 sentences per option)
                 
                 Output format (mandatory):
                 - One line per option, in alphabetical order (A → Z)
