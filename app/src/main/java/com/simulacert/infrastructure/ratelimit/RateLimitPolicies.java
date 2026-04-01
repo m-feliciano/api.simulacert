@@ -1,8 +1,7 @@
 package com.simulacert.infrastructure.ratelimit;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -50,10 +49,8 @@ public class RateLimitPolicies {
         return RateLimitPolicy.of("llm", llm.capacity, llm.refillTokens, llm.refillPeriod);
     }
 
-    @Setter
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @Data
+    @Builder
     public static class PolicyConfig {
         private int capacity;
         private int refillTokens;

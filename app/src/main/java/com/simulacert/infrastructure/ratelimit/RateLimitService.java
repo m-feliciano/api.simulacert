@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RateLimitService {
 
+    @SuppressWarnings("all")
     private final Cache<String, TokenBucket> buckets;
 
     public RateLimitService() {
@@ -21,6 +22,7 @@ public class RateLimitService {
     public boolean allow(String key, RateLimitPolicy policy) {
         String cacheKey = key + ":" + policy.name();
         TokenBucket bucket = buckets.get(cacheKey, k -> createBucket(policy));
+        if (bucket == null) return false;
         return bucket.tryConsume();
     }
 

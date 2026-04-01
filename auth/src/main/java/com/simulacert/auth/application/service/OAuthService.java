@@ -85,7 +85,7 @@ public class OAuthService implements OAuthUseCase {
 
         GoogleTokenResponse tokens = googleClient.exchangeCodeForTokens(code, redirectUri);
 
-        GoogleUserInfo userInfo = googleClient.validateIdTokenAndExtractUserInfo(tokens.id_token());
+        GoogleUserInfo userInfo = googleClient.validateIdTokenAndExtractUserInfo(tokens.idToken());
 
         if (!userInfo.emailVerified()) throw new IllegalArgumentException("Email not verified by Google");
 

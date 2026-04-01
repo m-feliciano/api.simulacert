@@ -48,27 +48,17 @@ public class RateLimitFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        if (!enabled) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String path = request.getRequestURI();
+        if (enabled && !shouldSkipRateLimit(path)) {
+            RateLimitPolicy policy = resolvePolicy(path);
+            String key = keyResolver.resolve(request);
 
-        if (shouldSkipRateLimit(path)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        RateLimitPolicy policy = resolvePolicy(path);
-        String key = keyResolver.resolve(request);
-
-        if (!rateLimitService.allow(key, policy)) {
-            log.warn("Rate limit exceeded: key={}, policy={}, capacity={}, path={}",
-                    key, policy.name(), policy.capacity(), path);
-            recordBlocked(policy);
-            write429Response(response, policy);
-            return;
+            if (!rateLimitService.allow(key, policy)) {
+                log.warn("Rate limit exceeded: key={}, policy={}, capacity={}, path={}", key, policy.name(), policy.capacity(), path);
+                recordBlocked(policy);
+                write429Response(response, policy);
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);
