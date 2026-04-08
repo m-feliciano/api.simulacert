@@ -20,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,10 +50,10 @@ public class AttemptService implements AttemptUseCase {
     public void cleanUpOldInProgressAttempts() {
         log.info("Starting cleanup of old in-progress attempts");
 
-        var cutoff = clock.now().minusSeconds(3600 * 4);
+        var cutoff = clock.now().minusSeconds(Duration.ofDays(7).toSeconds());
         var oldAttempts = attemptRepository.findByStatusAndStartedAtBefore(IN_PROGRESS, cutoff);
         for (var attempt : oldAttempts) {
-            log.info("Cancelling old in-progress attempt: {}", attempt.getId());
+            log.info("Cancelling old in-progress attempt: {} which started at {}", attempt.getId(), attempt.getStartedAt());
             attempt.cancel(clock.now());
             attemptRepository.save(attempt);
         }
