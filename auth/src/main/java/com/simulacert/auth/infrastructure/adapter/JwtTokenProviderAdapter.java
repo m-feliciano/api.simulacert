@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Date;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Component
 public class JwtTokenProviderAdapter implements TokenProviderPort {
 
-    private final Key key;
+    private final SecretKey key;
     private final long jwtExpirationMs;
 
     public JwtTokenProviderAdapter(
@@ -35,13 +36,13 @@ public class JwtTokenProviderAdapter implements TokenProviderPort {
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
         return Jwts.builder()
-                .setSubject(user.getId().toString())
+                .subject(user.getId().toString())
                 .claim("email", user.getEmail())
                 .claim("role", user.getRole().name())
                 .claim("type", "ACCESS")
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(key)
                 .compact();
     }
 
@@ -52,11 +53,11 @@ public class JwtTokenProviderAdapter implements TokenProviderPort {
         Date expiryDate = new Date(now.getTime() + days);
 
         return Jwts.builder()
-                .setSubject(user.getId().toString())
+                .subject(user.getId().toString())
                 .claim("type", "REFRESH")
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(key)
                 .compact();
     }
 
@@ -100,11 +101,11 @@ public class JwtTokenProviderAdapter implements TokenProviderPort {
     }
 
     private Claims parseClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(plainToken(token))
-                .getBody();
+                .parseSignedClaims(plainToken(token))
+                .getPayload();
     }
 
 }
