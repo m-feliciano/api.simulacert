@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
         return ErrorCode.VALIDATION_ERROR;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiErrorResponse handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
         log.error("Illegal argument exception caught: ", ex);

@@ -90,14 +90,9 @@ public class ExamController implements ExamControllerOpenApi {
             @Valid @RequestBody UpdateExamRequest request) {
         log.info("Updating exam: {}", examId);
 
-        try {
-            ExamResponse response = examUseCase.updateExam(examId, request);
-            log.info("Exam updated: {}", examId);
-            return ResponseEntity.ok(response);
-        } catch (IllegalArgumentException e) {
-            log.warn("Exam not found: {}", examId);
-            return ResponseEntity.notFound().build();
-        }
+        ExamResponse response = examUseCase.updateExam(examId, request);
+        log.info("Exam updated: {}", examId);
+        return ResponseEntity.ok(response);
     }
 
     @Override
