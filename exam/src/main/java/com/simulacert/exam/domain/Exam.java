@@ -33,6 +33,8 @@ public class Exam {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    private String difficulty;
+
     public static Exam create(String title, String description, String slug) {
         Objects.requireNonNull(title, "title cannot be null");
         if (title.trim().isEmpty()) {

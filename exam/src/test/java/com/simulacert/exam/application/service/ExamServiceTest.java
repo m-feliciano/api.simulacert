@@ -28,7 +28,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -86,7 +85,7 @@ class ExamServiceTest {
         ExamResponse expectedResponse = new ExamResponse(examId, "Test Exam", "Test Description");
 
         when(examRepository.findById(examId)).thenReturn(Optional.of(testExam));
-        when(examMapper.toResponseComplete(any(Exam.class), anyLong(), any(), any()))
+        when(examMapper.toResponse(any(Exam.class)))
                 .thenReturn(expectedResponse);
 
         ExamResponse response = examService.getExamById(examId);
@@ -113,7 +112,7 @@ class ExamServiceTest {
         Exam exam2 = Exam.create("Exam 2", "Description 2", "exam-2-slug");
 
         when(examRepository.findAll()).thenReturn(List.of(testExam, exam2));
-        when(examMapper.toResponseComplete(any(Exam.class), anyLong(), any(), any()))
+        when(examMapper.toResponse(any(Exam.class)))
                 .thenReturn(new ExamResponse(testExam.getId(), testExam.getTitle(), testExam.getDescription()))
                 .thenReturn(new ExamResponse(exam2.getId(), exam2.getTitle(), exam2.getDescription()));
 
@@ -121,7 +120,7 @@ class ExamServiceTest {
 
         assertThat(responses).hasSize(2);
         verify(examRepository).findAll();
-        verify(examMapper, times(2)).toResponseComplete(any(Exam.class), anyLong(), any(), any());
+        verify(examMapper, times(2)).toResponse(any(Exam.class));
     }
 
     @Test

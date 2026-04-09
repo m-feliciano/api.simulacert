@@ -1,11 +1,13 @@
 package com.simulacert.auth.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record GoogleTokenResponse(
-        String access_token,
-        String expires_in,
+        @JsonProperty("access_token") String accessToken,
+        @JsonProperty("expires_in") int expiresIn,
         String scope,
-        String token_type,
-        String id_token
+        @JsonProperty("token_type") String tokenType,
+        @JsonProperty("id_token") String idToken
 ) {
 }
 

@@ -38,23 +38,10 @@ public class GlobalExceptionHandler {
         return ErrorCode.VALIDATION_ERROR;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ApiErrorResponse handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
-        log.error("Illegal argument exception caught: ", ex);
-
-        ErrorCode errorCode = mapToErrorCode(ex.getMessage());
-        return new ApiErrorResponse(
-                errorCode.name(),
-                "This error may occur due to invalid input data or request parameters.",
-                Instant.now(),
-                request.getRequestURI()
-        );
-    }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({
             HttpClientErrorException.BadRequest.class,
+            IllegalArgumentException.class
     })
     public ApiErrorResponse handleIllegalStateException(IllegalStateException ex, HttpServletRequest request) {
         log.error("Illegal state exception caught: ", ex);

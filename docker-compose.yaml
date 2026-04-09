@@ -5,6 +5,7 @@ services:
 
     mem_limit: 2g
     mem_reservation: 1400m
+    restart: unless-stopped
 
     env_file:
       - .env

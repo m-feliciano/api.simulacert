@@ -58,7 +58,7 @@ public class ReviewController implements ReviewControllerOpenApi {
 
         return createReviewUseCase.getReviewByAttempt(user.getId(), attemptId)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.noContent().build());
     }
 }
 
