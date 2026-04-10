@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +43,7 @@ public class AttemptController implements AttemptControllerOpenApi {
     @Override
     @PostMapping
     @PreAuthorize("#request.userId() == authentication.principal.id")
-    public ResponseEntity<AttemptResponse> startAttempt(@RequestBody StartAttemptRequest request) {
+    public ResponseEntity<Void> startAttempt(@RequestBody StartAttemptRequest request) {
         log.info("Starting attempt for user {} on exam {}", request.userId(), request.examId());
 
         AttemptVo attemptVo = useCase.startAttempt(
@@ -50,8 +53,12 @@ public class AttemptController implements AttemptControllerOpenApi {
         );
 
         log.info("Attempt started with id: {}", attemptVo.id());
-        AttemptResponse response = mapper.toResponse(attemptVo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(attemptVo.id())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @Override
@@ -111,25 +118,24 @@ public class AttemptController implements AttemptControllerOpenApi {
 
     @Override
     @DeleteMapping("/{attemptId}/answers/{questionId}")
-    public ResponseEntity<Void> deleteAnswer(
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId) {
         log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
 
         answerUseCase.deleteAnswer(attemptId, questionId);
-
-        return ResponseEntity.noContent().build();
     }
 
     @Override
     @PostMapping("/{attemptId}/cancel")
-    public ResponseEntity<Void> cancelAttempt(@PathVariable UUID attemptId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelAttempt(@PathVariable UUID attemptId) {
         log.info("Cancelling attempt {}", attemptId);
 
         useCase.cancelAttempt(attemptId);
 
         log.info("Attempt {} cancelled", attemptId);
-        return ResponseEntity.noContent().build();
     }
 }
 

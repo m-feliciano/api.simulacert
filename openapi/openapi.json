@@ -70,13 +70,6 @@
         },
         "responses": {
           "201": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttemptResponse"
-                }
-              }
-            },
             "description": "Attempt started successfully"
           },
           "400": {
@@ -90,23 +83,9 @@
             "description": "Invalid request data"
           },
           "403": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttemptResponse"
-                }
-              }
-            },
             "description": "Not authorized - can only start attempts for yourself"
           },
           "404": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttemptResponse"
-                }
-              }
-            },
             "description": "Exam not found"
           },
           "500": {
@@ -3407,7 +3386,7 @@
           "description": {
             "type": "string"
           },
-          "difficultyLevel": {
+          "difficulty": {
             "type": "string"
           },
           "durationMinutes": {

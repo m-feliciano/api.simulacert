@@ -28,25 +28,12 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Attempt started successfully",
-                    content = @Content(schema = @Schema(implementation = AttemptResponse.class))
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid request data"
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Not authorized - can only start attempts for yourself"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Exam not found"
-            )
+            @ApiResponse(responseCode = "201", description = "Attempt started successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself"),
+            @ApiResponse(responseCode = "404", description = "Exam not found")
     })
-    ResponseEntity<AttemptResponse> startAttempt(@RequestBody StartAttemptRequest request);
+    ResponseEntity<Void> startAttempt(@RequestBody StartAttemptRequest request);
 
     @Operation(
             summary = "Finish exam attempt",
@@ -54,23 +41,13 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Attempt finished successfully",
+            @ApiResponse(responseCode = "200", description = "Attempt finished successfully",
                     content = @Content(schema = @Schema(implementation = AttemptResponse.class))
             ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid score value (must be between 0 and 100)"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Attempt not found"
-            )
+            @ApiResponse(responseCode = "400", description = "Invalid score value (must be between 0 and 100)"),
+            @ApiResponse(responseCode = "404", description = "Attempt not found")
     })
-    ResponseEntity<AttemptResponse> finishAttempt(
-            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId
-    );
+    ResponseEntity<AttemptResponse> finishAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 
     @Operation(
             summary = "Get attempt by ID",
@@ -83,18 +60,10 @@ public interface AttemptControllerOpenApi {
                     description = "Attempt found",
                     content = @Content(schema = @Schema(implementation = AttemptResponse.class))
             ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Attempt not found"
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Not authorized - Admin role required"
-            )
+            @ApiResponse(responseCode = "404", description = "Attempt not found"),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
     })
-    ResponseEntity<AttemptResponse> getAttempt(
-            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId
-    );
+    ResponseEntity<AttemptResponse> getAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 
     @Operation(
             summary = "Get user attempts",
@@ -102,23 +71,11 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "User attempts retrieved successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Not authorized - can only view own attempts or require Admin role"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
+            @ApiResponse(responseCode = "200", description = "User attempts retrieved successfully"),
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only view own attempts or require Admin role"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
-    ResponseEntity<List<AttemptResponse>> getAttemptsByUser(
-            @Parameter(description = "User ID", required = true) @PathVariable UUID userId
-    );
-
+    ResponseEntity<List<AttemptResponse>> getAttemptsByUser(@Parameter(description = "User ID", required = true) @PathVariable UUID userId);
 
     @Operation(
             summary = "Get attempt questions",
@@ -126,14 +83,8 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Attempt questions retrieved successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Attempt not found"
-            )
+            @ApiResponse(responseCode = "200", description = "Attempt questions retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Attempt not found")
     })
     ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId);
 
@@ -143,18 +94,9 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Answer submitted successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid answer data"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Attempt or question not found"
-            )
+            @ApiResponse(responseCode = "201", description = "Answer submitted successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid answer data"),
+            @ApiResponse(responseCode = "404", description = "Attempt or question not found")
     })
     ResponseEntity<Void> submitAnswer(
             @PathVariable UUID attemptId,
@@ -167,18 +109,10 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Answer deleted successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Attempt or question not found"
-            )
+            @ApiResponse(responseCode = "204", description = "Answer deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Attempt or question not found")
     })
-    ResponseEntity<Void> deleteAnswer(
-            @PathVariable UUID attemptId,
-            @PathVariable UUID questionId);
+    void deleteAnswer(@PathVariable UUID attemptId, @PathVariable UUID questionId);
 
     @Operation(
             summary = "Cancel exam attempt",
@@ -186,17 +120,9 @@ public interface AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Attempt cancelled successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Attempt not found"
-            )
+            @ApiResponse(responseCode = "204", description = "Attempt cancelled successfully"),
+            @ApiResponse(responseCode = "404", description = "Attempt not found")
     })
-    ResponseEntity<Void> cancelAttempt(
-            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId
-    );
+    void cancelAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 }
 
