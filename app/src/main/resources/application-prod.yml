@@ -111,7 +111,7 @@ info:
   app:
     name: simulacert
     version: 1.0.0
-    description: Sistema de Simulados AWS - Production
+    description: Sistema de Simulados AWS | Azure | Google - Production
     architecture: modular-monolith
     profile: prod
 

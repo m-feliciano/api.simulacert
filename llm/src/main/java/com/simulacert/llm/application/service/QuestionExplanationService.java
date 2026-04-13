@@ -35,7 +35,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private static final String PROMPT_VERSION = "v1.0";
     private static final Double TEMPERATURE = 0.25;
     private static final Integer MAX_TOKENS = 400;
-    private static final Duration EXPIRATION_DURATION = Duration.ofDays(7); // 1 week
+    private static final Duration EXPIRATION_DURATION = Duration.ofDays(15);
 
     private final AttemptRepositoryPort attemptRepository;
     private final QuestionRepositoryPort questionRepository;
@@ -126,7 +126,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 .filter(QuestionOption::getIsCorrect)
                 .map(QuestionOption::getOptionKey)
                 .sorted(String::compareTo)
-                .collect(Collectors.toList());
+                .toList();
 
         String correctOption = String.join(", ", correctList);
         if (correctOption.isEmpty()) {
@@ -158,6 +158,9 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 - One line per option, in alphabetical order (A → Z)
                 - Format exactly: Opção <OPTION_KEY>: <explanation>
                 
+                Resources:
+                - AWS documentation: https://docs.aws.amazon.com/
+
                 Question:
                 %s
                 
