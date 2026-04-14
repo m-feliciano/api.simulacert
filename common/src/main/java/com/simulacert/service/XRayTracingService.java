@@ -1,6 +1,8 @@
 package com.simulacert.service;
 
 import com.amazonaws.xray.AWSXRay;
+import com.amazonaws.xray.entities.Entity;
+import com.amazonaws.xray.entities.Segment;
 import com.amazonaws.xray.entities.Subsegment;
 import com.simulacert.infrastructure.xray.XRayAnnotation;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
@@ -27,7 +29,10 @@ public class XRayTracingService {
         Method method = sig.getMethod();
 
         XRaySubsegment ann = AnnotationUtils.findAnnotation(method, XRaySubsegment.class);
-        if (ann == null) {
+        Entity entity = AWSXRay.getTraceEntity();
+        Segment currentSegment = AWSXRay.getCurrentSegment();
+
+        if (ann == null || (entity == null && currentSegment == null)) {
             return pjp.proceed();
         }
 

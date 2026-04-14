@@ -49,7 +49,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "llm.requestExplanation")
+    @XRaySubsegment("llm.requestExplanation")
     public ExplanationResponse requestExplanation(RequestExplanationCommand command, UUID userId) {
         xray.putAnnotation("attemptId", command.examAttemptId());
         xray.putAnnotation("questionId", command.questionId());
@@ -89,7 +89,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "llm.submitFeedback")
+    @XRaySubsegment("llm.submitFeedback")
     public void submitFeedback(UUID explanationId, SubmitFeedbackCommand command) {
         xray.putAnnotation("explanationId", explanationId);
         log.info("Submitting feedback for explanation {}", explanationId);

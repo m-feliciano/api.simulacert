@@ -7,6 +7,9 @@ info:
     architecture: modular-monolith
 
 spring:
+  aop:
+    # Enable CGLIB proxies to allow proxying of classes without interfaces, which is common in modular monoliths.
+    proxy-target-class: true
   profiles:
     active: prod
 

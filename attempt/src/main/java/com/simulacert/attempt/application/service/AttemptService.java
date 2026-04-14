@@ -67,7 +67,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.startAttempt")
+    @XRaySubsegment("attempt.startAttempt")
     public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount, Integer limitSeconds) {
         xray.putAnnotation("examId", examId);
         validateQuestionCount(questionCount);
@@ -101,7 +101,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.pauseAttempt")
+    @XRaySubsegment("attempt.pauseAttempt")
     public AttemptTimingResponse pauseAttempt(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -113,7 +113,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.resumeAttempt")
+    @XRaySubsegment("attempt.resumeAttempt")
     public AttemptTimingResponse resumeAttempt(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -125,9 +125,13 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment("attempt.heartbeatAttempt")
     public AttemptTimingResponse heartbeatAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        xray.putAnnotation("examId", attempt.getExamId());
 
         attempt.heartbeat(clock.now());
         attemptRepository.save(attempt);
@@ -136,7 +140,7 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "attempt.finishAttempt")
+    @XRaySubsegment("attempt.finishAttempt")
     public AttemptVo finishAttempt(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -155,7 +159,7 @@ public class AttemptService implements AttemptUseCase {
         return attempt.toVo();
     }
 
-    @XRaySubsegment(value = "attempt.cancelAttempt")
+    @XRaySubsegment("attempt.cancelAttempt")
     public void cancelAttempt(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         log.info("Cancelling attempt {}", attemptId);
@@ -167,7 +171,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.getAttemptById")
+    @XRaySubsegment("attempt.getAttemptById")
     public AttemptVo getAttemptById(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         return attemptRepository.findById(attemptId)
@@ -176,7 +180,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.getAttemptsByUser")
+    @XRaySubsegment("attempt.getAttemptsByUser")
     public List<AttemptVo> getAttemptsByUser(UUID userId) {
         return attemptRepository.findByUserIdOrderByStartedAtDesc(userId)
                 .stream()
@@ -185,7 +189,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.getAttemptQuestions")
+    @XRaySubsegment("attempt.getAttemptQuestions")
     public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)

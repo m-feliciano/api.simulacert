@@ -31,7 +31,7 @@ public class AnswerService implements AnswerUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "attempt.submitAnswer")
+    @XRaySubsegment("attempt.submitAnswer")
     public void submitAnswer(UUID attemptId, UUID questionId, SubmitAnswerRequest request) {
         xray.putAnnotation("attemptId", attemptId);
         xray.putAnnotation("questionId", questionId);
@@ -61,7 +61,7 @@ public class AnswerService implements AnswerUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "attempt.deleteAnswer")
+    @XRaySubsegment("attempt.deleteAnswer")
     public void deleteAnswer(UUID attemptId, UUID questionId) {
         xray.putAnnotation("attemptId", attemptId);
         xray.putAnnotation("questionId", questionId);
@@ -77,7 +77,7 @@ public class AnswerService implements AnswerUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.getAnswer")
+    @XRaySubsegment("attempt.getAnswer")
     public List<AnswerResponse> getAnswer(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
         log.debug("Getting answer for attempt {}", attemptId);
