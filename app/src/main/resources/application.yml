@@ -12,6 +12,8 @@ spring:
     proxy-target-class: true
   profiles:
     active: prod
+  jackson:
+      default-property-inclusion: non_null
 
   jackson:
     default-property-inclusion: non_null

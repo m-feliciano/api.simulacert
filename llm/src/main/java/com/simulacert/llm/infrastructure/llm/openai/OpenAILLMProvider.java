@@ -41,34 +41,24 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         log.info("Calling OpenAI API with model: {}", properties.getModel());
         log.debug("Temperature: {}, Max Tokens: {}", request.temperature(), request.maxTokens());
 
-        try {
-            OpenAIRequest openAIRequest = buildOpenAIRequest(request);
+        OpenAIRequest openAIRequest = buildOpenAIRequest(request);
 
-            OpenAIResponse response = restClient.post()
-                    .uri("/chat/completions")
-                    .body(openAIRequest)
-                    .retrieve()
-                    .body(OpenAIResponse.class);
+        OpenAIResponse response = restClient.post()
+                .uri("/chat/completions")
+                .body(openAIRequest)
+                .retrieve()
+                .body(OpenAIResponse.class);
 
-            if (response == null || response.choices() == null || response.choices().isEmpty()) {
-                throw new IllegalStateException("OpenAI returned empty response");
-            }
-
-            String content = response.choices().getFirst().message().content();
-
-            log.info("OpenAI API call successful. Tokens used: {}",
-                    response.usage() != null ? response.usage().totalTokens() : "unknown");
-
-            return new LLMResult(
-                    content,
-                    response.model(),
-                    "openai"
-            );
-
-        } catch (Exception e) {
-            log.error("Error calling OpenAI API", e);
-            throw new RuntimeException("Failed to generate explanation using OpenAI: " + e.getMessage(), e);
+        if (response == null || response.choices() == null || response.choices().isEmpty()) {
+            throw new IllegalStateException("OpenAI returned empty response");
         }
+
+        String content = response.choices().getFirst().message().content();
+
+        log.info("OpenAI API call successful. Tokens used: {}",
+                response.usage() != null ? response.usage().totalTokens() : "unknown");
+
+        return new LLMResult(content, response.model(), "openai");
     }
 
     private OpenAIRequest buildOpenAIRequest(LLMRequest request) {

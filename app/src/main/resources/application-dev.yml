@@ -80,7 +80,7 @@ info:
   app:
     name: simulacert
     version: 1.0.0-DEV
-    description: Sistema de Simulados AWS - Development
+    description: Sistema de Simulados AWS | Azure | Google - Development
     architecture: modular-monolith
     profile: dev
 
