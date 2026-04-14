@@ -9,6 +9,7 @@ services:
 
     env_file:
       - .env
+
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
@@ -20,9 +21,24 @@ services:
       OPENAI_ENABLED: ${OPENAI_ENABLED}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      AWS_XRAY_DAEMON_ADDRESS: xray-daemon:2000
 
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
+
+    depends_on:
+      - xray-daemon
+
+    networks:
+      - simulacert-network
+
+  xray-daemon:
+    image: public.ecr.aws/xray/aws-xray-daemon
+    environment:
+      - AWS_REGION=us-east-1
+
+    networks:
+      - simulacert-network
 
 networks:
   simulacert-network:

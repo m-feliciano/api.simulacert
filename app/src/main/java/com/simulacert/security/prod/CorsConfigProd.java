@@ -1,6 +1,6 @@
-package com.simulacert.config.security.dev;
+package com.simulacert.security.prod;
 
-import com.simulacert.config.security.CorsConfigurationHelper;
+import com.simulacert.security.CorsConfigurationHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,19 +8,24 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.List;
+import java.util.Arrays;
 
 @Slf4j
 @Configuration
-@Profile({"dev", "default"})
-public class CorsConfigDev {
+@Profile("prod")
+public class CorsConfigProd {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        log.info("CORS Configuration for DEV environment");
+        log.info("CORS Configuration for PROD environment");
 
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOrigins(
+                Arrays.asList(
+                        "https://app.simulacert.com",
+                        "https://admin.simulacert.com"
+                )
+        );
 
         return CorsConfigurationHelper.build(configuration);
     }

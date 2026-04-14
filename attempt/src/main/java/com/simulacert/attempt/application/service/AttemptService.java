@@ -1,6 +1,7 @@
 package com.simulacert.attempt.application.service;
 
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.QuestionOption;
 import com.simulacert.attempt.application.port.in.AttemptUseCase;
@@ -14,6 +15,7 @@ import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,6 +40,8 @@ public class AttemptService implements AttemptUseCase {
 
     private static final int MIN_QUESTION_COUNT = 10;
     private static final int MAX_QUESTION_COUNT = 100;
+
+    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofHours(4).toSeconds();
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;
@@ -60,7 +65,8 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount) {
+    @XRaySubsegment(value = "attempt.startAttempt", captureArgs = true)
+    public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount, Integer limitSeconds) {
         validateQuestionCount(questionCount);
         validateExamExists(examId);
 
@@ -80,8 +86,39 @@ public class AttemptService implements AttemptUseCase {
                 seed
         );
 
+        ensureTimerInitialized(attempt, limitSeconds);
         attemptRepository.save(attempt);
         return attempt.toVo();
+    }
+
+    @Override
+    public AttemptTimingResponse pauseAttempt(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        attempt.pause(clock.now());
+        attemptRepository.save(attempt);
+        return toTimingResponse(attempt, clock.now());
+    }
+
+    @Override
+    public AttemptTimingResponse resumeAttempt(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        attempt.resume(clock.now());
+        attemptRepository.save(attempt);
+        return toTimingResponse(attempt, clock.now());
+    }
+
+    @Override
+    public AttemptTimingResponse heartbeatAttempt(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        attempt.heartbeat(clock.now());
+        attemptRepository.save(attempt);
+        return toTimingResponse(attempt, clock.now());
     }
 
     @Override
@@ -90,12 +127,7 @@ public class AttemptService implements AttemptUseCase {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
-        long answeredCount = answerRepository.findByAttemptId(attemptId).size();
         long totalQuestions = attempt.getQuestionIds().size();
-
-        if (answeredCount < totalQuestions) {
-            throw new IllegalStateException("All questions must be answered before finishing");
-        }
 
         long correctAnswers = attemptQueryPort.countCorrectAnswers(attemptId);
         int score = (int) ((correctAnswers * 100) / totalQuestions);
@@ -129,6 +161,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment(value = "attempt.getAttemptQuestions", captureArgs = true)
     public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
@@ -243,5 +276,26 @@ public class AttemptService implements AttemptUseCase {
                 .limit(count)
                 .map(Question::getId)
                 .toList();
+    }
+
+    private void ensureTimerInitialized(Attempt attempt, Integer limitSeconds) {
+        if (limitSeconds == null || limitSeconds <= 0) {
+            throw new IllegalArgumentException("limitSeconds must be provided and > 0");
+        }
+
+        long clamped = Math.min(limitSeconds.longValue(), MAX_ATTEMPT_DURATION_SECONDS);
+        attempt.initTimer(clamped);
+    }
+
+    private AttemptTimingResponse toTimingResponse(Attempt attempt, Instant now) {
+        Instant endsAt = attempt.getEndsAt();
+        Instant pausedAt = attempt.getPausedAt();
+
+        return new AttemptTimingResponse(
+                endsAt != null ? endsAt.toString() : null,
+                attempt.remainingSeconds(now),
+                attempt.isPaused(),
+                pausedAt != null ? pausedAt.toString() : null
+        );
     }
 }

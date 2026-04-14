@@ -122,3 +122,7 @@ logging:
     org.springframework.web: ERROR
     org.hibernate.SQL: WARN
 
+
+aws:
+  xray:
+    daemon-address: xray-daemon:2000

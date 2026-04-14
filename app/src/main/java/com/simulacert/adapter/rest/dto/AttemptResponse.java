@@ -15,7 +15,7 @@ public record AttemptResponse(
         Instant finishedAt,
         Integer score,
         List<UUID> questionIds,
-        long seed
-) {
+        long seed,
+        Instant endsAt) {
 }
 

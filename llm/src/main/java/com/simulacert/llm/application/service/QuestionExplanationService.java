@@ -7,6 +7,7 @@ import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.exam.domain.QuestionOption;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import com.simulacert.llm.application.dto.LLMRequest;
 import com.simulacert.llm.application.dto.LLMResult;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 public class QuestionExplanationService implements QuestionExplanationUseCase {
     private static final String PROMPT_VERSION = "v1.0";
     private static final Double TEMPERATURE = 0.25;
-    private static final Integer MAX_TOKENS = 400;
+    private static final Integer MAX_TOKENS = 500;
     private static final Duration EXPIRATION_DURATION = Duration.ofDays(7); // 1 week
 
     private final AttemptRepositoryPort attemptRepository;
@@ -46,15 +47,17 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment(value = "llm.requestExplanation", captureArgs = true)
     public ExplanationResponse requestExplanation(RequestExplanationCommand command, UUID userId) {
         log.info("Requesting explanation for question {} by user {}", command.questionId(), userId);
 
         validateExplanationRequest(command, userId);
 
-        Optional<QuestionExplanationRun> explanation = explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), command.language());
+        Optional<QuestionExplanationRun> explanation = explanationRunRepository
+                .findByQuestionIdAndLanguage(command.questionId(), command.language());
+
         if (explanation.isPresent()) {
             log.info("Returning existing explanation from DB for question {}", command.questionId());
-
             QuestionExplanationRun run = explanation.get();
             return new ExplanationResponse(
                     run.getId(),
@@ -82,6 +85,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment(value = "llm.submitFeedback", captureArgs = true)
     public void submitFeedback(UUID explanationId, SubmitFeedbackCommand command) {
         log.info("Submitting feedback for explanation {}", explanationId);
 
@@ -150,7 +154,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 - Do not restate the question or options
                 - Do not mention exams strategies or personal opinions
                 - Do not mention that you are an AI
-                - Write in %s
+                - Write in %s language
                 - Cover ALL options listed
                 - Be concise and technical (4–8 sentences per option)
                 

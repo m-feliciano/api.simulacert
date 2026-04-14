@@ -1,5 +1,6 @@
 package com.simulacert.attempt.application.service;
 
+import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import com.simulacert.attempt.application.port.in.AnswerUseCase;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -63,6 +65,15 @@ public class AnswerService implements AnswerUseCase {
         } else {
             log.info("No answer found for attempt {} question {}, nothing to delete", attemptId, questionId);
         }
+    }
+
+    @Override
+    public List<AnswerResponse> getAnswer(UUID attemptId) {
+        log.debug("Getting answer for attempt {}", attemptId);
+
+        return answerRepository.findByAttemptId(attemptId).stream()
+                .map(AnswerResponse::from)
+                .toList();
     }
 }
 

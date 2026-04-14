@@ -15,6 +15,10 @@ public record AttemptVo(
         String status,
         Integer score,
         Instant startedAt,
-        Instant finishedAt
+        Instant finishedAt,
+        Instant endsAt,
+        boolean paused,
+        Instant pausedAt,
+        Long pausedRemainingSeconds
 ) {
 }

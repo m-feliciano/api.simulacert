@@ -107,7 +107,7 @@ class AttemptServiceTest {
         when(clock.now()).thenReturn(now);
         when(attemptRepository.save(any(Attempt.class))).thenReturn(testAttempt);
 
-        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount);
+        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, null);
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
@@ -128,7 +128,7 @@ class AttemptServiceTest {
         when(attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, AttemptStatus.IN_PROGRESS))
                 .thenReturn(Optional.of(testAttempt));
 
-        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount);
+        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, null);
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
@@ -143,7 +143,7 @@ class AttemptServiceTest {
     void shouldThrowExceptionWhenQuestionCountIsBelowMinimum() {
         int questionCount = 5;
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount))
+        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("questionCount must be between");
 
@@ -155,7 +155,7 @@ class AttemptServiceTest {
     void shouldThrowExceptionWhenQuestionCountIsAboveMaximum() {
         int questionCount = 150;
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount))
+        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("questionCount must be between");
 
@@ -169,7 +169,7 @@ class AttemptServiceTest {
 
         when(examQueryPort.existsById(examId)).thenReturn(false);
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount))
+        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, null))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Exam not found: " + examId);
 

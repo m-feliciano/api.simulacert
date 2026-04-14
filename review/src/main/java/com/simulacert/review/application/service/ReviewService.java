@@ -1,6 +1,7 @@
 package com.simulacert.review.application.service;
 
 import com.simulacert.common.ClockPort;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
 import com.simulacert.review.application.port.in.CreateReviewUseCase;
@@ -26,6 +27,7 @@ public class ReviewService implements CreateReviewUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment(value = "review.createReview", captureArgs = true)
     public ReviewResponse createReview(UUID userId, CreateReviewRequest request) {
         log.info("Creating review for attempt {} by user {}", request.attemptId(), userId);
 

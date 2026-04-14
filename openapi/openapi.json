@@ -307,6 +307,91 @@
         ]
       }
     },
+    "/api/v1/attempts/{attemptId}/answers": {
+      "get": {
+        "description": "Retrieves the submitted answer for a specific attempt.",
+        "operationId": "getAnswer",
+        "parameters": [
+          {
+            "description": "Attempt ID",
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnswerResponse"
+                  }
+                }
+              }
+            },
+            "description": "Answer retrieved successfully"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnswerResponse"
+                  }
+                }
+              }
+            },
+            "description": "Answer not found"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get answer for attempt",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
     "/api/v1/attempts/{attemptId}/answers/{questionId}": {
       "delete": {
         "description": "Deletes the submitted answer for a specific question within an attempt",
@@ -605,6 +690,182 @@
         ]
       }
     },
+    "/api/v1/attempts/{attemptId}/heartbeat": {
+      "post": {
+        "description": "Updates/returns timer state for an attempt (keep-alive)",
+        "operationId": "heartbeatAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Heartbeat OK"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not in progress"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Attempt heartbeat",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/pause": {
+      "post": {
+        "description": "Pauses the server-authoritative timer for an in-progress attempt",
+        "operationId": "pauseAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt paused"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not in progress"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Pause attempt timer",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
     "/api/v1/attempts/{attemptId}/questions": {
       "get": {
         "description": "Retrieves all questions associated with a specific attempt",
@@ -684,6 +945,94 @@
           }
         ],
         "summary": "Get attempt questions",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/resume": {
+      "post": {
+        "description": "Resumes the server-authoritative timer for a paused attempt",
+        "operationId": "resumeAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt resumed"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not paused or not in progress"
+          },
+          "500": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          },
+          "501": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorResponse"
+                }
+              }
+            },
+            "description": "Not Implemented"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Resume attempt timer",
         "tags": [
           "Attempts"
         ]
@@ -3097,6 +3446,22 @@
   },
   "components": {
     "schemas": {
+      "AnswerResponse": {
+        "type": "object",
+        "properties": {
+          "answeredAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "questionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "selectedOption": {
+            "type": "string"
+          }
+        }
+      },
       "ApiErrorResponse": {
         "type": "object",
         "properties": {
@@ -3218,6 +3583,24 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "AttemptTimingResponse": {
+        "type": "object",
+        "properties": {
+          "endsAt": {
+            "type": "string"
+          },
+          "paused": {
+            "type": "boolean"
+          },
+          "pausedAt": {
+            "type": "string"
+          },
+          "remainingSeconds": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -3691,6 +4074,10 @@
           "examId": {
             "type": "string",
             "format": "uuid"
+          },
+          "limitSeconds": {
+            "type": "integer",
+            "format": "int32"
           },
           "questionCount": {
             "type": "integer",

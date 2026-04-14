@@ -12,6 +12,7 @@ import com.simulacert.auth.application.port.out.TokenProviderPort;
 import com.simulacert.auth.application.port.out.UserRepositoryPort;
 import com.simulacert.auth.domain.User;
 import com.simulacert.common.ClockPort;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @XRaySubsegment("auth.login")
     public AuthResponse login(LoginRequest request) {
         log.info("Login attempt for email: {}", request.email());
 
@@ -218,6 +220,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @XRaySubsegment("auth.refreshToken")
     public AuthResponse refreshToken(String refreshToken) {
         log.info("Refreshing token");
 

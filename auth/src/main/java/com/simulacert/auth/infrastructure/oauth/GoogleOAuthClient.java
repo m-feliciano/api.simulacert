@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simulacert.auth.application.dto.GoogleTokenResponse;
 import com.simulacert.auth.application.dto.GoogleUserInfo;
 import com.simulacert.auth.application.port.out.GoogleOAuthClientPort;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -52,6 +53,7 @@ public class GoogleOAuthClient implements GoogleOAuthClientPort {
     }
 
     @Override
+    @XRaySubsegment("ext.google.oauth.exchange")
     public GoogleTokenResponse exchangeCodeForTokens(String code, String redirectUri) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -80,6 +82,7 @@ public class GoogleOAuthClient implements GoogleOAuthClientPort {
     }
 
     @Override
+    @XRaySubsegment("crypto.google.idToken.validate")
     public GoogleUserInfo validateIdTokenAndExtractUserInfo(String idToken) {
         String[] parts = idToken.split("\\.");
         if (parts.length != 3) {

@@ -1,5 +1,6 @@
 package com.simulacert.stats.infrastructure.persistence;
 
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.stats.application.dto.AttemptHistoryItemDto;
 import com.simulacert.stats.application.dto.AwsDomainStatsDto;
 import com.simulacert.stats.application.dto.UserStatsDto;
@@ -46,6 +47,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
         return domainStatsMapper.toDtoList(rows);
     }
 
+    @XRaySubsegment(value = "db.stats.userStats", captureArgs = true)
     private UserStatsRow executeUserStatsQuery(UUID userId) {
         String sql = """
                 SELECT
@@ -62,6 +64,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
         return jdbcTemplate.queryForObject(sql, this::mapUserStatsRow, userId, userId);
     }
 
+    @XRaySubsegment(value = "db.stats.attemptHistory", captureArgs = true)
     private List<AttemptHistoryRow> executeAttemptHistoryQuery(UUID userId) {
         String sql = """
                 SELECT
@@ -81,6 +84,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
         return jdbcTemplate.query(sql, this::mapAttemptHistoryRow, userId);
     }
 
+    @XRaySubsegment(value = "db.stats.awsDomain", captureArgs = true)
     private List<AwsDomainStatsRow> executeAwsDomainStatsQuery(UUID userId) {
         String sql = """
                 WITH user_attempts AS (

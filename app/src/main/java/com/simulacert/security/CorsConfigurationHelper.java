@@ -1,4 +1,4 @@
-package com.simulacert.config.security;
+package com.simulacert.security;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,9 +14,11 @@ public final class CorsConfigurationHelper {
 
     public static CorsConfigurationSource build(CorsConfiguration configuration) {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setExposedHeaders(List.of("Location"));
+
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L);
+        configuration.setMaxAge(86400L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

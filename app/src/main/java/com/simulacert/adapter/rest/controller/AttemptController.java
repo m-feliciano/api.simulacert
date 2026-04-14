@@ -4,7 +4,9 @@ import com.simulacert.adapter.rest.controller.openapi.AttemptControllerOpenApi;
 import com.simulacert.adapter.rest.dto.AttemptResponse;
 import com.simulacert.adapter.rest.dto.StartAttemptRequest;
 import com.simulacert.adapter.rest.mapper.AttemptMapper;
+import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import com.simulacert.attempt.application.port.in.AnswerUseCase;
@@ -49,7 +51,8 @@ public class AttemptController implements AttemptControllerOpenApi {
         AttemptVo attemptVo = useCase.startAttempt(
                 request.userId(),
                 request.examId(),
-                request.questionCount()
+                request.questionCount(),
+                request.limitSeconds()
         );
 
         log.info("Attempt started with id: {}", attemptVo.id());
@@ -79,7 +82,8 @@ public class AttemptController implements AttemptControllerOpenApi {
 
         AttemptVo response = useCase.getAttemptById(attemptId);
 
-        return ResponseEntity.ok(mapper.toResponse(response));
+        AttemptResponse body = mapper.toResponse(response);
+        return ResponseEntity.ok(body);
     }
 
     @Override
@@ -117,6 +121,15 @@ public class AttemptController implements AttemptControllerOpenApi {
     }
 
     @Override
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{attemptId}/answers")
+    public List<AnswerResponse> getAnswer(@PathVariable UUID attemptId) {
+        log.debug("Getting answers for attempt {}", attemptId);
+
+        return answerUseCase.getAnswer(attemptId);
+    }
+
+    @Override
     @DeleteMapping("/{attemptId}/answers/{questionId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAnswer(
@@ -136,6 +149,27 @@ public class AttemptController implements AttemptControllerOpenApi {
         useCase.cancelAttempt(attemptId);
 
         log.info("Attempt {} cancelled", attemptId);
+    }
+
+    @Override
+    @PostMapping("/{attemptId}/pause")
+    public ResponseEntity<AttemptTimingResponse> pauseAttempt(@PathVariable UUID attemptId) {
+        log.info("Pausing attempt {}", attemptId);
+        return ResponseEntity.ok(useCase.pauseAttempt(attemptId));
+    }
+
+    @Override
+    @PostMapping("/{attemptId}/resume")
+    public ResponseEntity<AttemptTimingResponse> resumeAttempt(@PathVariable UUID attemptId) {
+        log.info("Resuming attempt {}", attemptId);
+        return ResponseEntity.ok(useCase.resumeAttempt(attemptId));
+    }
+
+    @Override
+    @PostMapping("/{attemptId}/heartbeat")
+    public ResponseEntity<AttemptTimingResponse> heartbeatAttempt(@PathVariable UUID attemptId) {
+        log.debug("Heartbeat attempt {}", attemptId);
+        return ResponseEntity.ok(useCase.heartbeatAttempt(attemptId));
     }
 }
 

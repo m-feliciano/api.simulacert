@@ -2,7 +2,9 @@ package com.simulacert.adapter.rest.controller.openapi;
 
 import com.simulacert.adapter.rest.dto.AttemptResponse;
 import com.simulacert.adapter.rest.dto.StartAttemptRequest;
+import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,7 +22,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Attempts", description = "Exam attempt management endpoints")
-public interface AttemptControllerOpenApi {
+public interface
+AttemptControllerOpenApi {
 
     @Operation(
             summary = "Start exam attempt",
@@ -124,5 +127,59 @@ public interface AttemptControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Attempt not found")
     })
     void cancelAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
+
+    @Operation(
+            summary = "Pause attempt timer",
+            description = "Pauses the server-authoritative timer for an in-progress attempt",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Attempt paused",
+                    content = @Content(schema = @Schema(implementation = AttemptTimingResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "Attempt not found"),
+            @ApiResponse(responseCode = "409", description = "Attempt not in progress")
+    })
+    ResponseEntity<AttemptTimingResponse> pauseAttempt(@PathVariable UUID attemptId);
+
+    @Operation(
+            summary = "Resume attempt timer",
+            description = "Resumes the server-authoritative timer for a paused attempt",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Attempt resumed",
+                    content = @Content(schema = @Schema(implementation = AttemptTimingResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "Attempt not found"),
+            @ApiResponse(responseCode = "409", description = "Attempt not paused or not in progress")
+    })
+    ResponseEntity<AttemptTimingResponse> resumeAttempt(@PathVariable UUID attemptId);
+
+    @Operation(
+            summary = "Attempt heartbeat",
+            description = "Updates/returns timer state for an attempt (keep-alive)",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Heartbeat OK",
+                    content = @Content(schema = @Schema(implementation = AttemptTimingResponse.class))
+            ),
+            @ApiResponse(responseCode = "404", description = "Attempt not found"),
+            @ApiResponse(responseCode = "409", description = "Attempt not in progress")
+    })
+    ResponseEntity<AttemptTimingResponse> heartbeatAttempt(@PathVariable UUID attemptId);
+
+    @Operation(
+            summary = "Get answer for attempt",
+            description = "Retrieves the submitted answer for a specific attempt.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Answer retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Answer not found")
+    })
+    List<AnswerResponse> getAnswer(
+            @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 }
 

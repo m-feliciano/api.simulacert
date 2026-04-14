@@ -1,7 +1,7 @@
-package com.simulacert.config.security.prod;
+package com.simulacert.security.dev;
 
-import com.simulacert.config.security.JwtAuthenticationFilter;
 import com.simulacert.infrastructure.ratelimit.RateLimitFilter;
+import com.simulacert.security.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -17,15 +17,15 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 @Slf4j
 @Configuration
-@Profile("prod")
-public class SecurityConfigProd {
+@Profile({"dev", "default"})
+public class SecurityConfigDev {
 
     @Bean
-    public SecurityFilterChain securityFilterChainProd(HttpSecurity http,
-                                                       CorsConfigurationSource corsConfigurationSource,
-                                                       RateLimitFilter rateLimitFilter,
-                                                       JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
-        log.info("SecurityFilterChain for PROD profile");
+    public SecurityFilterChain securityFilterChainDev(HttpSecurity http,
+                                                      CorsConfigurationSource corsConfigurationSource,
+                                                      RateLimitFilter rateLimitFilter,
+                                                      JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
+        log.info("SecurityFilterChain for DEV profile");
 
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
@@ -38,8 +38,12 @@ public class SecurityConfigProd {
                                 -> response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health/liveness").permitAll()
-                        .requestMatchers("/actuator/**").denyAll()
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/actuator/**"
+                        ).permitAll()
                         .requestMatchers(
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register",
