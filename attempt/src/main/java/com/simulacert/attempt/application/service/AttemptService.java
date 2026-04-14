@@ -16,6 +16,7 @@ import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
+import com.simulacert.service.XRayTracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,6 +51,7 @@ public class AttemptService implements AttemptUseCase {
     private final QuestionRepositoryPort questionRepository;
     private final QuestionOptionQueryPort questionOptionQueryPort;
     private final ClockPort clock;
+    private final XRayTracingService xray;
 
     @Scheduled(cron = "0 0 * * * ?") // runs every hour
     public void cleanUpOldInProgressAttempts() {
@@ -65,14 +67,16 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.startAttempt", captureArgs = true)
+    @XRaySubsegment(value = "attempt.startAttempt")
     public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount, Integer limitSeconds) {
+        xray.putAnnotation("examId", examId);
         validateQuestionCount(questionCount);
         validateExamExists(examId);
 
         var existingAttempt = attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, IN_PROGRESS);
         if (existingAttempt.isPresent()) {
             Attempt attempt = existingAttempt.get();
+            xray.putAnnotation("attemptId", attempt.getId());
             Long remainingSeconds = attempt.getPausedRemainingSeconds();
             ensureTimerInitialized(attempt, remainingSeconds.intValue());
             return attempt.toVo();
@@ -89,14 +93,17 @@ public class AttemptService implements AttemptUseCase {
                 seed
         );
 
+        xray.putAnnotation("attemptId", attempt.getId());
+
         ensureTimerInitialized(attempt, limitSeconds);
         attemptRepository.save(attempt);
         return attempt.toVo();
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.pauseAttempt", captureArgs = true)
+    @XRaySubsegment(value = "attempt.pauseAttempt")
     public AttemptTimingResponse pauseAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
@@ -106,8 +113,9 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.resumeAttempt", captureArgs = true)
+    @XRaySubsegment(value = "attempt.resumeAttempt")
     public AttemptTimingResponse resumeAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
@@ -128,10 +136,13 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "attempt.finishAttempt", captureArgs = true)
+    @XRaySubsegment(value = "attempt.finishAttempt")
     public AttemptVo finishAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        xray.putAnnotation("examId", attempt.getExamId());
 
         long totalQuestions = attempt.getQuestionIds().size();
 
@@ -144,8 +155,9 @@ public class AttemptService implements AttemptUseCase {
         return attempt.toVo();
     }
 
-    @XRaySubsegment(value = "attempt.cancelAttempt", captureArgs = true)
+    @XRaySubsegment(value = "attempt.cancelAttempt")
     public void cancelAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         log.info("Cancelling attempt {}", attemptId);
 
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -155,13 +167,16 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment(value = "attempt.getAttemptById")
     public AttemptVo getAttemptById(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         return attemptRepository.findById(attemptId)
                 .map(Attempt::toVo)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
     }
 
     @Override
+    @XRaySubsegment(value = "attempt.getAttemptsByUser")
     public List<AttemptVo> getAttemptsByUser(UUID userId) {
         return attemptRepository.findByUserIdOrderByStartedAtDesc(userId)
                 .stream()
@@ -170,10 +185,13 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    @XRaySubsegment(value = "attempt.getAttemptQuestions", captureArgs = true)
+    @XRaySubsegment(value = "attempt.getAttemptQuestions")
     public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        xray.putAnnotation("examId", attempt.getExamId());
 
         var answers = answerRepository.findByAttemptId(attemptId);
         var answerMap = answers.stream()

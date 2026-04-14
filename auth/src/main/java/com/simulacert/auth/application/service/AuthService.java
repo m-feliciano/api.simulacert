@@ -39,6 +39,7 @@ public class AuthService implements AuthUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment("auth.register")
     public UserResponse register(@Valid RegisterRequest request) {
         log.info("Registering new user with email: {}", request.email());
 
@@ -113,6 +114,7 @@ public class AuthService implements AuthUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment("auth.changePassword")
     public void changePassword(UUID userId, ChangePasswordRequest request) {
         log.info("Changing password for user: {}", userId);
 
@@ -176,6 +178,7 @@ public class AuthService implements AuthUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment("auth.createAnonymousUser")
     public UserResponse createAnonymousUser() {
         log.info("Creating anonymous user");
 
@@ -190,6 +193,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @XRaySubsegment("auth.loginAnonymous")
     public AuthResponse loginAnonymous(UUID anonymousUserId, String dummyPassword) {
         log.info("Anonymous login attempt for user id: {}", anonymousUserId);
 

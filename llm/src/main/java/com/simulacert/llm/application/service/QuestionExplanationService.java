@@ -17,6 +17,7 @@ import com.simulacert.llm.application.port.in.QuestionExplanationUseCase;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.llm.application.port.out.QuestionExplanationRunRepositoryPort;
 import com.simulacert.llm.domain.QuestionExplanationRun;
+import com.simulacert.service.XRayTracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,11 +45,14 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private final ExplanationLLMPort llmProvider;
     private final ClockPort clock;
     private final ExplanationCacheService cacheService;
+    private final XRayTracingService xray;
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "llm.requestExplanation", captureArgs = true)
+    @XRaySubsegment(value = "llm.requestExplanation")
     public ExplanationResponse requestExplanation(RequestExplanationCommand command, UUID userId) {
+        xray.putAnnotation("attemptId", command.examAttemptId());
+        xray.putAnnotation("questionId", command.questionId());
         log.info("Requesting explanation for question {} by user {}", command.questionId(), userId);
 
         validateExplanationRequest(command, userId);
@@ -85,8 +89,9 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "llm.submitFeedback", captureArgs = true)
+    @XRaySubsegment(value = "llm.submitFeedback")
     public void submitFeedback(UUID explanationId, SubmitFeedbackCommand command) {
+        xray.putAnnotation("explanationId", explanationId);
         log.info("Submitting feedback for explanation {}", explanationId);
 
         QuestionExplanationRun explanationRun = explanationRunRepository.findById(explanationId)

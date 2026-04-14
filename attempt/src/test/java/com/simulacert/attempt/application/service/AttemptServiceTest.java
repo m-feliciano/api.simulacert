@@ -13,6 +13,7 @@ import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
+import com.simulacert.service.XRayTracingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,9 @@ class AttemptServiceTest {
     @Mock
     private ClockPort clock;
 
+    @Mock
+    private XRayTracingService xray;
+
     @InjectMocks
     private AttemptService attemptService;
 
@@ -107,7 +111,7 @@ class AttemptServiceTest {
         when(clock.now()).thenReturn(now);
         when(attemptRepository.save(any(Attempt.class))).thenReturn(testAttempt);
 
-        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, null);
+        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, 1800);
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
@@ -123,12 +127,14 @@ class AttemptServiceTest {
     @DisplayName("Should return existing attempt if already in progress")
     void shouldReturnExistingAttemptIfAlreadyInProgress() {
         int questionCount = 15;
+        testAttempt.initTimer(1800);
+        testAttempt.pause(now.plusSeconds(60));
 
         when(examQueryPort.existsById(examId)).thenReturn(true);
         when(attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, AttemptStatus.IN_PROGRESS))
                 .thenReturn(Optional.of(testAttempt));
 
-        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, null);
+        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, 1800);
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
@@ -143,7 +149,7 @@ class AttemptServiceTest {
     void shouldThrowExceptionWhenQuestionCountIsBelowMinimum() {
         int questionCount = 5;
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, null))
+        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, 1800))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("questionCount must be between");
 
@@ -155,7 +161,7 @@ class AttemptServiceTest {
     void shouldThrowExceptionWhenQuestionCountIsAboveMaximum() {
         int questionCount = 150;
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, null))
+        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, 1800))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("questionCount must be between");
 
@@ -169,7 +175,7 @@ class AttemptServiceTest {
 
         when(examQueryPort.existsById(examId)).thenReturn(false);
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, null))
+        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, 1800))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Exam not found: " + examId);
 
@@ -180,10 +186,8 @@ class AttemptServiceTest {
     @Test
     @DisplayName("Should finish attempt successfully")
     void shouldFinishAttemptSuccessfully() {
-        List<Answer> answers = createMockAnswers(attemptId, testAttempt.getQuestionIds());
 
         when(attemptRepository.findById(attemptId)).thenReturn(Optional.of(testAttempt));
-        when(answerRepository.findByAttemptId(attemptId)).thenReturn(answers);
         when(attemptQueryPort.countCorrectAnswers(attemptId)).thenReturn(7L);
         when(clock.now()).thenReturn(now.plusSeconds(1800));
         when(attemptRepository.save(any(Attempt.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -194,7 +198,6 @@ class AttemptServiceTest {
         assertThat(result.status()).isEqualTo("COMPLETED");
         assertThat(result.score()).isEqualTo(70);
         verify(attemptRepository).findById(attemptId);
-        verify(answerRepository).findByAttemptId(attemptId);
         verify(attemptQueryPort).countCorrectAnswers(attemptId);
         verify(attemptRepository).save(any(Attempt.class));
     }

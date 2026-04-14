@@ -9,6 +9,8 @@ import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
 import com.simulacert.common.ClockPort;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
+import com.simulacert.service.XRayTracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,14 @@ public class AnswerService implements AnswerUseCase {
     private final AnswerRepositoryPort answerRepository;
     private final AttemptRepositoryPort attemptRepository;
     private final ClockPort clock;
+    private final XRayTracingService xray;
 
     @Override
     @Transactional
+    @XRaySubsegment(value = "attempt.submitAnswer")
     public void submitAnswer(UUID attemptId, UUID questionId, SubmitAnswerRequest request) {
+        xray.putAnnotation("attemptId", attemptId);
+        xray.putAnnotation("questionId", questionId);
         log.info("Submitting answer for attempt {} question {}", attemptId, questionId);
 
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -55,7 +61,10 @@ public class AnswerService implements AnswerUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment(value = "attempt.deleteAnswer")
     public void deleteAnswer(UUID attemptId, UUID questionId) {
+        xray.putAnnotation("attemptId", attemptId);
+        xray.putAnnotation("questionId", questionId);
         log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
 
         if (answerRepository.existsByAttemptIdAndQuestionId(attemptId, questionId)) {
@@ -68,7 +77,9 @@ public class AnswerService implements AnswerUseCase {
     }
 
     @Override
+    @XRaySubsegment(value = "attempt.getAnswer")
     public List<AnswerResponse> getAnswer(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         log.debug("Getting answer for attempt {}", attemptId);
 
         return answerRepository.findByAttemptId(attemptId).stream()

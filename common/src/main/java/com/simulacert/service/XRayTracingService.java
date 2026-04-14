@@ -31,31 +31,15 @@ public class XRayTracingService {
             return pjp.proceed();
         }
 
-        String name = resolveName(method, ann);
-
-        Subsegment sub = AWSXRay.beginSubsegment(name);
-
-        applyUserEntityTracing();
-
-        try {
-            Object result = pjp.proceed();
-
-            if (ann.captureArgs()) {
-                addSafeMetadata(sub, sig, pjp.getArgs());
-            }
-
-            return result;
-
-        } catch (Throwable t) {
+        try (Subsegment sub = AWSXRay.beginSubsegment(resolveName(method, ann))) {
+            applyUserEntityTracing();
             try {
+                return pjp.proceed();
+            } catch (Throwable t) {
                 sub.addException(t);
-            } catch (Exception ignored) {
+                sub.setFault(true);
+                throw t;
             }
-
-            throw t;
-
-        } finally {
-            sub.close();
         }
     }
 
@@ -80,6 +64,39 @@ public class XRayTracingService {
         return result;
     }
 
+    public void putAnnotation(String key, UUID value) {
+        if (key == null || key.isBlank() || value == null) return;
+        putAnnotationInternal(key, value.toString());
+    }
+
+    public void putAnnotation(String key, Number value) {
+        if (key == null || key.isBlank() || value == null) return;
+        putAnnotationInternal(key, value.toString());
+    }
+
+    public void putAnnotation(String key, String value) {
+        if (key == null || key.isBlank() || value == null || value.isBlank()) return;
+        putAnnotationInternal(key, value);
+    }
+
+    private void putAnnotationInternal(String key, String stringValue) {
+        String safeValue = stringValue;
+        if (safeValue.length() > 128) {
+            safeValue = safeValue.substring(0, 128);
+        }
+
+        try {
+            if (AWSXRay.getCurrentSegment() != null) {
+                AWSXRay.getCurrentSegment().putAnnotation(key, safeValue);
+
+            } else if (AWSXRay.getTraceEntity() != null) {
+                AWSXRay.getTraceEntity().putAnnotation(key, safeValue);
+            }
+        } catch (Exception ex) {
+            log.warn("Failed to put annotation {}: {}", key, safeValue, ex);
+        }
+    }
+
     private void applyUserEntityTracing() {
         UUID uuid = UserContextHolder.getUser();
         if (uuid == null) return;
@@ -98,29 +115,6 @@ public class XRayTracingService {
             }
             return m.getDeclaringClass().getSimpleName() + "." + m.getName();
         });
-    }
-
-    private void addSafeMetadata(Subsegment sub, MethodSignature sig, Object[] args) {
-        String[] names = sig.getParameterNames();
-        if (names == null || args == null) return;
-
-        for (int i = 0; i < Math.min(names.length, args.length); i++) {
-            sub.putMetadata("args", names[i], sanitize(args[i]));
-        }
-    }
-
-    private Object sanitize(Object value) {
-        if (value == null) return null;
-
-        if (value instanceof String s) {
-            return s.length() > 64 ? s.substring(0, 64) + "..." : s;
-        }
-
-        if (value instanceof Number || value instanceof Boolean) {
-            return value;
-        }
-
-        return value.getClass().getSimpleName();
     }
 
     private Object extractParam(MethodSignature sig, Object[] args, String paramName) {

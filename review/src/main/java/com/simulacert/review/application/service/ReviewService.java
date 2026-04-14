@@ -27,7 +27,7 @@ public class ReviewService implements CreateReviewUseCase {
 
     @Override
     @Transactional
-    @XRaySubsegment(value = "review.createReview", captureArgs = true)
+    @XRaySubsegment(value = "review.createReview")
     public ReviewResponse createReview(UUID userId, CreateReviewRequest request) {
         log.info("Creating review for attempt {} by user {}", request.attemptId(), userId);
 
@@ -72,6 +72,7 @@ public class ReviewService implements CreateReviewUseCase {
 
     @Override
     @Transactional(readOnly = true)
+    @XRaySubsegment(value = "review.getReviewByAttempt")
     public Optional<ReviewResponse> getReviewByAttempt(UUID userId, UUID attemptId) {
         log.debug("Getting review for attempt {} by user {}", attemptId, userId);
 

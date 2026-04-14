@@ -47,7 +47,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
         return domainStatsMapper.toDtoList(rows);
     }
 
-    @XRaySubsegment(value = "db.stats.userStats", captureArgs = true)
+    @XRaySubsegment(value = "db.stats.userStats")
     private UserStatsRow executeUserStatsQuery(UUID userId) {
         String sql = """
                 SELECT
@@ -64,7 +64,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
         return jdbcTemplate.queryForObject(sql, this::mapUserStatsRow, userId, userId);
     }
 
-    @XRaySubsegment(value = "db.stats.attemptHistory", captureArgs = true)
+    @XRaySubsegment(value = "db.stats.attemptHistory")
     private List<AttemptHistoryRow> executeAttemptHistoryQuery(UUID userId) {
         String sql = """
                 SELECT
@@ -84,7 +84,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
         return jdbcTemplate.query(sql, this::mapAttemptHistoryRow, userId);
     }
 
-    @XRaySubsegment(value = "db.stats.awsDomain", captureArgs = true)
+    @XRaySubsegment(value = "db.stats.awsDomain")
     private List<AwsDomainStatsRow> executeAwsDomainStatsQuery(UUID userId) {
         String sql = """
                 WITH user_attempts AS (

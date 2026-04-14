@@ -15,6 +15,7 @@ import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.llm.application.port.out.QuestionExplanationRunRepositoryPort;
 import com.simulacert.llm.domain.QuestionExplanationRun;
+import com.simulacert.service.XRayTracingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,6 +63,9 @@ class QuestionExplanationServiceTest {
 
     @Mock
     private ClockPort clock;
+
+    @Mock
+    private XRayTracingService xray;
 
     @InjectMocks
     private QuestionExplanationService service;
