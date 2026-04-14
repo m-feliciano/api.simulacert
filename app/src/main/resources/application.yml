@@ -14,10 +14,6 @@ spring:
     active: prod
   jackson:
       default-property-inclusion: non_null
-
-  jackson:
-    default-property-inclusion: non_null
-
   application:
     name: simulacert
 
