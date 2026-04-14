@@ -101,7 +101,7 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "400", description = "Invalid answer data"),
             @ApiResponse(responseCode = "404", description = "Attempt or question not found")
     })
-    ResponseEntity<Void> submitAnswer(
+    void submitAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId,
             @RequestBody SubmitAnswerRequest request);

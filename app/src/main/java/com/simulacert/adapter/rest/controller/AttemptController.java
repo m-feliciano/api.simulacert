@@ -109,15 +109,13 @@ public class AttemptController implements AttemptControllerOpenApi {
 
     @Override
     @PostMapping("/{attemptId}/answers/{questionId}")
-    public ResponseEntity<Void> submitAnswer(
+    @ResponseStatus(HttpStatus.CREATED)
+    public void submitAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId,
             @RequestBody SubmitAnswerRequest request) {
         log.info("Submitting answer for attempt {} question {}", attemptId, questionId);
-
         answerUseCase.submitAnswer(attemptId, questionId, request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
@@ -125,7 +123,6 @@ public class AttemptController implements AttemptControllerOpenApi {
     @GetMapping("/{attemptId}/answers")
     public List<AnswerResponse> getAnswer(@PathVariable UUID attemptId) {
         log.debug("Getting answers for attempt {}", attemptId);
-
         return answerUseCase.getAnswer(attemptId);
     }
 
@@ -136,7 +133,6 @@ public class AttemptController implements AttemptControllerOpenApi {
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId) {
         log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
-
         answerUseCase.deleteAnswer(attemptId, questionId);
     }
 
@@ -145,10 +141,7 @@ public class AttemptController implements AttemptControllerOpenApi {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelAttempt(@PathVariable UUID attemptId) {
         log.info("Cancelling attempt {}", attemptId);
-
         useCase.cancelAttempt(attemptId);
-
-        log.info("Attempt {} cancelled", attemptId);
     }
 
     @Override

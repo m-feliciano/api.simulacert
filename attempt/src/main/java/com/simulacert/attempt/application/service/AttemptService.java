@@ -72,7 +72,10 @@ public class AttemptService implements AttemptUseCase {
 
         var existingAttempt = attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, IN_PROGRESS);
         if (existingAttempt.isPresent()) {
-            return existingAttempt.get().toVo();
+            Attempt attempt = existingAttempt.get();
+            Long remainingSeconds = attempt.getPausedRemainingSeconds();
+            ensureTimerInitialized(attempt, remainingSeconds.intValue());
+            return attempt.toVo();
         }
 
         long seed = new Random().nextLong();
@@ -92,6 +95,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment(value = "attempt.pauseAttempt", captureArgs = true)
     public AttemptTimingResponse pauseAttempt(UUID attemptId) {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
@@ -102,6 +106,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment(value = "attempt.resumeAttempt", captureArgs = true)
     public AttemptTimingResponse resumeAttempt(UUID attemptId) {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
@@ -123,6 +128,7 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment(value = "attempt.finishAttempt", captureArgs = true)
     public AttemptVo finishAttempt(UUID attemptId) {
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
@@ -138,7 +144,10 @@ public class AttemptService implements AttemptUseCase {
         return attempt.toVo();
     }
 
+    @XRaySubsegment(value = "attempt.cancelAttempt", captureArgs = true)
     public void cancelAttempt(UUID attemptId) {
+        log.info("Cancelling attempt {}", attemptId);
+
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
         attempt.cancel(clock.now());
