@@ -3,8 +3,8 @@ services:
     image: 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest
     container_name: simulacert-api
 
-    mem_limit: 2g
-    mem_reservation: 1400m
+    mem_limit: 1400m
+    mem_reservation: 1024m
     restart: unless-stopped
 
     env_file:
