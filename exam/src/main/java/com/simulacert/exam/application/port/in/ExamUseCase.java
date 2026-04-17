@@ -1,10 +1,9 @@
 package com.simulacert.exam.application.port.in;
 
 import com.simulacert.exam.application.dto.request.CreateExamRequest;
-import com.simulacert.exam.application.dto.request.ExamImportDto;
 import com.simulacert.exam.application.dto.request.UpdateExamRequest;
-import com.simulacert.exam.application.dto.response.ExamImportResponse;
 import com.simulacert.exam.application.dto.response.ExamResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +22,9 @@ public interface ExamUseCase {
 
     void deleteExam(UUID examId);
 
-    ExamImportResponse importExam(ExamImportDto examImportDto);
+    void importExamsFiles(List<MultipartFile> files);
 
     ExamResponse getExamBySlug(String slug);
+
+    void importExamsFilesFromDirectory();
 }

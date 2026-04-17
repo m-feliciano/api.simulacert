@@ -1,4 +1,4 @@
-package com.simulacert.config;
+package com.simulacert.exam.application.config;
 
 import lombok.Getter;
 import lombok.Setter;
