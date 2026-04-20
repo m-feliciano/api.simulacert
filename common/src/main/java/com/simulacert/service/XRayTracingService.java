@@ -1,8 +1,6 @@
 package com.simulacert.service;
 
 import com.amazonaws.xray.AWSXRay;
-import com.amazonaws.xray.entities.Entity;
-import com.amazonaws.xray.entities.Segment;
 import com.amazonaws.xray.entities.Subsegment;
 import com.simulacert.infrastructure.xray.XRayAnnotation;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
@@ -29,10 +27,8 @@ public class XRayTracingService {
         Method method = sig.getMethod();
 
         XRaySubsegment ann = AnnotationUtils.findAnnotation(method, XRaySubsegment.class);
-        Entity entity = AWSXRay.getTraceEntity();
-        Segment currentSegment = AWSXRay.getCurrentSegment();
 
-        if (ann == null || (entity == null && currentSegment == null)) {
+        if (ann == null || (AWSXRay.getTraceEntity() == null && AWSXRay.getCurrentSegment() == null)) {
             return pjp.proceed();
         }
 
@@ -61,27 +57,19 @@ public class XRayTracingService {
 
         Object result = pjp.proceed();
 
-        Object value = extractParam(sig, pjp.getArgs(), ann.param());
-        if (value != null && AWSXRay.getTraceEntity() != null) {
-            AWSXRay.getTraceEntity().putAnnotation(ann.key(), String.valueOf(value));
+        if (AWSXRay.getTraceEntity() != null) {
+            Object value = extractParam(sig, pjp.getArgs(), ann.param());
+            if (value != null) {
+                AWSXRay.getTraceEntity().putAnnotation(ann.key(), String.valueOf(value));
+            }
         }
 
         return result;
     }
 
-    public void putAnnotation(String key, UUID value) {
+    public void putAnnotation(String key, Object value) {
         if (key == null || key.isBlank() || value == null) return;
         putAnnotationInternal(key, value.toString());
-    }
-
-    public void putAnnotation(String key, Number value) {
-        if (key == null || key.isBlank() || value == null) return;
-        putAnnotationInternal(key, value.toString());
-    }
-
-    public void putAnnotation(String key, String value) {
-        if (key == null || key.isBlank() || value == null || value.isBlank()) return;
-        putAnnotationInternal(key, value);
     }
 
     private void putAnnotationInternal(String key, String stringValue) {
@@ -104,12 +92,9 @@ public class XRayTracingService {
 
     private void applyUserEntityTracing() {
         UUID uuid = UserContextHolder.getUser();
-        if (uuid == null) return;
 
-        String userId = uuid.toString();
-
-        if (AWSXRay.getCurrentSegment() != null) {
-            AWSXRay.getCurrentSegment().putAnnotation("userId", userId);
+        if (uuid != null && AWSXRay.getCurrentSegment() != null) {
+            AWSXRay.getCurrentSegment().putAnnotation("userId", uuid.toString());
         }
     }
 
@@ -123,14 +108,15 @@ public class XRayTracingService {
     }
 
     private Object extractParam(MethodSignature sig, Object[] args, String paramName) {
-        if (paramName == null || paramName.isBlank()) return null;
+        if (paramName != null) {
+            String[] names = sig.getParameterNames();
 
-        String[] names = sig.getParameterNames();
-        if (names == null || args == null) return null;
-
-        for (int i = 0; i < names.length; i++) {
-            if (paramName.equals(names[i])) {
-                return args[i];
+            if (names != null && args != null) {
+                for (int i = 0; i < names.length; i++) {
+                    if (paramName.equals(names[i])) {
+                        return args[i];
+                    }
+                }
             }
         }
 
