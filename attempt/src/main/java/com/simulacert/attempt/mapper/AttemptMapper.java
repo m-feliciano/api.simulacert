@@ -1,6 +1,6 @@
-package com.simulacert.adapter.rest.mapper;
+package com.simulacert.attempt.mapper;
 
-import com.simulacert.adapter.rest.dto.AttemptResponse;
+import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;

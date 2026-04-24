@@ -1,6 +1,7 @@
 package com.simulacert.attempt.application.service;
 
 import com.simulacert.attempt.application.dto.AttemptVo;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
 import com.simulacert.attempt.application.port.out.AttemptQueryPort;
 import com.simulacert.attempt.application.port.out.AttemptRepositoryPort;
@@ -111,7 +112,8 @@ class AttemptServiceTest {
         when(clock.now()).thenReturn(now);
         when(attemptRepository.save(any(Attempt.class))).thenReturn(testAttempt);
 
-        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, 1800);
+        StartAttemptRequest request = new StartAttemptRequest(userId, examId, questionCount, 1800);
+        AttemptVo result = attemptService.startAttempt(request);
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
@@ -134,7 +136,8 @@ class AttemptServiceTest {
         when(attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, AttemptStatus.IN_PROGRESS))
                 .thenReturn(Optional.of(testAttempt));
 
-        AttemptVo result = attemptService.startAttempt(userId, examId, questionCount, 1800);
+        StartAttemptRequest request = new StartAttemptRequest(userId, examId, questionCount, 1800);
+        AttemptVo result = attemptService.startAttempt(request);
 
         assertThat(result).isNotNull();
         assertThat(result.userId()).isEqualTo(userId);
@@ -149,7 +152,8 @@ class AttemptServiceTest {
     void shouldThrowExceptionWhenQuestionCountIsBelowMinimum() {
         int questionCount = 5;
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, 1800))
+        assertThatThrownBy(() -> attemptService.startAttempt(
+                new StartAttemptRequest(userId, examId, questionCount, 1800)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("questionCount must be between");
 
@@ -161,7 +165,9 @@ class AttemptServiceTest {
     void shouldThrowExceptionWhenQuestionCountIsAboveMaximum() {
         int questionCount = 150;
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, 1800))
+        assertThatThrownBy(() -> attemptService.startAttempt(
+                new StartAttemptRequest(userId, examId, questionCount, 1800))
+        )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("questionCount must be between");
 
@@ -175,7 +181,9 @@ class AttemptServiceTest {
 
         when(examQueryPort.existsById(examId)).thenReturn(false);
 
-        assertThatThrownBy(() -> attemptService.startAttempt(userId, examId, questionCount, 1800))
+        assertThatThrownBy(() -> attemptService.startAttempt(
+                new StartAttemptRequest(userId, examId, questionCount, 1800))
+        )
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Exam not found: " + examId);
 

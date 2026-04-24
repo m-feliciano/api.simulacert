@@ -1,6 +1,6 @@
 package com.simulacert.adapter.rest.controller;
 
-import com.simulacert.adapter.rest.dto.OAuthExchangeRequest;
+import com.simulacert.auth.application.dto.OAuthExchangeRequest;
 import com.simulacert.auth.application.dto.AuthResponse;
 import com.simulacert.auth.application.port.in.OAuthUseCase;
 import jakarta.servlet.http.HttpServletResponse;

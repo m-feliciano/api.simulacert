@@ -1,7 +1,7 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
-import com.simulacert.adapter.rest.dto.AttemptResponse;
-import com.simulacert.adapter.rest.dto.StartAttemptRequest;
+import com.simulacert.attempt.application.dto.AttemptResponse;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;

@@ -4,6 +4,7 @@ import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.QuestionOption;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.port.in.AttemptUseCase;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
 import com.simulacert.attempt.application.port.out.AttemptQueryPort;
@@ -53,11 +54,11 @@ public class AttemptService implements AttemptUseCase {
     private final ClockPort clock;
     private final XRayTracingService xray;
 
-    @Scheduled(cron = "0 0 * * * ?") // runs every hour
+    @Scheduled(cron = "0 0 0 * * ?") // runs every day at midnight
     public void cleanUpOldInProgressAttempts() {
         log.info("Starting cleanup of old in-progress attempts");
 
-        var cutoff = clock.now().minusSeconds(Duration.ofDays(7).toSeconds());
+        var cutoff = clock.now().minus(Duration.ofDays(14));
         var oldAttempts = attemptRepository.findByStatusAndStartedAtBefore(IN_PROGRESS, cutoff);
         for (var attempt : oldAttempts) {
             log.info("Cancelling old in-progress attempt: {} which started at {}", attempt.getId(), attempt.getStartedAt());
@@ -68,22 +69,27 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @XRaySubsegment("attempt.startAttempt")
-    public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount, Integer limitSeconds) {
-        xray.putAnnotation("examId", examId);
-        validateQuestionCount(questionCount);
-        validateExamExists(examId);
+    public AttemptVo startAttempt(StartAttemptRequest request) {
+        xray.putAnnotation("examId", request.examId());
+
+        validateQuestionCount(request.questionCount());
+        validateExamExists(request.examId());
+
+        UUID userId = request.userId();
+        UUID examId = request.examId();
 
         var existingAttempt = attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, IN_PROGRESS);
         if (existingAttempt.isPresent()) {
             Attempt attempt = existingAttempt.get();
             xray.putAnnotation("attemptId", attempt.getId());
+
             Long remainingSeconds = attempt.getPausedRemainingSeconds();
             ensureTimerInitialized(attempt, remainingSeconds.intValue());
             return attempt.toVo();
         }
 
         long seed = new Random().nextLong();
-        List<UUID> selectedQuestionIds = selectQuestions(examId, questionCount, seed);
+        List<UUID> selectedQuestionIds = selectQuestions(examId, request.questionCount(), seed);
 
         Attempt attempt = Attempt.create(
                 userId,
@@ -95,7 +101,7 @@ public class AttemptService implements AttemptUseCase {
 
         xray.putAnnotation("attemptId", attempt.getId());
 
-        ensureTimerInitialized(attempt, limitSeconds);
+        ensureTimerInitialized(attempt, request.limitSeconds());
         attemptRepository.save(attempt);
         return attempt.toVo();
     }

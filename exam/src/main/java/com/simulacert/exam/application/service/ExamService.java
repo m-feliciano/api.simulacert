@@ -141,7 +141,8 @@ public class ExamService implements ExamUseCase {
         }
 
         if (fileMap.isEmpty()) {
-            throw new IllegalArgumentException("No valid JSON files found in directory: " + importProperties.getInputDir());
+            log.warn("No exam files found in directory: {}", importProperties.getInputDir());
+            return;
         }
 
         List<ExamImportDto> exams = new ArrayList<>(fileMap.values());
@@ -171,11 +172,13 @@ public class ExamService implements ExamUseCase {
                 continue;
             }
 
-            exams.add(objectMapper.readValue(file.getInputStream(), ExamImportDto.class));
+            ExamImportDto dto = objectMapper.readValue(file.getInputStream(), ExamImportDto.class);
+            exams.add(dto);
         }
 
         if (exams.isEmpty()) {
-            throw new IllegalArgumentException("No valid JSON files provided for import");
+            log.warn("No valid exam files to import");
+            return;
         }
 
         this.importExams(exams);

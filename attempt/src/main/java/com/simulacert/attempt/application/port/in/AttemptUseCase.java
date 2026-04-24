@@ -3,13 +3,14 @@ package com.simulacert.attempt.application.port.in;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface AttemptUseCase {
 
-    AttemptVo startAttempt(UUID userId, UUID examId, int questionCount, Integer limitSeconds);
+    AttemptVo startAttempt(StartAttemptRequest startAttemptRequest);
 
     AttemptVo finishAttempt(UUID attemptId);
 

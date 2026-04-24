@@ -1,4 +1,4 @@
-package com.simulacert.adapter.rest.dto;
+package com.simulacert.attempt.application.dto;
 
 import com.simulacert.attempt.domain.AttemptStatus;
 

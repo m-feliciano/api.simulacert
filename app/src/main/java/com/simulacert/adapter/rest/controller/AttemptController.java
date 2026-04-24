@@ -1,9 +1,9 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.AttemptControllerOpenApi;
-import com.simulacert.adapter.rest.dto.AttemptResponse;
-import com.simulacert.adapter.rest.dto.StartAttemptRequest;
-import com.simulacert.adapter.rest.mapper.AttemptMapper;
+import com.simulacert.attempt.application.dto.AttemptResponse;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
+import com.simulacert.attempt.mapper.AttemptMapper;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
@@ -11,6 +11,7 @@ import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import com.simulacert.attempt.application.port.in.AnswerUseCase;
 import com.simulacert.attempt.application.port.in.AttemptUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,15 +46,10 @@ public class AttemptController implements AttemptControllerOpenApi {
     @Override
     @PostMapping
     @PreAuthorize("#request.userId() == authentication.principal.id")
-    public ResponseEntity<Void> startAttempt(@RequestBody StartAttemptRequest request) {
+    public ResponseEntity<Void> startAttempt(@RequestBody @Valid StartAttemptRequest request) {
         log.info("Starting attempt for user {} on exam {}", request.userId(), request.examId());
 
-        AttemptVo attemptVo = useCase.startAttempt(
-                request.userId(),
-                request.examId(),
-                request.questionCount(),
-                request.limitSeconds()
-        );
+        AttemptVo attemptVo = useCase.startAttempt(request);
 
         log.info("Attempt started with id: {}", attemptVo.id());
 
