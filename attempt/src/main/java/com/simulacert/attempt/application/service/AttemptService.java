@@ -11,6 +11,7 @@ import com.simulacert.attempt.application.port.out.AttemptQueryPort;
 import com.simulacert.attempt.application.port.out.AttemptRepositoryPort;
 import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
+import com.simulacert.attempt.domain.Difficulty;
 import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
@@ -89,7 +90,7 @@ public class AttemptService implements AttemptUseCase {
         }
 
         long seed = new Random().nextLong();
-        List<UUID> selectedQuestionIds = selectQuestions(examId, request.questionCount(), seed);
+        List<UUID> selectedQuestionIds = selectQuestions(examId, request.questionCount(), seed, request.difficulty());
 
         Attempt attempt = Attempt.create(
                 userId,
@@ -251,7 +252,7 @@ public class AttemptService implements AttemptUseCase {
         }
     }
 
-    private List<UUID> selectQuestions(UUID examId, int questionCount, long seed) {
+    private List<UUID> selectQuestions(UUID examId, int questionCount, long seed, String difficultyLevel) {
         log.debug("Selecting {} questions for exam {} with seed {}", questionCount, examId, seed);
 
         List<Question> allQuestions = questionRepository.findByExamId(examId);
@@ -259,44 +260,65 @@ public class AttemptService implements AttemptUseCase {
             throw new IllegalStateException("Exam has only " + allQuestions.size() + " questions");
         }
 
-        // Embaralha todas as perguntas com a semente fornecida
-        List<Question> shuffledQuestions = new ArrayList<>(allQuestions);
-        Collections.shuffle(shuffledQuestions, new Random(seed));
-
-        // Distribuição por dificuldade: 30% easy, 50% medium, 20% hard
-        int easyCount = (int) Math.round(questionCount * 0.3);
-        int mediumCount = (int) Math.round(questionCount * 0.5);
-        int hardCount = questionCount - easyCount - mediumCount; // garante soma exata
-
-        // Se não houver perguntas suficientes em uma categoria, redistribui para as outras
-        var hardQuestions = filterByDifficulty(shuffledQuestions, "HARD");
-        if (hardQuestions.size() < hardCount) {
-            int deficit = hardCount - hardQuestions.size();
-            hardCount = hardQuestions.size();
-            mediumCount += deficit;
-        }
-
-        var mediumQuestions = filterByDifficulty(shuffledQuestions, "MEDIUM");
-        if (mediumQuestions.size() < mediumCount) {
-            int deficit = mediumCount - mediumQuestions.size();
-            mediumCount = mediumQuestions.size();
-            easyCount += deficit;
-        }
-
-        var easyQuestions = filterByDifficulty(shuffledQuestions, "EASY");
-        if (easyQuestions.size() < easyCount) {
-            throw new IllegalStateException("Not enough questions to satisfy the difficulty distribution");
-        }
-
         Random random = new Random(seed);
+        List<UUID> selected;
 
-        List<UUID> selected = new ArrayList<>();
-        selected.addAll(selectRandom(easyQuestions, easyCount, random));
-        selected.addAll(selectRandom(mediumQuestions, mediumCount, random));
-        selected.addAll(selectRandom(hardQuestions, hardCount, random));
+        if (difficultyLevel == null) {
+            int easyCount = (int) Math.round(questionCount * 0.3);
+            int mediumCount = (int) Math.round(questionCount * 0.5);
+            int hardCount = questionCount - easyCount - mediumCount;
+
+            var easyQuestions = filterByDifficulty(allQuestions, Difficulty.EASY.name());
+            var mediumQuestions = filterByDifficulty(allQuestions, Difficulty.MEDIUM.name());
+            var hardQuestions = filterByDifficulty(allQuestions, Difficulty.HARD.name());
+
+            if (hardQuestions.size() < hardCount) {
+                mediumCount += (hardCount - hardQuestions.size());
+                hardCount = hardQuestions.size();
+            }
+
+            if (mediumQuestions.size() < mediumCount) {
+                easyCount += (mediumCount - mediumQuestions.size());
+                mediumCount = mediumQuestions.size();
+            }
+
+            selected = new ArrayList<>();
+            selected.addAll(selectRandom(easyQuestions, easyCount, random));
+            selected.addAll(selectRandom(mediumQuestions, mediumCount, random));
+            selected.addAll(selectRandom(hardQuestions, hardCount, random));
+
+        } else {
+            Difficulty difficulty = Difficulty.valueOf(difficultyLevel.toUpperCase());
+            List<Question> candidates = new ArrayList<>(filterByDifficulty(allQuestions, difficulty.name()));
+
+            if (candidates.size() < questionCount) {
+                List<Difficulty> others = difficulty.getLessDifficultyThanThis();
+
+                int i = others.size() - 1;
+                while (i-- >= 0 && candidates.size() < questionCount) {
+                    candidates.addAll(filterByDifficulty(allQuestions, others.get(i).name()));
+                }
+            }
+
+            if (candidates.size() < questionCount) {
+                for (Difficulty d : Difficulty.values()) {
+                    List<Question> questions = filterByDifficulty(allQuestions, d.name());
+                    for (Question q : questions) {
+                        if (candidates.stream().noneMatch(c -> c.getId().equals(q.getId()))) {
+                            candidates.add(q);
+                        }
+
+                        if (candidates.size() >= questionCount) break;
+                    }
+
+                    if (candidates.size() >= questionCount) break;
+                }
+            }
+
+            selected = selectRandom(candidates, questionCount, random);
+        }
 
         Collections.shuffle(selected, random);
-
         return selected;
     }
 
@@ -307,12 +329,22 @@ public class AttemptService implements AttemptUseCase {
     }
 
     private List<UUID> selectRandom(List<Question> questions, int count, Random random) {
+        if (questions.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        if (questions.size() <= count) {
+            return questions.stream()
+                    .map(Question::getId)
+                    .collect(Collectors.toList());
+        }
+
         var shuffled = new ArrayList<>(questions);
         Collections.shuffle(shuffled, random);
         return shuffled.stream()
                 .limit(count)
                 .map(Question::getId)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private void ensureTimerInitialized(Attempt attempt, Integer limitSeconds) {

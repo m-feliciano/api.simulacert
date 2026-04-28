@@ -10,7 +10,7 @@ public record StartAttemptRequest(
         @NotNull UUID examId,
         @NotNull int questionCount,
         @NotNull @Positive Integer limitSeconds,
-        String difficult
+        String difficulty
 ) {
 
     public StartAttemptRequest(UUID userId, UUID examId, int questionCount, Integer limitSeconds) {

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +37,7 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself"),
             @ApiResponse(responseCode = "404", description = "Exam not found")
     })
-    ResponseEntity<Void> startAttempt(@RequestBody StartAttemptRequest request);
+    ResponseEntity<Void> startAttempt(@RequestBody @Valid StartAttemptRequest request);
 
     @Operation(
             summary = "Finish exam attempt",
