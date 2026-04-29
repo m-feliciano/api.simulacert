@@ -9,11 +9,11 @@ COPY gradlew .
 COPY settings.gradle build.gradle ./
 COPY app/build.gradle app/
 
+COPY . .
+
 RUN chmod +x gradlew
 
 RUN ./gradlew dependencies --no-daemon
-
-COPY . .
 
 RUN ./gradlew :app:bootJar \
   --no-daemon \
