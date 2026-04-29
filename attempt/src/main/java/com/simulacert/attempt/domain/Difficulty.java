@@ -8,6 +8,7 @@ import java.util.List;
 
 @AllArgsConstructor
 public enum Difficulty {
+    ANY(0),
     EASY(1),
     MEDIUM(2),
     HARD(3);
@@ -19,6 +20,7 @@ public enum Difficulty {
 
     public List<Difficulty> getLessDifficultyThanThis() {
         return Arrays.stream(VALUES)
+                .filter(d -> d != ANY)
                 .filter(d -> d.level < this.level)
                 .toList();
     }
