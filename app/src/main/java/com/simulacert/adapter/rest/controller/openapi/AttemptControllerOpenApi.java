@@ -1,10 +1,10 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
-import com.simulacert.attempt.application.dto.AttemptResponse;
-import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,6 +38,17 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Exam not found")
     })
     ResponseEntity<Void> startAttempt(@RequestBody @Valid StartAttemptRequest request);
+
+    @Operation(summary = "Retake exam attempt",
+            description = "Allows a user to retake an exam by starting a new attempt based on a previous attempt. The new attempt will have the same exam and user, but a new start time and reset score. This is useful for allowing users to retry exams while keeping a history of their attempts.",
+            security = @SecurityRequirement(name = "bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Attempt started successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid request data"),
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself"),
+            @ApiResponse(responseCode = "404", description = "Exam not found")
+    })
+    AttemptResponse retakeAttempt(@PathVariable UUID attemptId);
 
     @Operation(
             summary = "Finish exam attempt",

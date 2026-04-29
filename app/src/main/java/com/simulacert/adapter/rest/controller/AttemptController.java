@@ -1,21 +1,22 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.AttemptControllerOpenApi;
-import com.simulacert.attempt.application.dto.AttemptResponse;
-import com.simulacert.attempt.application.dto.StartAttemptRequest;
-import com.simulacert.attempt.mapper.AttemptMapper;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import com.simulacert.attempt.application.port.in.AnswerUseCase;
 import com.simulacert.attempt.application.port.in.AttemptUseCase;
+import com.simulacert.attempt.mapper.AttemptMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -159,6 +160,15 @@ public class AttemptController implements AttemptControllerOpenApi {
     public ResponseEntity<AttemptTimingResponse> heartbeatAttempt(@PathVariable UUID attemptId) {
         log.debug("Heartbeat attempt {}", attemptId);
         return ResponseEntity.ok(useCase.heartbeatAttempt(attemptId));
+    }
+
+    @Override
+    @PostMapping("/{attemptId}/retake")
+    @ResponseStatus(HttpStatus.OK)
+    @PostAuthorize("returnObject.userId() == authentication.principal.id or hasRole('ADMIN')")
+    public AttemptResponse retakeAttempt(@PathVariable UUID attemptId) {
+        log.debug("Heartbeat attempt {}", attemptId);
+        return useCase.retakeAttempt(attemptId);
     }
 }
 

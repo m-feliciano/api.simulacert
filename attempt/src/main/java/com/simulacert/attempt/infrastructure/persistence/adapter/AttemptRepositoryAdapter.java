@@ -42,5 +42,10 @@ public class AttemptRepositoryAdapter implements AttemptRepositoryPort {
     public List<Attempt> findByStatusAndStartedAtBefore(AttemptStatus attemptStatus, Instant cutoff) {
         return repository.findByStatusAndStartedAtBefore(attemptStatus, cutoff);
     }
+
+    @Override
+    public int countByStatus(UUID userId, AttemptStatus attemptStatus) {
+        return repository.countByStatus(userId, attemptStatus);
+    }
 }
 

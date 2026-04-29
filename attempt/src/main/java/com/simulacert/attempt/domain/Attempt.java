@@ -1,6 +1,7 @@
 package com.simulacert.attempt.domain;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -210,5 +211,20 @@ public class Attempt {
         if (this.status != AttemptStatus.IN_PROGRESS) {
             throw new IllegalStateException("Attempt must be IN_PROGRESS");
         }
+    }
+
+    public AttemptResponse toResponse() {
+        return new AttemptResponse(
+                id,
+                userId,
+                examId,
+                status,
+                startedAt,
+                finishedAt,
+                score,
+                new ArrayList<>(questionIds),
+                seed,
+                endsAt
+        );
     }
 }

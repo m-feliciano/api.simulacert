@@ -18,5 +18,7 @@ public interface AttemptRepositoryPort {
     List<Attempt> findByUserIdOrderByStartedAtDesc(UUID userId);
 
     List<Attempt> findByStatusAndStartedAtBefore(AttemptStatus attemptStatus, Instant cutoff);
+
+    int countByStatus(UUID userId, AttemptStatus attemptStatus);
 }
 

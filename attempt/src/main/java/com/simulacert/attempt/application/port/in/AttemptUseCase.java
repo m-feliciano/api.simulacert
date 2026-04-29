@@ -1,6 +1,7 @@
 package com.simulacert.attempt.application.port.in;
 
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.StartAttemptRequest;
@@ -27,4 +28,6 @@ public interface AttemptUseCase {
     List<AttemptVo> getAttemptsByUser(UUID userId);
 
     List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId);
+
+    AttemptResponse retakeAttempt(UUID attemptId);
 }

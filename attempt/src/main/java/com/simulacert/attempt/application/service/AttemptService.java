@@ -1,6 +1,7 @@
 package com.simulacert.attempt.application.service;
 
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.QuestionOption;
@@ -42,9 +43,9 @@ import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
 public class AttemptService implements AttemptUseCase {
 
     private static final int MIN_QUESTION_COUNT = 10;
-    private static final int MAX_QUESTION_COUNT = 100;
+    private static final int MAX_QUESTION_COUNT = 65;
 
-    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofHours(4).toSeconds();
+    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofMinutes(150).toSeconds();
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;
@@ -236,6 +237,29 @@ public class AttemptService implements AttemptUseCase {
                     );
                 })
                 .toList();
+    }
+
+    @Override
+    @XRaySubsegment("attempt.retakeAttempt")
+    public AttemptResponse retakeAttempt(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        if (attemptRepository.countByStatus(attempt.getUserId(), IN_PROGRESS) > 5) {
+            throw new IllegalStateException("User has too many in-progress attempts");
+        }
+
+        Attempt newAttempt = Attempt.create(
+                attempt.getUserId(),
+                attempt.getExamId(),
+                attempt.getQuestionIds(),
+                clock.now(),
+                new Random().nextLong()
+        );
+
+        newAttempt.initTimer(MAX_ATTEMPT_DURATION_SECONDS);
+        attemptRepository.save(newAttempt);
+        return newAttempt.toResponse();
     }
 
     private void validateQuestionCount(int questionCount) {
