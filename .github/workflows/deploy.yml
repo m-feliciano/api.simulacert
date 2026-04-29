@@ -33,8 +33,11 @@ jobs:
       - name: Build JAR
         run: ./gradlew :app:bootJar
 
+      - name: Verificar artefato gerado
+        run: ls -lh app/build/libs
+
       - name: Copiar JAR para raiz do projeto
-        run: cp app/build/libs/*.jar app.jar
+        run: cp app/build/libs/*.jar ./app.jar
 
       - name: Login no ECR
         uses: aws-actions/amazon-ecr-login@v2
