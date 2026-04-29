@@ -21,17 +21,17 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Login no ECR
-        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build e push (ARM64)
         run: |
           docker buildx build \
-            --builder multiarch \
             --platform linux/arm64 \
             --push \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${GITHUB_SHA} \
+            -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
             .
