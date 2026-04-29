@@ -1,18 +1,10 @@
-FROM gradle:8.11-jdk21 AS build
-WORKDIR /app
-
-COPY . .
-
-RUN chmod +x gradlew
-RUN ./gradlew :app:bootJar --build-cache
-
 FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-COPY --from=build /app/app/build/libs/*.jar app.jar
+COPY app.jar app.jar
 COPY conteudo/ /conteudo/
 
 EXPOSE 8080
