@@ -13,8 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Configurar AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
@@ -22,36 +21,17 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Dar permissão ao gradlew
-        run: chmod +x gradlew
-
-      - name: Build JAR
-        run: ./gradlew :app:bootJar
-
-      - name: Copiar artefato para contexto Docker
-        run: cp app/build/libs/*.jar app.jar
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Login no ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Criar builder multiarch
-        run: docker buildx create --use --name multiarch || true
-
-      - name: Build e push (ARM64 garantido)
+      - name: Build e push (ARM64)
         run: |
           docker buildx build \
             --builder multiarch \
             --platform linux/arm64 \
             --push \
-            -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${GITHUB_SHA} \
             .
