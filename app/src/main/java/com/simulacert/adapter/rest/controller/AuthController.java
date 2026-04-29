@@ -65,6 +65,7 @@ public class AuthController implements AuthControllerOpenApi {
 
     @Override
     @GetMapping("/users/{userId}")
+    @PreAuthorize("hasRole('ADMIN') or #userId == principal.id")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId) {
         log.debug("Get user by id: {}", userId);
 
@@ -94,6 +95,7 @@ public class AuthController implements AuthControllerOpenApi {
     }
 
     @PutMapping("/users/{userId}/password")
+    @PreAuthorize("hasRole('USER') and #userId == principal.id")
     public ResponseEntity<Void> changePassword(
             @PathVariable UUID userId,
             @Valid @RequestBody ChangePasswordRequest request) {
