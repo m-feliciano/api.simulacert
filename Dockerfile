@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 
 RUN chmod +x gradlew
-RUN ./gradlew :app:bootJar --no-daemon
+RUN ./gradlew :app:bootJar --build-cache
 
 FROM eclipse-temurin:21-jre-jammy
 
