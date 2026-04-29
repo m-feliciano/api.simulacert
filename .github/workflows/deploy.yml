@@ -27,18 +27,20 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Garantir permissão do gradlew
+      - name: Dar permissão ao gradlew
         run: chmod +x gradlew
 
       - name: Build JAR
         run: ./gradlew :app:bootJar
 
-      - name: Renomear artefato
-        run: |
-          cp app/build/libs/*.jar app.jar
+      - name: Copiar JAR para raiz do projeto
+        run: cp app/build/libs/*.jar app.jar
 
       - name: Login no ECR
-        uses: aws-actions/amazon-ecr-login@v1
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build e push Docker (ARM64)
         run: |
