@@ -32,10 +32,29 @@ services:
     networks:
       - simulacert-network
 
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
   xray-daemon:
     image: public.ecr.aws/xray/aws-xray-daemon
     environment:
       - AWS_REGION=us-east-1
+
+    networks:
+      - simulacert-network
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    command: >
+      --interval 300
+      --label-enable
+      --cleanup
 
     networks:
       - simulacert-network
