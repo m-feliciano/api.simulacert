@@ -9,12 +9,15 @@ COPY conteudo/ /conteudo/
 
 EXPOSE 8080
 
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://localhost:8080/actuator/health/liveness || exit 1
+
 USER appuser
 
-ENTRYPOINT ["java", \
-  "-XX:+HeapDumpOnOutOfMemoryError", \
-  "-XX:+ExitOnOutOfMemoryError", \
-  "-Dfile.encoding=UTF-8", \
-  "-Duser.timezone=UTC", \
-  "-jar", \
+ENTRYPOINT ["java",
+  "-XX:+HeapDumpOnOutOfMemoryError",
+  "-XX:+ExitOnOutOfMemoryError",
+  "-Dfile.encoding=UTF-8",
+  "-Duser.timezone=UTC",
+  "-jar",
   "app.jar"]
