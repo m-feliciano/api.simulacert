@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Configurar AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
@@ -33,11 +34,8 @@ jobs:
       - name: Build JAR
         run: ./gradlew :app:bootJar
 
-      - name: Verificar artefato gerado
-        run: ls -lh app/build/libs
-
-      - name: Copiar JAR para raiz do projeto
-        run: cp app/build/libs/*.jar ./app.jar
+      - name: Copiar artefato para contexto Docker
+        run: cp app/build/libs/*.jar app.jar
 
       - name: Login no ECR
         uses: aws-actions/amazon-ecr-login@v2
@@ -45,10 +43,15 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build e push Docker (ARM64)
+      - name: Criar builder multiarch
+        run: docker buildx create --use --name multiarch || true
+
+      - name: Build e push (ARM64 garantido)
         run: |
           docker buildx build \
+            --builder multiarch \
             --platform linux/arm64 \
+            --push \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${GITHUB_SHA} \
-            --push .
+            .
