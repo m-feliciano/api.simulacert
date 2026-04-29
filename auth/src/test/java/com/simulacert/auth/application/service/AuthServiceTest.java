@@ -12,6 +12,8 @@ import com.simulacert.auth.application.port.out.UserRepositoryPort;
 import com.simulacert.auth.domain.User;
 import com.simulacert.auth.domain.UserRole;
 import com.simulacert.common.ClockPort;
+import com.simulacert.exception.ForbiddenException;
+import com.simulacert.exception.UnauthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -99,7 +101,7 @@ class AuthServiceTest {
         when(userRepository.existsByEmail(request.email())).thenReturn(true);
 
         assertThatThrownBy(() -> authService.register(request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessage("Email already registered");
 
         verify(userRepository).existsByEmail(request.email());
@@ -153,7 +155,7 @@ class AuthServiceTest {
         when(passwordEncoder.matches(request.password(), testUser.getPasswordHash())).thenReturn(false);
 
         assertThatThrownBy(() -> authService.login(request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(UnauthorizedException.class)
                 .hasMessage("Invalid email or password");
 
         verify(passwordEncoder).matches(request.password(), testUser.getPasswordHash());
@@ -169,7 +171,7 @@ class AuthServiceTest {
         when(userRepository.findByEmail(request.email())).thenReturn(Optional.of(testUser));
 
         assertThatThrownBy(() -> authService.login(request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(ForbiddenException.class)
                 .hasMessage("Account is deactivated");
 
         verify(userRepository).findByEmail(request.email());
@@ -242,7 +244,7 @@ class AuthServiceTest {
         when(passwordEncoder.matches(request.currentPassword(), testUser.getPasswordHash())).thenReturn(false);
 
         assertThatThrownBy(() -> authService.changePassword(userId, request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(UnauthorizedException.class)
                 .hasMessage("Current password is incorrect");
 
         verify(userRepository, never()).save(any());

@@ -7,6 +7,7 @@ import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.exam.domain.QuestionOption;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import com.simulacert.llm.application.dto.LLMRequest;
 import com.simulacert.llm.application.dto.LLMResult;
@@ -16,6 +17,7 @@ import com.simulacert.llm.application.port.in.QuestionExplanationUseCase;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.llm.application.port.out.QuestionExplanationRunRepositoryPort;
 import com.simulacert.llm.domain.QuestionExplanationRun;
+import com.simulacert.service.XRayTracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,8 +36,8 @@ import java.util.stream.Collectors;
 public class QuestionExplanationService implements QuestionExplanationUseCase {
     private static final String PROMPT_VERSION = "v1.0";
     private static final Double TEMPERATURE = 0.25;
-    private static final Integer MAX_TOKENS = 400;
-    private static final Duration EXPIRATION_DURATION = Duration.ofDays(15);
+    private static final Integer MAX_TOKENS = 500;
+    private static final Duration EXPIRATION_DURATION = Duration.ofDays(30);
 
     private final AttemptRepositoryPort attemptRepository;
     private final QuestionRepositoryPort questionRepository;
@@ -43,18 +45,23 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private final ExplanationLLMPort llmProvider;
     private final ClockPort clock;
     private final ExplanationCacheService cacheService;
+    private final XRayTracingService xray;
 
     @Override
     @Transactional
+    @XRaySubsegment("llm.requestExplanation")
     public ExplanationResponse requestExplanation(RequestExplanationCommand command, UUID userId) {
+        xray.putAnnotation("attemptId", command.examAttemptId());
+        xray.putAnnotation("questionId", command.questionId());
         log.info("Requesting explanation for question {} by user {}", command.questionId(), userId);
 
         validateExplanationRequest(command, userId);
 
-        Optional<QuestionExplanationRun> explanation = explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), command.language());
+        Optional<QuestionExplanationRun> explanation = explanationRunRepository
+                .findByQuestionIdAndLanguage(command.questionId(), command.language());
+
         if (explanation.isPresent()) {
             log.info("Returning existing explanation from DB for question {}", command.questionId());
-
             QuestionExplanationRun run = explanation.get();
             return new ExplanationResponse(
                     run.getId(),
@@ -82,7 +89,9 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment("llm.submitFeedback")
     public void submitFeedback(UUID explanationId, SubmitFeedbackCommand command) {
+        xray.putAnnotation("explanationId", explanationId);
         log.info("Submitting feedback for explanation {}", explanationId);
 
         QuestionExplanationRun explanationRun = explanationRunRepository.findById(explanationId)
@@ -150,7 +159,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 - Do not restate the question or options
                 - Do not mention exams strategies or personal opinions
                 - Do not mention that you are an AI
-                - Write in %s
+                - Write in %s language
                 - Cover ALL options listed
                 - Be concise and technical (4–8 sentences per option)
                 

@@ -5,7 +5,6 @@ import com.simulacert.exam.application.dto.request.ExamImportDto;
 import com.simulacert.exam.application.dto.request.OptionImportDto;
 import com.simulacert.exam.application.dto.request.QuestionImportDto;
 import com.simulacert.exam.application.dto.request.UpdateExamRequest;
-import com.simulacert.exam.application.dto.response.ExamImportResponse;
 import com.simulacert.exam.application.dto.response.ExamResponse;
 import com.simulacert.exam.application.mapper.ExamMapper;
 import com.simulacert.exam.application.port.out.ExamRepositoryPort;
@@ -216,31 +215,22 @@ class ExamServiceTest {
     @Test
     @DisplayName("Should import exam successfully")
     void shouldImportExamSuccessfully() {
-        List<OptionImportDto> options = List.of(
-                new OptionImportDto("A", "Option A", false),
-                new OptionImportDto("B", "Option B", true)
-        );
-
-        List<QuestionImportDto> questions = List.of(
-                new QuestionImportDto("Question 1?", "EASY", "AWS", options),
-                new QuestionImportDto("Question 2?", "MEDIUM", "AWS", options)
-        );
-
-        ExamImportDto importDto = new ExamImportDto("Imported Exam", "Description", "imported-exam-slug", questions);
-
-        Question mockQuestion = Question.create(examId, "Question 1?", "AWS", "EASY");
+        Question mockQuestion = Question.create(examId, "Question 1?", "AWS", "EASY", "Q001");
 
         when(examRepository.save(any(Exam.class))).thenReturn(testExam);
         when(questionRepository.save(any(Question.class))).thenReturn(mockQuestion);
         when(questionOptionRepository.saveAll(anyList())).thenReturn(List.of());
 
-        ExamImportResponse response = examService.importExam(importDto);
+        QuestionImportDto question = new QuestionImportDto("Option 1", "Mock 1", "AWS", "Q001",
+                List.of(
+                        new OptionImportDto("Option A", "Mock 1", true),
+                        new OptionImportDto("Option B", "Mock 1", false)
+                ));
+        var examImportDto = new ExamImportDto("Imported Exam", "Description", "imported-slug",
+                List.of(question, question));
 
-        assertThat(response).isNotNull();
-        assertThat(response.examId()).isEqualTo(examId);
-        assertThat(response.title()).isEqualTo("Test Exam");
-        assertThat(response.questionsImported()).isEqualTo(2);
-        assertThat(response.status()).isEqualTo("SUCCESS");
+        examService.importExams(List.of(examImportDto));
+
         verify(examRepository).save(any(Exam.class));
         verify(questionRepository, times(2)).save(any(Question.class));
         verify(questionOptionRepository, times(2)).saveAll(anyList());

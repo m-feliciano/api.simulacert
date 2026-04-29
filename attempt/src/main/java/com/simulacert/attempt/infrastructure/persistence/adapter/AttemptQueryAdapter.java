@@ -4,6 +4,7 @@ import com.simulacert.attempt.application.port.out.AttemptQueryPort;
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.infrastructure.persistence.repository.AnswerRepository;
 import com.simulacert.attempt.infrastructure.persistence.repository.AttemptRepository;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,7 @@ public class AttemptQueryAdapter implements AttemptQueryPort {
     }
 
     @Override
+    @XRaySubsegment("db.attempt.countCorrectAnswers")
     public long countCorrectAnswers(UUID attemptId) {
         return answerRepository.countCorrectAnswersByAttemptId(attemptId);
     }

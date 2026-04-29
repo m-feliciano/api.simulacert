@@ -70,64 +70,16 @@
         },
         "responses": {
           "201": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttemptResponse"
-                }
-              }
-            },
             "description": "Attempt started successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid request data"
           },
           "403": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttemptResponse"
-                }
-              }
-            },
             "description": "Not authorized - can only start attempts for yourself"
           },
           "404": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/AttemptResponse"
-                }
-              }
-            },
             "description": "Exam not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -171,16 +123,6 @@
             },
             "description": "User attempts retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -206,26 +148,6 @@
               }
             },
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -266,16 +188,6 @@
             },
             "description": "Attempt found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -295,26 +207,6 @@
               }
             },
             "description": "Attempt not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -323,6 +215,61 @@
           }
         ],
         "summary": "Get attempt by ID",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/answers": {
+      "get": {
+        "description": "Retrieves the submitted answer for a specific attempt.",
+        "operationId": "getAnswer",
+        "parameters": [
+          {
+            "description": "Attempt ID",
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnswerResponse"
+                  }
+                }
+              }
+            },
+            "description": "Answer retrieved successfully"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnswerResponse"
+                  }
+                }
+              }
+            },
+            "description": "Answer not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get answer for attempt",
         "tags": [
           "Attempts"
         ]
@@ -356,38 +303,8 @@
           "204": {
             "description": "Answer deleted successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Attempt or question not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -438,37 +355,10 @@
             "description": "Answer submitted successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid answer data"
           },
           "404": {
             "description": "Attempt or question not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -502,38 +392,8 @@
           "204": {
             "description": "Attempt cancelled successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Attempt not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -578,7 +438,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
+                  "$ref": "#/components/schemas/AttemptResponse"
                 }
               }
             },
@@ -593,26 +453,6 @@
               }
             },
             "description": "Attempt not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -621,6 +461,122 @@
           }
         ],
         "summary": "Finish exam attempt",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/heartbeat": {
+      "post": {
+        "description": "Updates/returns timer state for an attempt (keep-alive)",
+        "operationId": "heartbeatAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Heartbeat OK"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not in progress"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Attempt heartbeat",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/pause": {
+      "post": {
+        "description": "Pauses the server-authoritative timer for an in-progress attempt",
+        "operationId": "pauseAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt paused"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not in progress"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Pause attempt timer",
         "tags": [
           "Attempts"
         ]
@@ -655,16 +611,6 @@
             },
             "description": "Attempt questions retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "404": {
             "content": {
               "*/*": {
@@ -677,26 +623,6 @@
               }
             },
             "description": "Attempt not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -705,6 +631,142 @@
           }
         ],
         "summary": "Get attempt questions",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/resume": {
+      "post": {
+        "description": "Resumes the server-authoritative timer for a paused attempt",
+        "operationId": "resumeAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt resumed"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptTimingResponse"
+                }
+              }
+            },
+            "description": "Attempt not paused or not in progress"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Resume attempt timer",
+        "tags": [
+          "Attempts"
+        ]
+      }
+    },
+    "/api/v1/attempts/{attemptId}/retake": {
+      "post": {
+        "description": "Allows a user to retake an exam by starting a new attempt based on a previous attempt. The new attempt will have the same exam and user, but a new start time and reset score. This is useful for allowing users to retry exams while keeping a history of their attempts.",
+        "operationId": "retakeAttempt",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "attemptId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResponse"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "201": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResponse"
+                }
+              }
+            },
+            "description": "Attempt started successfully"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResponse"
+                }
+              }
+            },
+            "description": "Invalid request data"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResponse"
+                }
+              }
+            },
+            "description": "Not authorized - can only start attempts for yourself"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttemptResponse"
+                }
+              }
+            },
+            "description": "Exam not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Retake exam attempt",
         "tags": [
           "Attempts"
         ]
@@ -735,16 +797,6 @@
             },
             "description": "Login successful"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "401": {
             "content": {
               "*/*": {
@@ -764,26 +816,6 @@
               }
             },
             "description": "User account is inactive"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "User login",
@@ -807,16 +839,6 @@
             },
             "description": "Current user retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "401": {
             "content": {
               "*/*": {
@@ -826,26 +848,6 @@
               }
             },
             "description": "Unauthorized - Invalid or missing token"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -865,36 +867,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "tags": [
@@ -925,36 +897,6 @@
               }
             },
             "description": "OK"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "tags": [
@@ -985,36 +927,6 @@
               }
             },
             "description": "OK"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "tags": [
@@ -1048,34 +960,7 @@
             "description": "User registered successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid input data or email already exists"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Register new user",
@@ -1100,36 +985,6 @@
               }
             },
             "description": "OK"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "tags": [
@@ -1151,36 +1006,6 @@
               }
             },
             "description": "Anonymous user created successfully"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1220,16 +1045,6 @@
             },
             "description": "User found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -1249,26 +1064,6 @@
               }
             },
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1309,16 +1104,6 @@
             },
             "description": "User found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "404": {
             "content": {
               "*/*": {
@@ -1328,26 +1113,6 @@
               }
             },
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1381,41 +1146,11 @@
           "204": {
             "description": "User activated successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "description": "Not authorized - Admin role required"
           },
           "404": {
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1449,41 +1184,11 @@
           "204": {
             "description": "User deactivated successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "description": "Not authorized - Admin role required"
           },
           "404": {
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1528,37 +1233,10 @@
             "description": "Password changed successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid old password"
           },
           "404": {
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1589,36 +1267,6 @@
               }
             },
             "description": "List of exams retrieved successfully"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Get all exams",
@@ -1644,37 +1292,10 @@
             "description": "Exam created successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid input data"
           },
           "403": {
             "description": "Not authorized - Admin role required"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -1708,70 +1329,16 @@
         ],
         "responses": {
           "201": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExamImportResponse"
-                }
-              }
-            },
             "description": "Exams imported successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid file format"
           },
           "401": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExamImportResponse"
-                  }
-                }
-              }
-            },
             "description": "Not authenticated"
           },
           "403": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExamImportResponse"
-                  }
-                }
-              }
-            },
             "description": "Not authorized (requires ADMIN role)"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Import exams from JSON files",
@@ -1786,70 +1353,16 @@
         "operationId": "importFromDirectory",
         "responses": {
           "201": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExamImportResponse"
-                }
-              }
-            },
             "description": "Exams imported successfully from directory"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "401": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExamImportResponse"
-                  }
-                }
-              }
-            },
             "description": "Not authenticated"
           },
           "403": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExamImportResponse"
-                  }
-                }
-              }
-            },
             "description": "Not authorized (requires ADMIN role)"
           },
           "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Error accessing directory"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Import exams from directory",
@@ -1884,16 +1397,6 @@
             },
             "description": "Exam found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "404": {
             "content": {
               "*/*": {
@@ -1903,26 +1406,6 @@
               }
             },
             "description": "Exam not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Get exam by slug",
@@ -1951,41 +1434,11 @@
           "204": {
             "description": "Exam deleted successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "description": "Not authorized - Admin role required"
           },
           "404": {
             "description": "Exam not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2024,16 +1477,6 @@
             },
             "description": "Exam found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "404": {
             "content": {
               "*/*": {
@@ -2043,26 +1486,6 @@
               }
             },
             "description": "Exam not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Get exam by ID",
@@ -2106,16 +1529,6 @@
             },
             "description": "Exam updated successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -2135,26 +1548,6 @@
               }
             },
             "description": "Exam not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2194,36 +1587,6 @@
               }
             },
             "description": "Existence check completed"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Check if exam exists",
@@ -2263,13 +1626,6 @@
             "description": "Feedback submitted successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid rating or feedback"
           },
           "401": {
@@ -2277,26 +1633,6 @@
           },
           "404": {
             "description": "Explanation not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2329,37 +1665,10 @@
             "description": "Question created successfully"
           },
           "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
             "description": "Invalid request data"
           },
           "401": {
             "description": "Not authenticated"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "summary": "Create a new question",
@@ -2404,16 +1713,6 @@
             },
             "description": "Questions retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "401": {
             "content": {
               "*/*": {
@@ -2423,26 +1722,6 @@
               }
             },
             "description": "Not authenticated"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2483,16 +1762,6 @@
             },
             "description": "Question found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "401": {
             "content": {
               "*/*": {
@@ -2512,26 +1781,6 @@
               }
             },
             "description": "Question not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2586,7 +1835,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
+                  "$ref": "#/components/schemas/ExplanationResponse"
                 }
               }
             },
@@ -2621,26 +1870,6 @@
               }
             },
             "description": "Question or attempt not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2683,7 +1912,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
+                  "$ref": "#/components/schemas/ReviewResponse"
                 }
               }
             },
@@ -2708,26 +1937,6 @@
               }
             },
             "description": "Review already exists for this attempt"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2768,16 +1977,6 @@
             },
             "description": "Review found"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "401": {
             "content": {
               "*/*": {
@@ -2797,26 +1996,6 @@
               }
             },
             "description": "Review not found for this attempt"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2857,16 +2036,6 @@
             },
             "description": "User statistics retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -2886,26 +2055,6 @@
               }
             },
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -2949,16 +2098,6 @@
             },
             "description": "Domain statistics retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -2984,26 +2123,6 @@
               }
             },
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -3047,16 +2166,6 @@
             },
             "description": "Attempt history retrieved successfully"
           },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Bad Request"
-          },
           "403": {
             "content": {
               "*/*": {
@@ -3082,26 +2191,6 @@
               }
             },
             "description": "User not found"
-          },
-          "500": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Internal Server Error"
-          },
-          "501": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiErrorResponse"
-                }
-              }
-            },
-            "description": "Not Implemented"
           }
         },
         "security": [
@@ -3118,21 +2207,19 @@
   },
   "components": {
     "schemas": {
-      "ApiErrorResponse": {
+      "AnswerResponse": {
         "type": "object",
         "properties": {
-          "code": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          },
-          "path": {
-            "type": "string"
-          },
-          "timestamp": {
+          "answeredAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "questionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "selectedOption": {
+            "type": "string"
           }
         }
       },
@@ -3197,6 +2284,10 @@
       "AttemptResponse": {
         "type": "object",
         "properties": {
+          "endsAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "examId": {
             "type": "string",
             "format": "uuid"
@@ -3239,6 +2330,24 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "AttemptTimingResponse": {
+        "type": "object",
+        "properties": {
+          "endsAt": {
+            "type": "string"
+          },
+          "paused": {
+            "type": "boolean"
+          },
+          "pausedAt": {
+            "type": "string"
+          },
+          "remainingSeconds": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -3382,32 +2491,13 @@
           "rating"
         ]
       },
-      "ExamImportResponse": {
-        "type": "object",
-        "properties": {
-          "examId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "questionsImported": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "status": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          }
-        }
-      },
       "ExamResponse": {
         "type": "object",
         "properties": {
           "description": {
             "type": "string"
           },
-          "difficultyLevel": {
+          "difficulty": {
             "type": "string"
           },
           "durationMinutes": {
@@ -3709,9 +2799,16 @@
       "StartAttemptRequest": {
         "type": "object",
         "properties": {
+          "difficulty": {
+            "type": "string"
+          },
           "examId": {
             "type": "string",
             "format": "uuid"
+          },
+          "limitSeconds": {
+            "type": "integer",
+            "format": "int32"
           },
           "questionCount": {
             "type": "integer",
@@ -3721,7 +2818,13 @@
             "type": "string",
             "format": "uuid"
           }
-        }
+        },
+        "required": [
+          "examId",
+          "limitSeconds",
+          "questionCount",
+          "userId"
+        ]
       },
       "SubmitAnswerRequest": {
         "type": "object",

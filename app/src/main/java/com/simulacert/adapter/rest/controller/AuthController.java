@@ -1,7 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.AuthControllerOpenApi;
-import com.simulacert.adapter.rest.dto.RefreshTokenRequest;
+import com.simulacert.auth.application.dto.RefreshTokenRequest;
 import com.simulacert.auth.application.dto.AuthResponse;
 import com.simulacert.auth.application.dto.ChangePasswordRequest;
 import com.simulacert.auth.application.dto.LoginRequest;

@@ -20,6 +20,10 @@ public record QuestionImportDto(
         @Size(max = 100, message = "Domain must not exceed 100 characters")
         String domain,
 
+        @NotBlank(message = "Code is required")
+        @Size(max = 20, message = "Code must not exceed 20 characters")
+        String code,
+
         @NotEmpty(message = "Options are required")
         @Valid
         List<OptionImportDto> options

@@ -1,4 +1,4 @@
-package com.simulacert.adapter.persistence.repository;
+package com.simulacert.llm.persistence.repository;
 
 import com.simulacert.llm.domain.QuestionExplanationRun;
 import org.springframework.data.jpa.repository.JpaRepository;

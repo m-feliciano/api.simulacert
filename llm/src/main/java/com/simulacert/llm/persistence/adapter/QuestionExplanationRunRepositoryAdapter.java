@@ -1,6 +1,6 @@
-package com.simulacert.adapter.persistence.adapter;
+package com.simulacert.llm.persistence.adapter;
 
-import com.simulacert.adapter.persistence.repository.QuestionExplanationRunRepository;
+import com.simulacert.llm.persistence.repository.QuestionExplanationRunRepository;
 import com.simulacert.common.ClockPort;
 import com.simulacert.llm.application.port.out.QuestionExplanationRunRepositoryPort;
 import com.simulacert.llm.domain.QuestionExplanationRun;

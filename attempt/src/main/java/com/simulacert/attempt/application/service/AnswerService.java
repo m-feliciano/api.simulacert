@@ -1,5 +1,6 @@
 package com.simulacert.attempt.application.service;
 
+import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 import com.simulacert.attempt.application.port.in.AnswerUseCase;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
@@ -8,11 +9,14 @@ import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
 import com.simulacert.common.ClockPort;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
+import com.simulacert.service.XRayTracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -23,10 +27,14 @@ public class AnswerService implements AnswerUseCase {
     private final AnswerRepositoryPort answerRepository;
     private final AttemptRepositoryPort attemptRepository;
     private final ClockPort clock;
+    private final XRayTracingService xray;
 
     @Override
     @Transactional
+    @XRaySubsegment("attempt.submitAnswer")
     public void submitAnswer(UUID attemptId, UUID questionId, SubmitAnswerRequest request) {
+        xray.putAnnotation("attemptId", attemptId);
+        xray.putAnnotation("questionId", questionId);
         log.info("Submitting answer for attempt {} question {}", attemptId, questionId);
 
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -53,7 +61,10 @@ public class AnswerService implements AnswerUseCase {
 
     @Override
     @Transactional
+    @XRaySubsegment("attempt.deleteAnswer")
     public void deleteAnswer(UUID attemptId, UUID questionId) {
+        xray.putAnnotation("attemptId", attemptId);
+        xray.putAnnotation("questionId", questionId);
         log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
 
         if (answerRepository.existsByAttemptIdAndQuestionId(attemptId, questionId)) {
@@ -63,6 +74,17 @@ public class AnswerService implements AnswerUseCase {
         } else {
             log.info("No answer found for attempt {} question {}, nothing to delete", attemptId, questionId);
         }
+    }
+
+    @Override
+    @XRaySubsegment("attempt.getAnswer")
+    public List<AnswerResponse> getAnswer(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
+        log.debug("Getting answer for attempt {}", attemptId);
+
+        return answerRepository.findByAttemptId(attemptId).stream()
+                .map(AnswerResponse::from)
+                .toList();
     }
 }
 

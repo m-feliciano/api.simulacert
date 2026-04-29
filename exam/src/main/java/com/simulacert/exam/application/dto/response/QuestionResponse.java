@@ -9,6 +9,7 @@ public record QuestionResponse(
         String text,
         String domain,
         String difficulty,
+        String code,
         List<QuestionOptionResponse> options
 ) {
 }

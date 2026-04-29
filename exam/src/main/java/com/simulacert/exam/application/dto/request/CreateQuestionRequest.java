@@ -24,6 +24,10 @@ public record CreateQuestionRequest(
         @Size(max = 50, message = "Difficulty must not exceed 50 characters")
         String difficulty,
 
+        @NotBlank(message = "Code is required")
+        @Size(max = 20, message = "Code must not exceed 20 characters")
+        String code,
+
         @NotEmpty(message = "Options are required")
         List<QuestionOptionDto> options
 ) {

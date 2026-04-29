@@ -1,8 +1,9 @@
-package com.simulacert.config.security;
+package com.simulacert.security;
 
 import com.simulacert.auth.application.port.out.TokenProviderPort;
 import com.simulacert.auth.application.port.out.UserRepositoryPort;
 import com.simulacert.auth.domain.User;
+import com.simulacert.util.UserContextHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -67,13 +68,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserContextHolder.setUser(userId);
 
         } catch (Exception ex) {
             SecurityContextHolder.clearContext();
             log.warn("JWT authentication failed: {}", ex.getMessage());
         }
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            UserContextHolder.clear();
+        }
     }
 
 

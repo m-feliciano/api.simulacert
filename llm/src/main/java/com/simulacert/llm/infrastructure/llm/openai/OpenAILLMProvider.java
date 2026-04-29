@@ -1,5 +1,6 @@
 package com.simulacert.llm.infrastructure.llm.openai;
 
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.llm.application.dto.LLMRequest;
 import com.simulacert.llm.application.dto.LLMResult;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
@@ -35,6 +36,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
     }
 
     @Override
+    @XRaySubsegment("ext.openai.chat.completions")
     public LLMResult generate(LLMRequest request) {
         log.info("Calling OpenAI API with model: {}", properties.getModel());
         log.debug("Temperature: {}, Max Tokens: {}", request.temperature(), request.maxTokens());

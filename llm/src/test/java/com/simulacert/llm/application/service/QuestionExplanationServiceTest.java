@@ -15,6 +15,7 @@ import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.llm.application.port.out.QuestionExplanationRunRepositoryPort;
 import com.simulacert.llm.domain.QuestionExplanationRun;
+import com.simulacert.service.XRayTracingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -62,6 +64,9 @@ class QuestionExplanationServiceTest {
 
     @Mock
     private ClockPort clock;
+
+    @Mock
+    private XRayTracingService xray;
 
     @InjectMocks
     private QuestionExplanationService service;
@@ -101,7 +106,8 @@ class QuestionExplanationServiceTest {
                 examId,
                 "Which AWS service is best for serverless computing?",
                 "Compute",
-                "MEDIUM"
+                "MEDIUM",
+                "AWSCertPract_TEST"
         );
 
         // Create options and add to question
@@ -410,7 +416,7 @@ class QuestionExplanationServiceTest {
         assertThat(capturedRun.getLanguage()).isEqualTo("pt");
         assertThat(capturedRun.getContent()).isEqualTo(generatedContent);
         assertThat(capturedRun.getCreatedAt()).isEqualTo(now);
-        assertThat(capturedRun.getExpiresAt()).isEqualTo(now.plusSeconds(604800)); // 7 days
+        assertThat(capturedRun.getExpiresAt()).isEqualTo(now.plusSeconds(Duration.ofDays(30).getSeconds()));
     }
 }
 

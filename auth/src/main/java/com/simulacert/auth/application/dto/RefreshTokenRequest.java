@@ -1,4 +1,4 @@
-package com.simulacert.adapter.rest.dto;
+package com.simulacert.auth.application.dto;
 
 public record RefreshTokenRequest(String refreshToken) {
 }

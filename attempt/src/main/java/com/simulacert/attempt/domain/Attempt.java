@@ -1,7 +1,8 @@
 package com.simulacert.attempt.domain;
 
-import com.simulacert.attempt.application.dto.AttemptVo;
 import com.github.f4b6a3.uuid.UuidCreator;
+import com.simulacert.attempt.application.dto.AttemptResponse;
+import com.simulacert.attempt.application.dto.AttemptVo;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -51,6 +52,18 @@ public class Attempt {
     @Column(name = "finished_at")
     private Instant finishedAt;
 
+    @Column(name = "ends_at")
+    private Instant endsAt;
+
+    @Column(nullable = false)
+    private boolean paused;
+
+    @Column(name = "paused_at")
+    private Instant pausedAt;
+
+    @Column(name = "paused_remaining_seconds")
+    private Long pausedRemainingSeconds;
+
     @Column(name = "score")
     private Integer score;
 
@@ -81,6 +94,7 @@ public class Attempt {
                 .startedAt(startedAt)
                 .questionIds(new ArrayList<>(questionIds))
                 .seed(seed)
+                .paused(false)
                 .build();
     }
 
@@ -111,6 +125,10 @@ public class Attempt {
                 .finishedAt(finishedAt)
                 .score(score)
                 .questionIds(new ArrayList<>(questionIds))
+                .endsAt(endsAt)
+                .paused(paused)
+                .pausedAt(pausedAt)
+                .pausedRemainingSeconds(pausedRemainingSeconds)
                 .build();
     }
 
@@ -120,5 +138,93 @@ public class Attempt {
         }
         this.status = AttemptStatus.ABANDONED;
         this.finishedAt = now;
+    }
+
+    public void initTimer(long durationSeconds) {
+        if (durationSeconds <= 0) {
+            throw new IllegalArgumentException("durationSeconds must be > 0");
+        }
+
+        if (this.startedAt == null) {
+            throw new IllegalStateException("startedAt must be set to initialize timer");
+        }
+
+        if (this.endsAt != null) {
+            return;
+        }
+
+        this.endsAt = this.startedAt.plusSeconds(durationSeconds);
+        this.paused = false;
+        this.pausedAt = null;
+        this.pausedRemainingSeconds = null;
+    }
+
+    public void pause(Instant now) {
+        requireInProgress();
+        if (paused) return;
+
+        if (endsAt == null) {
+            throw new IllegalStateException("Timer not initialized");
+        }
+
+        long remaining = Math.max(0, endsAt.getEpochSecond() - now.getEpochSecond());
+        this.paused = true;
+        this.pausedAt = now;
+        this.pausedRemainingSeconds = remaining;
+    }
+
+    public void resume(Instant now) {
+        requireInProgress();
+        if (!paused) return;
+
+        if (pausedRemainingSeconds == null) {
+            throw new IllegalStateException("pausedRemainingSeconds missing");
+
+        }
+        this.endsAt = now.plusSeconds(pausedRemainingSeconds);
+        this.paused = false;
+        this.pausedAt = null;
+    }
+
+    public void heartbeat(Instant now) {
+        requireInProgress();
+        if (endsAt == null) {
+            throw new IllegalStateException("Timer not initialized");
+        }
+
+        if (!paused && now.isAfter(endsAt)) {
+            this.endsAt = now;
+        }
+    }
+
+    public long remainingSeconds(Instant now) {
+        if (paused) {
+            return pausedRemainingSeconds == null ? 0 : Math.max(0, pausedRemainingSeconds);
+        }
+        if (endsAt == null) {
+            return 0;
+        }
+        return Math.max(0, endsAt.getEpochSecond() - now.getEpochSecond());
+    }
+
+    private void requireInProgress() {
+        if (this.status != AttemptStatus.IN_PROGRESS) {
+            throw new IllegalStateException("Attempt must be IN_PROGRESS");
+        }
+    }
+
+    public AttemptResponse toResponse() {
+        return new AttemptResponse(
+                id,
+                userId,
+                examId,
+                status,
+                startedAt,
+                finishedAt,
+                score,
+                new ArrayList<>(questionIds),
+                seed,
+                endsAt
+        );
     }
 }

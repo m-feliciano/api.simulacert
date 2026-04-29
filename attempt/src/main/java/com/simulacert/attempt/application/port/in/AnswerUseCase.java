@@ -1,7 +1,9 @@
 package com.simulacert.attempt.application.port.in;
 
+import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.SubmitAnswerRequest;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface AnswerUseCase {
@@ -9,4 +11,6 @@ public interface AnswerUseCase {
     void submitAnswer(UUID attemptId, UUID questionId, SubmitAnswerRequest request);
 
     void deleteAnswer(UUID attemptId, UUID questionId);
+
+    List<AnswerResponse> getAnswer(UUID attemptId);
 }

@@ -6,4 +6,7 @@ description = 'Common module'
 
 dependencies {
 
+    implementation 'com.amazonaws:aws-xray-recorder-sdk-core:2.21.0'
+
+    compileOnly 'org.projectlombok:lombok'
 }

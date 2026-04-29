@@ -1,5 +1,6 @@
 package com.simulacert.stats.infrastructure.persistence;
 
+import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.stats.application.dto.AttemptHistoryItemDto;
 import com.simulacert.stats.application.dto.AwsDomainStatsDto;
 import com.simulacert.stats.application.dto.UserStatsDto;
@@ -29,24 +30,8 @@ public class StatsQueryAdapter implements StatsQueryPort {
     private final AwsDomainStatsMapper domainStatsMapper;
 
     @Override
+    @XRaySubsegment("db.stats.userStats")
     public UserStatsDto getUserStats(UUID userId) {
-        UserStatsRow row = executeUserStatsQuery(userId);
-        return mapper.toDto(row);
-    }
-
-    @Override
-    public List<AttemptHistoryItemDto> getAttemptHistory(UUID userId) {
-        List<AttemptHistoryRow> rows = executeAttemptHistoryQuery(userId);
-        return historyMapper.toDtoList(rows);
-    }
-
-    @Override
-    public List<AwsDomainStatsDto> getStatsByAwsDomain(UUID userId) {
-        List<AwsDomainStatsRow> rows = executeAwsDomainStatsQuery(userId);
-        return domainStatsMapper.toDtoList(rows);
-    }
-
-    private UserStatsRow executeUserStatsQuery(UUID userId) {
         String sql = """
                 SELECT
                     ? as user_id,
@@ -59,10 +44,13 @@ public class StatsQueryAdapter implements StatsQueryPort {
                 WHERE a.user_id = ?
                 """;
 
-        return jdbcTemplate.queryForObject(sql, this::mapUserStatsRow, userId, userId);
+        UserStatsRow userStatsRow = jdbcTemplate.queryForObject(sql, this::mapUserStatsRow, userId, userId);
+        return mapper.toDto(userStatsRow);
     }
 
-    private List<AttemptHistoryRow> executeAttemptHistoryQuery(UUID userId) {
+    @Override
+    @XRaySubsegment("db.stats.attemptHistory")
+    public List<AttemptHistoryItemDto> getAttemptHistory(UUID userId) {
         String sql = """
                 SELECT
                     a.id,
@@ -77,11 +65,13 @@ public class StatsQueryAdapter implements StatsQueryPort {
                 WHERE a.user_id = ?
                 ORDER BY a.started_at DESC
                 """;
-
-        return jdbcTemplate.query(sql, this::mapAttemptHistoryRow, userId);
+        List<AttemptHistoryRow> rows = jdbcTemplate.query(sql, this::mapAttemptHistoryRow, userId);
+        return historyMapper.toDtoList(rows);
     }
 
-    private List<AwsDomainStatsRow> executeAwsDomainStatsQuery(UUID userId) {
+    @Override
+    @XRaySubsegment("db.stats.awsDomain")
+    public List<AwsDomainStatsDto> getStatsByAwsDomain(UUID userId) {
         String sql = """
                 WITH user_attempts AS (
                     SELECT id
@@ -140,8 +130,8 @@ public class StatsQueryAdapter implements StatsQueryPort {
                 GROUP BY q.domain
                 ORDER BY q.domain
                 """;
-
-        return jdbcTemplate.query(sql, this::mapAwsDomainStatsRow, userId);
+        List<AwsDomainStatsRow> rows = jdbcTemplate.query(sql, this::mapAwsDomainStatsRow, userId);
+        return domainStatsMapper.toDtoList(rows);
     }
 
     private UserStatsRow mapUserStatsRow(ResultSet rs, int rowNum) throws SQLException {

@@ -1,5 +1,5 @@
 
-package com.simulacert.adapter.rest.dto;
+package com.simulacert.auth.application.dto;
 
 import jakarta.validation.constraints.NotNull;
 

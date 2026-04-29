@@ -6,6 +6,7 @@ import com.simulacert.attempt.application.port.out.AttemptRepositoryPort;
 import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.common.ClockPort;
+import com.simulacert.service.XRayTracingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,9 @@ class AnswerServiceTest {
 
     @Mock
     private ClockPort clock;
+
+    @Mock
+    private XRayTracingService xray;
 
     @InjectMocks
     private AnswerService answerService;

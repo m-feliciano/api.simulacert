@@ -1,4 +1,4 @@
-package com.simulacert.adapter.rest.dto;
+package com.simulacert.attempt.application.dto;
 
 import com.simulacert.attempt.domain.AttemptStatus;
 
@@ -15,7 +15,7 @@ public record AttemptResponse(
         Instant finishedAt,
         Integer score,
         List<UUID> questionIds,
-        long seed
-) {
+        long seed,
+        Instant endsAt) {
 }
 

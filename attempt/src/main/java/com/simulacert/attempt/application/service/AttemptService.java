@@ -1,19 +1,25 @@
 package com.simulacert.attempt.application.service;
 
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
+import com.simulacert.attempt.application.dto.AttemptResponse;
+import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.QuestionOption;
+import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.port.in.AttemptUseCase;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
 import com.simulacert.attempt.application.port.out.AttemptQueryPort;
 import com.simulacert.attempt.application.port.out.AttemptRepositoryPort;
 import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
+import com.simulacert.attempt.domain.Difficulty;
 import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
+import com.simulacert.infrastructure.xray.XRaySubsegment;
+import com.simulacert.service.XRayTracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +43,9 @@ import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
 public class AttemptService implements AttemptUseCase {
 
     private static final int MIN_QUESTION_COUNT = 10;
-    private static final int MAX_QUESTION_COUNT = 100;
+    private static final int MAX_QUESTION_COUNT = 65;
+
+    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofMinutes(150).toSeconds();
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;
@@ -45,12 +54,13 @@ public class AttemptService implements AttemptUseCase {
     private final QuestionRepositoryPort questionRepository;
     private final QuestionOptionQueryPort questionOptionQueryPort;
     private final ClockPort clock;
+    private final XRayTracingService xray;
 
-    @Scheduled(cron = "0 0 * * * ?") // runs every hour
+    @Scheduled(cron = "0 0 0 * * ?") // runs every day at midnight
     public void cleanUpOldInProgressAttempts() {
         log.info("Starting cleanup of old in-progress attempts");
 
-        var cutoff = clock.now().minusSeconds(Duration.ofDays(7).toSeconds());
+        var cutoff = clock.now().minus(Duration.ofDays(14));
         var oldAttempts = attemptRepository.findByStatusAndStartedAtBefore(IN_PROGRESS, cutoff);
         for (var attempt : oldAttempts) {
             log.info("Cancelling old in-progress attempt: {} which started at {}", attempt.getId(), attempt.getStartedAt());
@@ -60,17 +70,28 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
-    public AttemptVo startAttempt(UUID userId, UUID examId, int questionCount) {
-        validateQuestionCount(questionCount);
-        validateExamExists(examId);
+    @XRaySubsegment("attempt.startAttempt")
+    public AttemptVo startAttempt(StartAttemptRequest request) {
+        xray.putAnnotation("examId", request.examId());
+
+        validateQuestionCount(request.questionCount());
+        validateExamExists(request.examId());
+
+        UUID userId = request.userId();
+        UUID examId = request.examId();
 
         var existingAttempt = attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, IN_PROGRESS);
         if (existingAttempt.isPresent()) {
-            return existingAttempt.get().toVo();
+            Attempt attempt = existingAttempt.get();
+            xray.putAnnotation("attemptId", attempt.getId());
+
+            Long remainingSeconds = attempt.getPausedRemainingSeconds();
+            ensureTimerInitialized(attempt, remainingSeconds.intValue());
+            return attempt.toVo();
         }
 
         long seed = new Random().nextLong();
-        List<UUID> selectedQuestionIds = selectQuestions(examId, questionCount, seed);
+        List<UUID> selectedQuestionIds = selectQuestions(examId, request.questionCount(), seed, request.difficulty());
 
         Attempt attempt = Attempt.create(
                 userId,
@@ -80,22 +101,62 @@ public class AttemptService implements AttemptUseCase {
                 seed
         );
 
+        xray.putAnnotation("attemptId", attempt.getId());
+
+        ensureTimerInitialized(attempt, request.limitSeconds());
         attemptRepository.save(attempt);
         return attempt.toVo();
     }
 
     @Override
-    @Transactional
-    public AttemptVo finishAttempt(UUID attemptId) {
+    @XRaySubsegment("attempt.pauseAttempt")
+    public AttemptTimingResponse pauseAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
-        long answeredCount = answerRepository.findByAttemptId(attemptId).size();
-        long totalQuestions = attempt.getQuestionIds().size();
+        attempt.pause(clock.now());
+        attemptRepository.save(attempt);
+        return toTimingResponse(attempt, clock.now());
+    }
 
-        if (answeredCount < totalQuestions) {
-            throw new IllegalStateException("All questions must be answered before finishing");
-        }
+    @Override
+    @XRaySubsegment("attempt.resumeAttempt")
+    public AttemptTimingResponse resumeAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        attempt.resume(clock.now());
+        attemptRepository.save(attempt);
+        return toTimingResponse(attempt, clock.now());
+    }
+
+    @Override
+    @XRaySubsegment("attempt.heartbeatAttempt")
+    public AttemptTimingResponse heartbeatAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        xray.putAnnotation("examId", attempt.getExamId());
+
+        attempt.heartbeat(clock.now());
+        attemptRepository.save(attempt);
+        return toTimingResponse(attempt, clock.now());
+    }
+
+    @Override
+    @Transactional
+    @XRaySubsegment("attempt.finishAttempt")
+    public AttemptVo finishAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        xray.putAnnotation("examId", attempt.getExamId());
+
+        long totalQuestions = attempt.getQuestionIds().size();
 
         long correctAnswers = attemptQueryPort.countCorrectAnswers(attemptId);
         int score = (int) ((correctAnswers * 100) / totalQuestions);
@@ -106,7 +167,11 @@ public class AttemptService implements AttemptUseCase {
         return attempt.toVo();
     }
 
+    @XRaySubsegment("attempt.cancelAttempt")
     public void cancelAttempt(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
+        log.info("Cancelling attempt {}", attemptId);
+
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
         attempt.cancel(clock.now());
@@ -114,13 +179,16 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment("attempt.getAttemptById")
     public AttemptVo getAttemptById(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         return attemptRepository.findById(attemptId)
                 .map(Attempt::toVo)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
     }
 
     @Override
+    @XRaySubsegment("attempt.getAttemptsByUser")
     public List<AttemptVo> getAttemptsByUser(UUID userId) {
         return attemptRepository.findByUserIdOrderByStartedAtDesc(userId)
                 .stream()
@@ -129,9 +197,13 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @XRaySubsegment("attempt.getAttemptQuestions")
     public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
+        xray.putAnnotation("attemptId", attemptId);
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        xray.putAnnotation("examId", attempt.getExamId());
 
         var answers = answerRepository.findByAttemptId(attemptId);
         var answerMap = answers.stream()
@@ -157,6 +229,7 @@ public class AttemptService implements AttemptUseCase {
 
                     return new AttemptQuestionResponse(
                             question.getId(),
+                            question.getCode(),
                             question.getText(),
                             question.getDomain(),
                             question.getDifficulty(),
@@ -165,6 +238,29 @@ public class AttemptService implements AttemptUseCase {
                     );
                 })
                 .toList();
+    }
+
+    @Override
+    @XRaySubsegment("attempt.retakeAttempt")
+    public AttemptResponse retakeAttempt(UUID attemptId) {
+        Attempt attempt = attemptRepository.findById(attemptId)
+                .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
+
+        if (attemptRepository.countByStatus(attempt.getUserId(), IN_PROGRESS) > 5) {
+            throw new IllegalStateException("User has too many in-progress attempts");
+        }
+
+        Attempt newAttempt = Attempt.create(
+                attempt.getUserId(),
+                attempt.getExamId(),
+                attempt.getQuestionIds(),
+                clock.now(),
+                new Random().nextLong()
+        );
+
+        newAttempt.initTimer(MAX_ATTEMPT_DURATION_SECONDS);
+        attemptRepository.save(newAttempt);
+        return newAttempt.toResponse();
     }
 
     private void validateQuestionCount(int questionCount) {
@@ -181,7 +277,7 @@ public class AttemptService implements AttemptUseCase {
         }
     }
 
-    private List<UUID> selectQuestions(UUID examId, int questionCount, long seed) {
+    private List<UUID> selectQuestions(UUID examId, int questionCount, long seed, String difficultyLevel) {
         log.debug("Selecting {} questions for exam {} with seed {}", questionCount, examId, seed);
 
         List<Question> allQuestions = questionRepository.findByExamId(examId);
@@ -189,44 +285,67 @@ public class AttemptService implements AttemptUseCase {
             throw new IllegalStateException("Exam has only " + allQuestions.size() + " questions");
         }
 
-        // Embaralha todas as perguntas com a semente fornecida
-        List<Question> shuffledQuestions = new ArrayList<>(allQuestions);
-        Collections.shuffle(shuffledQuestions, new Random(seed));
-
-        // Distribuição por dificuldade: 30% easy, 50% medium, 20% hard
-        int easyCount = (int) Math.round(questionCount * 0.3);
-        int mediumCount = (int) Math.round(questionCount * 0.5);
-        int hardCount = questionCount - easyCount - mediumCount; // garante soma exata
-
-        // Se não houver perguntas suficientes em uma categoria, redistribui para as outras
-        var hardQuestions = filterByDifficulty(shuffledQuestions, "HARD");
-        if (hardQuestions.size() < hardCount) {
-            int deficit = hardCount - hardQuestions.size();
-            hardCount = hardQuestions.size();
-            mediumCount += deficit;
-        }
-
-        var mediumQuestions = filterByDifficulty(shuffledQuestions, "MEDIUM");
-        if (mediumQuestions.size() < mediumCount) {
-            int deficit = mediumCount - mediumQuestions.size();
-            mediumCount = mediumQuestions.size();
-            easyCount += deficit;
-        }
-
-        var easyQuestions = filterByDifficulty(shuffledQuestions, "EASY");
-        if (easyQuestions.size() < easyCount) {
-            throw new IllegalStateException("Not enough questions to satisfy the difficulty distribution");
-        }
-
         Random random = new Random(seed);
+        List<UUID> selected;
 
-        List<UUID> selected = new ArrayList<>();
-        selected.addAll(selectRandom(easyQuestions, easyCount, random));
-        selected.addAll(selectRandom(mediumQuestions, mediumCount, random));
-        selected.addAll(selectRandom(hardQuestions, hardCount, random));
+        if (difficultyLevel == null) {
+            int easyCount = (int) Math.round(questionCount * 0.3);
+            int mediumCount = (int) Math.round(questionCount * 0.5);
+            int hardCount = questionCount - easyCount - mediumCount;
+
+            var easyQuestions = filterByDifficulty(allQuestions, Difficulty.EASY.name());
+            var mediumQuestions = filterByDifficulty(allQuestions, Difficulty.MEDIUM.name());
+            var hardQuestions = filterByDifficulty(allQuestions, Difficulty.HARD.name());
+
+            if (hardQuestions.size() < hardCount) {
+                mediumCount += (hardCount - hardQuestions.size());
+                hardCount = hardQuestions.size();
+            }
+
+            if (mediumQuestions.size() < mediumCount) {
+                easyCount += (mediumCount - mediumQuestions.size());
+                mediumCount = mediumQuestions.size();
+            }
+
+            selected = new ArrayList<>();
+            selected.addAll(selectRandom(easyQuestions, easyCount, random));
+            selected.addAll(selectRandom(mediumQuestions, mediumCount, random));
+            selected.addAll(selectRandom(hardQuestions, hardCount, random));
+
+        } else {
+            Difficulty difficulty = Difficulty.valueOf(difficultyLevel.toUpperCase());
+            List<Question> candidates = new ArrayList<>(filterByDifficulty(allQuestions, difficulty.name()));
+
+            if (candidates.size() < questionCount) {
+                List<Difficulty> others = difficulty.getLessDifficultyThanThis();
+
+                int i = others.size() - 1;
+                while (i-- >= 0 && candidates.size() < questionCount) {
+                    candidates.addAll(filterByDifficulty(allQuestions, others.get(i).name()));
+                }
+            }
+
+            if (candidates.size() < questionCount) {
+                for (Difficulty d : Difficulty.all()) {
+                    if (d == difficulty) continue;
+
+                    List<Question> questions = filterByDifficulty(allQuestions, d.name());
+                    for (Question q : questions) {
+                        if (candidates.stream().noneMatch(c -> c.getId().equals(q.getId()))) {
+                            candidates.add(q);
+                        }
+
+                        if (candidates.size() >= questionCount) break;
+                    }
+
+                    if (candidates.size() >= questionCount) break;
+                }
+            }
+
+            selected = selectRandom(candidates, questionCount, random);
+        }
 
         Collections.shuffle(selected, random);
-
         return selected;
     }
 
@@ -237,11 +356,42 @@ public class AttemptService implements AttemptUseCase {
     }
 
     private List<UUID> selectRandom(List<Question> questions, int count, Random random) {
+        if (questions.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        if (questions.size() <= count) {
+            return questions.stream()
+                    .map(Question::getId)
+                    .collect(Collectors.toList());
+        }
+
         var shuffled = new ArrayList<>(questions);
         Collections.shuffle(shuffled, random);
         return shuffled.stream()
                 .limit(count)
                 .map(Question::getId)
-                .toList();
+                .collect(Collectors.toList());
+    }
+
+    private void ensureTimerInitialized(Attempt attempt, Integer limitSeconds) {
+        if (limitSeconds == null || limitSeconds <= 0) {
+            throw new IllegalArgumentException("limitSeconds must be provided and > 0");
+        }
+
+        long clamped = Math.min(limitSeconds.longValue(), MAX_ATTEMPT_DURATION_SECONDS);
+        attempt.initTimer(clamped);
+    }
+
+    private AttemptTimingResponse toTimingResponse(Attempt attempt, Instant now) {
+        Instant endsAt = attempt.getEndsAt();
+        Instant pausedAt = attempt.getPausedAt();
+
+        return new AttemptTimingResponse(
+                endsAt != null ? endsAt.toString() : null,
+                attempt.remainingSeconds(now),
+                attempt.isPaused(),
+                pausedAt != null ? pausedAt.toString() : null
+        );
     }
 }
