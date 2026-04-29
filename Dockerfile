@@ -14,10 +14,10 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
 
 USER appuser
 
-ENTRYPOINT ["java",
-  "-XX:+HeapDumpOnOutOfMemoryError",
-  "-XX:+ExitOnOutOfMemoryError",
-  "-Dfile.encoding=UTF-8",
-  "-Duser.timezone=UTC",
-  "-jar",
+ENTRYPOINT ["java", \
+  "-XX:+HeapDumpOnOutOfMemoryError", \
+  "-XX:+ExitOnOutOfMemoryError", \
+  "-Dfile.encoding=UTF-8", \
+  "-Duser.timezone=UTC", \
+  "-jar", \
   "app.jar"]
