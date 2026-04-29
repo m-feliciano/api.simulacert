@@ -29,6 +29,6 @@ public interface AttemptRepository extends JpaRepository<Attempt, UUID> {
     );
 
     @Query("SELECT COUNT(a) FROM Attempt a WHERE a.userId = :userId AND a.status = :status")
-    int countByStatus(UUID userId, AttemptStatus status);
+    int countByStatus(@Param("userId") UUID userId, @Param("status") AttemptStatus status);
 }
 
