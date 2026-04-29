@@ -15,28 +15,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Definir versão da release
-        run: echo "IMAGE_TAG=${GITHUB_REF_NAME#release/}" >> $GITHUB_ENV
-
       - name: Configurar AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Build JAR
+        run: ./gradlew :app:bootJar
+
+      - name: Renomear artefato
+        run: |
+          cp app/build/libs/*.jar app.jar
+
       - name: Login no ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Setup Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build e push
+      - name: Build e push Docker (ARM64)
         run: |
           docker buildx build \
-            --platform linux/arm64,linux/amd64 \
+            --platform linux/arm64 \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
-            -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${IMAGE_TAG} \
+            -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${GITHUB_SHA} \
             --push .
