@@ -21,17 +21,26 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
       - name: Dar permissão ao gradlew
         run: chmod +x gradlew
+
+      - name: Build JAR
+        run: ./gradlew :app:bootJar
+
+      - name: Copiar artefato
+        run: cp app/build/libs/*.jar app.jar
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Login no ECR
-        uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build e push (ARM64)
         run: |
