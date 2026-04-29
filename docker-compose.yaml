@@ -1,6 +1,6 @@
 services:
   simulacert-api:
-    image: 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest
+    image: 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${IMAGE_TAG:-prod}
 
     mem_limit: 1400m
     mem_reservation: 1024m
@@ -27,6 +27,13 @@ services:
 
     depends_on:
       - xray-daemon
+
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "--max-time", "4", "http://localhost:8080/actuator/health/liveness"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
     networks:
       - simulacert-network
