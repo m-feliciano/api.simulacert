@@ -2,15 +2,16 @@ FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 COPY app.jar app.jar
 COPY conteudo/ /conteudo/
 
 EXPOSE 8080
-
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-  CMD wget -qO- http://localhost:8080/actuator/health/liveness || exit 1
 
 USER appuser
 
