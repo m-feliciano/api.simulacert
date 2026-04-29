@@ -4,11 +4,6 @@
 FROM --platform=$BUILDPLATFORM gradle:8.11-jdk21 AS build
 WORKDIR /app
 
-COPY gradle gradle
-COPY gradlew .
-COPY settings.gradle build.gradle ./
-COPY app/build.gradle app/
-
 COPY . .
 
 RUN chmod +x gradlew
