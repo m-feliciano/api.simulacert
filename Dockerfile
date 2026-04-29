@@ -1,14 +1,12 @@
 # =========================
 # Build stage
 # =========================
-FROM --platform=$BUILDPLATFORM gradle:8.11-jdk21 AS build
+FROM --platform=linux/arm64 gradle:8.11-jdk21 AS build
 WORKDIR /app
 
 COPY . .
 
 RUN chmod +x gradlew
-
-RUN ./gradlew dependencies --no-daemon
 
 RUN ./gradlew :app:bootJar \
   --no-daemon \
@@ -17,10 +15,10 @@ RUN ./gradlew :app:bootJar \
 # =========================
 # Runtime stage
 # =========================
-FROM eclipse-temurin:21-jre-jammy
+FROM --platform=linux/arm64 eclipse-temurin:21-jre-jammy AS runtime
 WORKDIR /app
 
-RUN useradd -ms /bin/bash appuser
+RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 COPY --from=build /app/app/build/libs/app.jar app.jar
 COPY conteudo/ /conteudo/
@@ -28,19 +26,20 @@ COPY conteudo/ /conteudo/
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-  CMD curl -f http://localhost:8080/actuator/health/liveness || exit 1
+  CMD wget -qO- http://localhost:8080/actuator/health/liveness || exit 1
 
 USER appuser
 
-ENTRYPOINT ["java", \
-              "-XX:+UseContainerSupport", \
-              "-XX:+UseG1GC", \
-              "-XX:MaxGCPauseMillis=200", \
-              "-XX:InitiatingHeapOccupancyPercent=30", \
-              "-XX:+ParallelRefProcEnabled", \
-              "-XX:+DisableExplicitGC", \
-              "-XX:+HeapDumpOnOutOfMemoryError", \
-              "-XX:+ExitOnOutOfMemoryError", \
-              "-Dfile.encoding=UTF-8", \
-              "-Duser.timezone=UTC", \
-              "-jar", "app.jar"]
+ENTRYPOINT ["java",
+  "-XX:+UseContainerSupport",
+  "-XX:+UseG1GC",
+  "-XX:MaxGCPauseMillis=200",
+  "-XX:InitiatingHeapOccupancyPercent=30",
+  "-XX:+ParallelRefProcEnabled",
+  "-XX:+DisableExplicitGC",
+  "-XX:+HeapDumpOnOutOfMemoryError",
+  "-XX:+ExitOnOutOfMemoryError",
+  "-Dfile.encoding=UTF-8",
+  "-Duser.timezone=UTC",
+  "-jar",
+  "app.jar"]
