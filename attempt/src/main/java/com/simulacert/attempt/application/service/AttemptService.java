@@ -301,8 +301,8 @@ public class AttemptService implements AttemptUseCase {
             }
 
             if (candidates.size() < questionCount) {
-                for (Difficulty d : Difficulty.values()) {
-                    if (d == difficulty || d == Difficulty.ANY) continue;
+                for (Difficulty d : Difficulty.all()) {
+                    if (d == difficulty) continue;
 
                     List<Question> questions = filterByDifficulty(allQuestions, d.name());
                     for (Question q : questions) {

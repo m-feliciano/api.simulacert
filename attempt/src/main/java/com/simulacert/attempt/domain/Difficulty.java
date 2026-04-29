@@ -18,9 +18,14 @@ public enum Difficulty {
     @Getter
     private final int level;
 
-    public List<Difficulty> getLessDifficultyThanThis() {
+    public static Difficulty[] all() {
         return Arrays.stream(VALUES)
                 .filter(d -> d != ANY)
+                .toArray(Difficulty[]::new);
+    }
+
+    public List<Difficulty> getLessDifficultyThanThis() {
+        return Arrays.stream(all())
                 .filter(d -> d.level < this.level)
                 .toList();
     }
