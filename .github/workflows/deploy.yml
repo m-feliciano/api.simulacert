@@ -30,7 +30,6 @@ jobs:
       - name: Build e push
         run: |
           docker buildx build \
-            --platform linux/arm64 \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${IMAGE_TAG} \
             --push .
