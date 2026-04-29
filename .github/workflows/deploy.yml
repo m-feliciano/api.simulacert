@@ -27,9 +27,13 @@ jobs:
       - name: Login no ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build e push
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build e push (multi-arch)
         run: |
           docker buildx build \
+            --platform linux/arm64,linux/amd64 \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${IMAGE_TAG} \
             --push .
