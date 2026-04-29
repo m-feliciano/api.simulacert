@@ -2,7 +2,11 @@ name: Deploy
 
 on:
   push:
-    branches: [ "release/*" ]
+    branches: ["release/*"]
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   build-and-push:
@@ -11,11 +15,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Configurar AWS
+      - name: Definir versão da release
+        run: echo "IMAGE_TAG=${GITHUB_REF_NAME#release/}" >> $GITHUB_ENV
+
+      - name: Configurar AWS (OIDC)
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login no ECR
@@ -26,5 +32,5 @@ jobs:
           docker buildx build \
             --platform linux/arm64 \
             -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:latest \
-            -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${{ github.sha }} \
+            -t 096000969109.dkr.ecr.us-east-1.amazonaws.com/simulacert-api:${IMAGE_TAG} \
             --push .
