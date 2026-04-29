@@ -229,6 +229,7 @@ public class AttemptService implements AttemptUseCase {
 
                     return new AttemptQuestionResponse(
                             question.getId(),
+                            question.getCode(),
                             question.getText(),
                             question.getDomain(),
                             question.getDifficulty(),

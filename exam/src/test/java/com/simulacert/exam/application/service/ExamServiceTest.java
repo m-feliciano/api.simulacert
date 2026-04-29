@@ -215,13 +215,13 @@ class ExamServiceTest {
     @Test
     @DisplayName("Should import exam successfully")
     void shouldImportExamSuccessfully() {
-        Question mockQuestion = Question.create(examId, "Question 1?", "AWS", "EASY");
+        Question mockQuestion = Question.create(examId, "Question 1?", "AWS", "EASY", "Q001");
 
         when(examRepository.save(any(Exam.class))).thenReturn(testExam);
         when(questionRepository.save(any(Question.class))).thenReturn(mockQuestion);
         when(questionOptionRepository.saveAll(anyList())).thenReturn(List.of());
 
-        QuestionImportDto question = new QuestionImportDto("Option 1", "Mock 1", "AWS",
+        QuestionImportDto question = new QuestionImportDto("Option 1", "Mock 1", "AWS", "Q001",
                 List.of(
                         new OptionImportDto("Option A", "Mock 1", true),
                         new OptionImportDto("Option B", "Mock 1", false)

@@ -67,7 +67,8 @@ public class QuestionService implements QuestionUseCase {
                 request.examId(),
                 request.text(),
                 request.domain(),
-                request.difficulty()
+                request.difficulty(),
+                request.code()
         );
 
         Question saved = questionRepository.save(question);

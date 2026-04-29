@@ -264,7 +264,14 @@ class AttemptServiceTest {
     private List<Question> createMockQuestions(UUID examId, int count) {
         List<Question> questions = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            Question q = Question.create(examId, "Question " + i, "AWS", i % 3 == 0 ? "EASY" : i % 3 == 1 ? "MEDIUM" : "HARD");
+            String code = String.format("T%019d", i); // 20 chars
+            Question q = Question.create(
+                    examId,
+                    "Question " + i,
+                    "AWS",
+                    i % 3 == 0 ? "EASY" : i % 3 == 1 ? "MEDIUM" : "HARD",
+                    code
+            );
             questions.add(q);
         }
         return questions;

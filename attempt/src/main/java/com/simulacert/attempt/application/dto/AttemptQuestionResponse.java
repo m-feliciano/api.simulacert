@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record AttemptQuestionResponse(
         UUID questionId,
+        String questionCode,
         String text,
         String domain,
         String difficulty,

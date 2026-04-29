@@ -28,6 +28,9 @@ public class Question {
     @Id
     private UUID id;
 
+    @Column(length = 20)
+    private String code;
+
     @Column(nullable = false, name = "exam_id")
     private UUID examId;
 
@@ -44,11 +47,12 @@ public class Question {
     @Builder.Default
     private List<QuestionOption> options = new ArrayList<>();
 
-    public static Question create(UUID examId, String text, String domain, String difficulty) {
+    public static Question create(UUID examId, String text, String domain, String difficulty, String code) {
         Objects.requireNonNull(examId, "examId cannot be null");
         Objects.requireNonNull(text, "text cannot be null");
         Objects.requireNonNull(domain, "domain cannot be null");
         Objects.requireNonNull(difficulty, "difficulty cannot be null");
+        Objects.requireNonNull(code, "code cannot be null");
 
         return Question.builder()
                 .id(UuidCreator.getTimeOrdered())
@@ -56,6 +60,7 @@ public class Question {
                 .text(text.trim())
                 .domain(domain.trim())
                 .difficulty(difficulty.trim())
+                .code(code.trim())
                 .build();
     }
 }

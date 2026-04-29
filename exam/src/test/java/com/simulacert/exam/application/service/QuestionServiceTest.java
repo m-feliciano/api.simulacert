@@ -57,7 +57,7 @@ class QuestionServiceTest {
     @BeforeEach
     void setUp() {
         examId = UUID.randomUUID();
-        testQuestion = Question.create(examId, "Test Question?", "AWS", "MEDIUM");
+        testQuestion = Question.create(examId, "Test Question?", "AWS", "MEDIUM", "CODE001");
         questionId = testQuestion.getId();
     }
 
@@ -74,6 +74,7 @@ class QuestionServiceTest {
                 "New Question?",
                 "AWS",
                 "EASY",
+                "CODE002",
                 options
         );
 
@@ -83,6 +84,7 @@ class QuestionServiceTest {
                 "New Question?",
                 "AWS",
                 "EASY",
+                "CODE002",
                 List.of()
         );
 
@@ -108,6 +110,7 @@ class QuestionServiceTest {
                 "Question?",
                 "AWS",
                 "EASY",
+                "CODE001",
                 List.of(new QuestionOptionDto("A", "Option A", true))
         );
 
@@ -124,12 +127,12 @@ class QuestionServiceTest {
     @Test
     @DisplayName("Should get questions by exam ID")
     void shouldGetQuestionsByExamId() {
-        Question question2 = Question.create(examId, "Question 2?", "AWS", "HARD");
+        Question question2 = Question.create(examId, "Question 2?", "AWS", "HARD", "CODE002");
 
         when(questionRepository.findByExamId(examId)).thenReturn(List.of(testQuestion, question2));
         when(questionMapper.toResponseList(anyList())).thenReturn(List.of(
-                new QuestionResponse(questionId, examId, "Test Question?", "AWS", "MEDIUM", List.of()),
-                new QuestionResponse(question2.getId(), examId, "Question 2?", "AWS", "HARD", List.of())
+                new QuestionResponse(questionId, examId, "Test Question?", "AWS", "MEDIUM", "CODE001", List.of()),
+                new QuestionResponse(question2.getId(), examId, "Question 2?", "AWS", "HARD", "CODE002", List.of())
         ));
 
         List<QuestionResponse> responses = questionService.getQuestionsByExamId(examId);
@@ -146,7 +149,7 @@ class QuestionServiceTest {
 
         when(questionRepository.findByExamIdPaginated(examId, pageable)).thenReturn(questionPage);
         when(questionMapper.toResponse(testQuestion)).thenReturn(
-                new QuestionResponse(questionId, examId, "Test Question?", "AWS", "MEDIUM", List.of())
+                new QuestionResponse(questionId, examId, "Test Question?", "AWS", "MEDIUM", "CODE001", List.of())
         );
 
         Page<QuestionResponse> responses = questionService.getQuestionsByExamIdPaginated(examId, pageable);
@@ -165,6 +168,7 @@ class QuestionServiceTest {
                 "Test Question?",
                 "AWS",
                 "MEDIUM",
+                "CODE001",
                 List.of()
         );
 

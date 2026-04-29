@@ -199,8 +199,8 @@ public class ExamService implements ExamUseCase {
             Exam exam = examRepository.save(Exam.create(importDto.title(), importDto.description(), importDto.slug()));
 
             for (var qdto : importDto.questions()) {
-                Question question = questionRepository.save(
-                        Question.create(exam.getId(), qdto.text(), qdto.domain(), qdto.difficulty()));
+                Question question = Question.create(exam.getId(), qdto.text(), qdto.domain(), qdto.difficulty(), qdto.code());
+                questionRepository.save(question);
 
                 var options = qdto.options().stream()
                         .map(opt ->
