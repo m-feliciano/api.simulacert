@@ -45,7 +45,7 @@ public class AttemptService implements AttemptUseCase {
     private static final int MIN_QUESTION_COUNT = 10;
     private static final int MAX_QUESTION_COUNT = 65;
 
-    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofMinutes(150).toSeconds();
+    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofHours(4).toSeconds();
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;
@@ -288,7 +288,7 @@ public class AttemptService implements AttemptUseCase {
         Random random = new Random(seed);
         List<UUID> selected;
 
-        if (difficultyLevel == null) {
+        if (difficultyLevel == null || Difficulty.ANY.name().equalsIgnoreCase(difficultyLevel)) {
             int easyCount = (int) Math.round(questionCount * 0.3);
             int mediumCount = (int) Math.round(questionCount * 0.5);
             int hardCount = questionCount - easyCount - mediumCount;
