@@ -288,7 +288,7 @@ public class AttemptService implements AttemptUseCase {
         Random random = new Random(seed);
         List<UUID> selected;
 
-        if (difficultyLevel == null) {
+        if (difficultyLevel == null || Difficulty.ANY.name().equalsIgnoreCase(difficultyLevel)) {
             int easyCount = (int) Math.round(questionCount * 0.3);
             int mediumCount = (int) Math.round(questionCount * 0.5);
             int hardCount = questionCount - easyCount - mediumCount;
