@@ -45,7 +45,7 @@ public class AttemptService implements AttemptUseCase {
     private static final int MIN_QUESTION_COUNT = 10;
     private static final int MAX_QUESTION_COUNT = 65;
 
-    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofMinutes(150).toSeconds();
+    private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofHours(4).toSeconds();
 
     private final AttemptRepositoryPort attemptRepository;
     private final AnswerRepositoryPort answerRepository;
