@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -35,8 +36,6 @@ public class ExamController implements ExamControllerOpenApi {
     @Override
     @GetMapping
     public ResponseEntity<List<ExamResponse>> getAllExams() {
-        log.debug("Getting all exams");
-
         List<ExamResponse> exams = examUseCase.getAllExams();
 
         return ResponseEntity.ok(exams);
@@ -44,35 +43,22 @@ public class ExamController implements ExamControllerOpenApi {
 
     @GetMapping("/{examId}")
     public ResponseEntity<ExamResponse> getExam(@PathVariable UUID examId) {
-        log.debug("Getting exam {}", examId);
-
         ExamResponse response = examUseCase.getExamById(examId);
 
-        if (response == null) {
-            log.warn("Exam {} not found", examId);
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(response);
+        return Optional.ofNullable(response)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{examId}/exists")
     public ResponseEntity<Boolean> examExists(@PathVariable UUID examId) {
-        log.debug("Checking if exam {} exists", examId);
-
-        boolean exists = examUseCase.examExists(examId);
-
-        return ResponseEntity.ok(exists);
+        return ResponseEntity.ok(examUseCase.examExists(examId));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> createExam(@Valid @RequestBody CreateExamRequest request) {
-        log.info("Creating exam with title: {}", request.title());
-
         ExamResponse response = examUseCase.createExam(request);
-
-        log.info("Exam created with id: {}", response.id());
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -88,37 +74,25 @@ public class ExamController implements ExamControllerOpenApi {
     public ResponseEntity<ExamResponse> updateExam(
             @PathVariable UUID examId,
             @Valid @RequestBody UpdateExamRequest request) {
-        log.info("Updating exam: {}", examId);
-
-        ExamResponse response = examUseCase.updateExam(examId, request);
-        log.info("Exam updated: {}", examId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(examUseCase.updateExam(examId, request));
     }
 
     @Override
     @DeleteMapping("/{examId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteExam(@PathVariable UUID examId) {
-        log.info("Deleting exam: {}", examId);
-
         examUseCase.deleteExam(examId);
-        log.info("Exam deleted: {}", examId);
         return ResponseEntity.noContent().build();
     }
 
     @Override
     @GetMapping("/slug/{slug}")
     public ResponseEntity<ExamResponse> getExamBySlug(@PathVariable String slug) {
-        log.debug("Getting exam by slug {}", slug);
-
         ExamResponse response = examUseCase.getExamBySlug(slug);
 
-        if (response == null) {
-            log.warn("Exam with slug {} not found", slug);
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(response);
+        return Optional.ofNullable(response)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
 

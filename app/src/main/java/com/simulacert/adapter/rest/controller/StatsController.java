@@ -29,29 +29,20 @@ public class StatsController implements StatsControllerOpenApi {
     @GetMapping("/user/{userId}")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<UserStatsDto> getUserStatistics(@PathVariable UUID userId) {
-        log.debug("Getting statistics for user {}", userId);
-
-        UserStatsDto stats = statsUseCase.getUserStatistics(userId);
-        return ResponseEntity.ok(stats);
+        return ResponseEntity.ok(statsUseCase.getUserStatistics(userId));
     }
 
     @GetMapping("/user/{userId}/history")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<List<AttemptHistoryItemDto>> getAttemptHistory(@PathVariable UUID userId) {
-        log.debug("Getting attempt history for user {}", userId);
-
-        List<AttemptHistoryItemDto> history = statsUseCase.getAttemptHistory(userId);
-        return ResponseEntity.ok(history);
+        return ResponseEntity.ok(statsUseCase.getAttemptHistory(userId));
     }
 
     @Override
     @GetMapping("/user/{userId}/domains")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<List<AwsDomainStatsDto>> getPerformanceByDomain(@PathVariable UUID userId) {
-        log.debug("Getting performance by AWS domain for user {}", userId);
-
-        List<AwsDomainStatsDto> domainStats = statsUseCase.getPerformanceByAwsDomain(userId);
-        return ResponseEntity.ok(domainStats);
+        return ResponseEntity.ok(statsUseCase.getPerformanceByAwsDomain(userId));
     }
 }
 

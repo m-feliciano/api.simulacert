@@ -36,8 +36,6 @@ public class ReviewController implements ReviewControllerOpenApi {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        log.info("Creating review for attempt {} by user {}", request.attemptId(), user.getId());
-
         ReviewResponse response = createReviewUseCase.createReview(user.getId(), request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -53,8 +51,6 @@ public class ReviewController implements ReviewControllerOpenApi {
     public ResponseEntity<ReviewResponse> getReviewByAttempt(@PathVariable UUID attemptId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-
-        log.debug("Getting review for attempt {} by user {}", attemptId, user.getId());
 
         return createReviewUseCase.getReviewByAttempt(user.getId(), attemptId)
                 .map(ResponseEntity::ok)

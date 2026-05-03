@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -35,15 +36,11 @@ public class QuestionController implements QuestionControllerOpenApi {
     @Override
     @GetMapping("/{questionId}")
     public ResponseEntity<QuestionResponse> getQuestion(@PathVariable UUID questionId) {
-        log.debug("Getting question {}", questionId);
-
         QuestionResponse response = questionUseCase.getQuestionById(questionId);
-        if (response == null) {
-            log.warn("Question {} not found", questionId);
-            return ResponseEntity.notFound().build();
-        }
 
-        return ResponseEntity.ok(response);
+        return Optional.ofNullable(response)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Override
@@ -52,22 +49,14 @@ public class QuestionController implements QuestionControllerOpenApi {
             @PathVariable UUID examId,
             @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
             Pageable pageable) {
-        log.debug("Getting paginated questions for exam {} with page: {}, size: {}",
-                examId, pageable.getPageNumber(), pageable.getPageSize());
-
-        Page<QuestionResponse> questions = questionUseCase.getQuestionsByExamIdPaginated(examId, pageable);
-
-        return ResponseEntity.ok(questions);
+        return ResponseEntity.ok(questionUseCase.getQuestionsByExamIdPaginated(examId, pageable));
     }
 
     @Override
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> createQuestion(@Valid @RequestBody CreateQuestionRequest request) {
-        log.info("Creating question for exam: {}", request.examId());
-
         QuestionResponse response = questionUseCase.createQuestion(request);
-        log.info("Question created with id: {}", response.id());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(response.id())
