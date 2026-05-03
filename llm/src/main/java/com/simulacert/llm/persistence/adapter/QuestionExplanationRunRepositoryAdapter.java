@@ -7,6 +7,7 @@ import com.simulacert.llm.domain.QuestionExplanationRun;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,7 +29,7 @@ public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanat
     }
 
     @Override
-    public Optional<QuestionExplanationRun> findByQuestionIdAndLanguage(UUID questionId, String language) {
+    public Optional<List<QuestionExplanationRun>> findByQuestionIdAndLanguage(UUID questionId, String language) {
         return repository.findByQuestionIdAndLanguage(questionId, language, clock.now());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public interface QuestionExplanationRunRepository extends JpaRepository<Question
     void deleteByExpiresAtBefore(@Param("now") Instant now);
 
     @Query("SELECT q FROM QuestionExplanationRun q WHERE q.questionId = :questionId AND q.language = :language and q.expiresAt > :now")
-    Optional<QuestionExplanationRun> findByQuestionIdAndLanguage(
+    Optional<List<QuestionExplanationRun>> findByQuestionIdAndLanguage(
             @Param("questionId") UUID questionId,
             @Param("language") String language,
             @Param("now") Instant now

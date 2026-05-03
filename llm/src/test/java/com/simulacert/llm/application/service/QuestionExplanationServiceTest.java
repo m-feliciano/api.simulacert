@@ -189,10 +189,9 @@ class QuestionExplanationServiceTest {
 
         when(attemptRepository.findById(attemptId)).thenReturn(Optional.of(attempt));
         when(questionRepository.findById(questionId)).thenReturn(question);
-//        when(cacheService.getExplanation(eq(cacheKey), any(), anyString())).thenReturn(cachedContent);
         when(explanationRunRepository.save(any(QuestionExplanationRun.class))).thenReturn(savedRun);
         when(explanationRunRepository.findByQuestionIdAndLanguage(questionId, "pt"))
-                .thenReturn(Optional.of(savedRun));
+                .thenReturn(Optional.of(List.of(savedRun)));
 
         // When
         ExplanationResponse response = service.requestExplanation(command, userId);

@@ -4,6 +4,7 @@ import com.simulacert.common.ClockPort;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
+import com.simulacert.review.application.dto.ReviewSummaryResponse;
 import com.simulacert.review.application.port.in.CreateReviewUseCase;
 import com.simulacert.review.application.port.out.AttemptQueryPort;
 import com.simulacert.review.application.port.out.ReviewRepositoryPort;
@@ -85,6 +86,15 @@ public class ReviewService implements CreateReviewUseCase {
                         review.getComment(),
                         review.getCreatedAt()
                 ));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    @XRaySubsegment("review.getSummaryByUser")
+    public ReviewSummaryResponse getSummaryByUser(UUID userId) {
+        long submitted = reviewRepository.countByUserId(userId);
+        long detailed = reviewRepository.countDetailedByUserId(userId);
+        return new ReviewSummaryResponse(submitted, detailed, null, null);
     }
 }
 

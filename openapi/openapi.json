@@ -2009,6 +2009,65 @@
         ]
       }
     },
+    "/api/v1/reviews/summary/user/{userId}": {
+      "get": {
+        "description": "Returns aggregated review metrics for a given user",
+        "operationId": "getSummaryByUser",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewSummaryResponse"
+                }
+              }
+            },
+            "description": "Summary retrieved successfully"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewSummaryResponse"
+                }
+              }
+            },
+            "description": "Not authenticated"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewSummaryResponse"
+                }
+              }
+            },
+            "description": "Not authorized - can only view own summary or require Admin role"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get review summary for a user",
+        "tags": [
+          "Reviews"
+        ]
+      }
+    },
     "/api/v1/stats/user/{userId}": {
       "get": {
         "description": "Retrieves overall statistics for a specific user",
@@ -2269,6 +2328,9 @@
               "$ref": "#/components/schemas/QuestionOption"
             }
           },
+          "questionCode": {
+            "type": "string"
+          },
           "questionId": {
             "type": "string",
             "format": "uuid"
@@ -2432,6 +2494,11 @@
       "CreateQuestionRequest": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
           "difficulty": {
             "type": "string",
             "maxLength": 50,
@@ -2460,6 +2527,7 @@
           }
         },
         "required": [
+          "code",
           "difficulty",
           "domain",
           "examId",
@@ -2680,6 +2748,9 @@
       "QuestionResponse": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "string"
+          },
           "difficulty": {
             "type": "string"
           },
@@ -2793,6 +2864,27 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "ReviewSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "approved": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "detailed": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "submitted": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "useful": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },

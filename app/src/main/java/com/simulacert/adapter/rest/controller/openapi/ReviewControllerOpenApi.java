@@ -2,6 +2,7 @@ package com.simulacert.adapter.rest.controller.openapi;
 
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
+import com.simulacert.review.application.dto.ReviewSummaryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -68,7 +69,26 @@ public interface ReviewControllerOpenApi {
     })
     ResponseEntity<ReviewResponse> getReviewByAttempt(
             @Parameter(description = "Attempt ID", required = true)
-            @PathVariable UUID attemptId
+            @PathVariable("attemptId") UUID attemptId
+    );
+
+    @Operation(
+            summary = "Get review summary for a user",
+            description = "Returns aggregated review metrics for a given user",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Summary retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = ReviewSummaryResponse.class))
+            ),
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only view own summary or require Admin role"),
+            @ApiResponse(responseCode = "401", description = "Not authenticated")
+    })
+    ResponseEntity<ReviewSummaryResponse> getSummaryByUser(
+            @Parameter(description = "User ID", required = true)
+            @PathVariable("userId") UUID userId
     );
 }
 
