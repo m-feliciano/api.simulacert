@@ -172,7 +172,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 
                 <div class="question-explanation">
                   <div class="option correct|incorrect">
-                    <h4>Option A</h4>
+                    <h4>Opção A</h4>
                     <p>Explanation...</p>
                     <div class="resource">
                         <a href="https://docs.aws.amazon.com/${language:pt_br}/Route53/latest/DeveloperGuide/Welcome.html" target="_blank" rel="noopener">Route53 documentation</a>
