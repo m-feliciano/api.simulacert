@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,9 +35,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuestionExplanationService implements QuestionExplanationUseCase {
-    private static final String PROMPT_VERSION = "v1.0";
+    private static final String PROMPT_VERSION = "v1.1";
     private static final Double TEMPERATURE = 0.25;
-    private static final Integer MAX_TOKENS = 500;
+    private static final Integer MAX_TOKENS = 1000;
     private static final Duration EXPIRATION_DURATION = Duration.ofDays(30);
 
     private final AttemptRepositoryPort attemptRepository;
@@ -57,12 +58,12 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
         validateExplanationRequest(command, userId);
 
-        Optional<QuestionExplanationRun> explanation = explanationRunRepository
+        Optional<List<QuestionExplanationRun>> explanation = explanationRunRepository
                 .findByQuestionIdAndLanguage(command.questionId(), command.language());
 
-        if (explanation.isPresent()) {
+        if (explanation.isPresent() && !explanation.get().isEmpty()) {
             log.info("Returning existing explanation from DB for question {}", command.questionId());
-            QuestionExplanationRun run = explanation.get();
+            QuestionExplanationRun run = explanation.get().getFirst();
             return new ExplanationResponse(
                     run.getId(),
                     run.getContent(),
@@ -127,7 +128,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     }
 
     private String getSystemPrompt(String certification) {
-        return String.format("You are an AWS-certified solutions architect expert in %s.", certification);
+        String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date());
+        return String.format("You are an AWS-certified solutions architect expert explaining exam questions for the %s certification in %s.", certification, year);
     }
 
     private String buildPrompt(Question question, String certification, String language) {
@@ -143,32 +145,47 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         }
 
         String optionsText = question.getOptions().stream()
+                .sorted(Comparator.comparing(QuestionOption::getOptionKey))
                 .map(opt -> opt.getOptionKey() + ") " + opt.getOptionText())
                 .collect(Collectors.joining("\n"));
 
         return String.format("""
-                You are explaining an AWS certification multiple-choice question.
+                You are explaining an AWS multiple-choice question.
                 
                 Task:
-                - Explain why each correct option is correct
-                - Explain why each incorrect option is incorrect
+                Explain why each option is correct or incorrect.
                 
-                Rules (mandatory):
-                - Use only AWS services, features, and behaviors documented by AWS
-                - Do not introduce assumptions beyond the question context
+                Rules:
+                - Use only AWS documented behavior
                 - Do not restate the question or options
-                - Do not mention exams strategies or personal opinions
-                - Do not mention that you are an AI
-                - Write in %s language
-                - Cover ALL options listed
-                - Be concise and technical (4–8 sentences per option)
+                - Do not add assumptions or opinions
+                - Write in %s
+                - Cover all options
+                - Be concise and technical (2–5 sentences per option)
                 
-                Output format (mandatory):
-                - One line per option, in alphabetical order (A → Z)
-                - Format exactly: Opção <OPTION_KEY>: <explanation>
+                Output (STRICT):
+                - Return ONLY valid HTML
+                - Start with <div class="question-explanation">
+                - End with </div>
                 
-                Resources:
-                - AWS documentation: https://docs.aws.amazon.com/
+                Format example:
+                
+                <div class="question-explanation">
+                  <div class="option correct|incorrect">
+                    <h4>Option A</h4>
+                    <p>Explanation...</p>
+                    <div class="resource">
+                        <a href="https://docs.aws.amazon.com/${language:pt_br}/Route53/latest/DeveloperGuide/Welcome.html" target="_blank" rel="noopener">Route53 documentation</a>
+                    </div>
+                  </div>
+                </div>
+                
+                Constraints:
+                - One option block per answer (A→Z)
+                - Use class="correct" or "incorrect"
+                - The link is optional; include only if certain and valid
+                - Do not add content outside this structure
+                - If the link inside the resource div support the language specified use it, otherwise use the english version of the documentation
 
                 Question:
                 %s

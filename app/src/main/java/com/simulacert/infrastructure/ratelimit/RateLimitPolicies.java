@@ -13,16 +13,6 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "app.rate-limit")
 public class RateLimitPolicies {
 
-    /**
-     * There's a nginx rate limit in front of the application as well:
-     * burst=3 for auth endpoints, burst=10 for overall traffic
-     * <p>
-     * Default policy: 100 requests per minute (for authenticated API calls)
-     * Unknown policy: 40 requests per minute (for non-API paths - bots, scanners, etc.)
-     * Auth policy: 10 requests per 30 seconds (login, register, oauth)
-     * Expensive operations policy: 5 requests per hour (anonymous user creation)
-     * LLM operations policy: 10 requests per 2 hours (AI explanations)
-     */
     private PolicyConfig defaultConfig = new PolicyConfig(100, 100, Duration.ofMinutes(1));
     private PolicyConfig unknown = new PolicyConfig(40, 40, Duration.ofMinutes(1));
     private PolicyConfig auth = new PolicyConfig(10, 10, Duration.ofSeconds(30));

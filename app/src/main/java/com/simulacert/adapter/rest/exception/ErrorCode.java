@@ -1,7 +1,11 @@
 package com.simulacert.adapter.rest.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
+@AllArgsConstructor
 public enum ErrorCode {
     ATTEMPT_ALREADY_IN_PROGRESS(HttpStatus.CONFLICT, "Attempt already in progress."),
     ATTEMPT_NOT_FOUND(HttpStatus.NOT_FOUND, "Attempt not found."),
@@ -16,17 +20,4 @@ public enum ErrorCode {
 
     private final HttpStatus httpStatus;
     private final String defaultMessage;
-
-    ErrorCode(HttpStatus httpStatus, String defaultMessage) {
-        this.httpStatus = httpStatus;
-        this.defaultMessage = defaultMessage;
-    }
-
-    public HttpStatus httpStatus() {
-        return httpStatus;
-    }
-
-    public String defaultMessage() {
-        return defaultMessage;
-    }
 }

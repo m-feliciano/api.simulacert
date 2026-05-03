@@ -4,6 +4,7 @@ import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.common.ClockPort;
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
+import com.simulacert.review.application.dto.ReviewSummaryResponse;
 import com.simulacert.review.application.port.out.AttemptQueryPort;
 import com.simulacert.review.application.port.out.ReviewRepositoryPort;
 import com.simulacert.review.domain.Review;
@@ -192,6 +193,21 @@ class ReviewServiceTest {
         assertThat(response.rating()).isEqualTo(1);
 
         verify(reviewRepository).save(any(Review.class));
+    }
+
+    @Test
+    @DisplayName("Should return review summary for user")
+    void shouldReturnReviewSummaryForUser() {
+        when(reviewRepository.countByUserId(userId)).thenReturn(3L);
+
+        ReviewSummaryResponse summary = reviewService.getSummaryByUser(userId);
+
+        assertThat(summary).isNotNull();
+        assertThat(summary.submitted()).isEqualTo(3L);
+        assertThat(summary.useful()).isNull();
+        assertThat(summary.approved()).isNull();
+
+        verify(reviewRepository).countByUserId(userId);
     }
 }
 

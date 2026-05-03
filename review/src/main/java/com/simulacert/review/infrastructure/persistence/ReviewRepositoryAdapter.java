@@ -28,5 +28,15 @@ public class ReviewRepositoryAdapter implements ReviewRepositoryPort {
     public Optional<Review> findByUserIdAndAttemptId(UUID userId, UUID attemptId) {
         return jpaRepository.findByUserIdAndAttemptId(userId, attemptId);
     }
+
+    @Override
+    public long countByUserId(UUID userId) {
+        return jpaRepository.countByUserId(userId);
+    }
+
+    @Override
+    public long countDetailedByUserId(UUID userId) {
+        return jpaRepository.countDetailedByUserId(userId);
+    }
 }
 

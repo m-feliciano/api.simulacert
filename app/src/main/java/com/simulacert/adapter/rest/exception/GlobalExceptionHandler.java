@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     private static ApiErrorResponse build(ErrorCode errorCode, HttpServletRequest request) {
         return new ApiErrorResponse(
                 errorCode.name(),
-                errorCode.defaultMessage(),
+                errorCode.getDefaultMessage(),
                 Instant.now(),
                 request.getRequestURI()
         );
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
     private static ResponseEntity<ApiErrorResponse> buildResponseEntity(ErrorCode errorCode, HttpServletRequest request) {
         ApiErrorResponse response = build(errorCode, request);
-        return ResponseEntity.status(errorCode.httpStatus()).body(response);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
     }
 
     private static ErrorCode mapToErrorCode(String message) {

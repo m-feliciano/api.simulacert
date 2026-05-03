@@ -9,5 +9,8 @@ public interface ReviewRepositoryPort {
     Review save(Review review);
     boolean existsByUserIdAndAttemptId(UUID userId, UUID attemptId);
     Optional<Review> findByUserIdAndAttemptId(UUID userId, UUID attemptId);
+    long countByUserId(UUID userId);
+
+    long countDetailedByUserId(UUID userId);
 }
 

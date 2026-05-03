@@ -4,11 +4,13 @@ import com.simulacert.adapter.rest.controller.openapi.ReviewControllerOpenApi;
 import com.simulacert.auth.domain.User;
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
+import com.simulacert.review.application.dto.ReviewSummaryResponse;
 import com.simulacert.review.application.port.in.CreateReviewUseCase;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +38,6 @@ public class ReviewController implements ReviewControllerOpenApi {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        log.info("Creating review for attempt {} by user {}", request.attemptId(), user.getId());
-
         ReviewResponse response = createReviewUseCase.createReview(user.getId(), request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -54,11 +54,16 @@ public class ReviewController implements ReviewControllerOpenApi {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        log.debug("Getting review for attempt {} by user {}", attemptId, user.getId());
-
         return createReviewUseCase.getReviewByAttempt(user.getId(), attemptId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
+    }
+
+    @Override
+    @GetMapping("/summary/user/{userId}")
+    @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
+    public ResponseEntity<ReviewSummaryResponse> getSummaryByUser(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok(createReviewUseCase.getSummaryByUser(userId));
     }
 }
 
