@@ -53,7 +53,7 @@ app:
     processed-dir: ./conteudo/import/feito
   llm:
     openai:
-      enabled: ${OPENAI_ENABLED:true}
+      enabled: ${OPENAI_ENABLED:false}
       api-key: ${OPENAI_API_KEY:}
       model: gpt-4.1-mini
       base-url: https://api.openai.com/v1
