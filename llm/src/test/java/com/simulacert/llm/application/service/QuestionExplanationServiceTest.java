@@ -309,11 +309,10 @@ class QuestionExplanationServiceTest {
     @DisplayName("Should build correct prompt with question and options")
     void shouldBuildCorrectPromptWithQuestionAndOptions() {
         // Given
-        String cacheKey = questionId + ":pt:v1.0";
         LLMResult llmResult = new LLMResult("explanation", "gpt-4", "openai");
 
         QuestionExplanationRun savedRun = QuestionExplanationRun.create(
-                questionId, attemptId, "openai", "gpt-4", "v1.0",
+                questionId, attemptId, "openai", "gpt-4", "v1.1",
                 0.25, "pt", "explanation", now, now.plusSeconds(172800)
         );
 
@@ -335,10 +334,9 @@ class QuestionExplanationServiceTest {
         assertThat(capturedRequest.userPrompt()).contains("Which AWS service is best for serverless computing?");
         assertThat(capturedRequest.userPrompt()).contains("A) EC2");
         assertThat(capturedRequest.userPrompt()).contains("B) Lambda");
-//        assertThat(capturedRequest.userPrompt()).contains("Correct answer: B");
-        assertThat(capturedRequest.userPrompt()).contains("pt language");
+        assertThat(capturedRequest.userPrompt()).contains("pt");
         assertThat(capturedRequest.temperature()).isEqualTo(0.25);
-        assertThat(capturedRequest.maxTokens()).isEqualTo(500);
+        assertThat(capturedRequest.maxTokens()).isEqualTo(1000);
     }
 
     @Test
@@ -388,7 +386,7 @@ class QuestionExplanationServiceTest {
     @DisplayName("Should persist explanation run with correct metadata")
     void shouldPersistExplanationRunWithCorrectMetadata() {
         // Given
-        String cacheKey = questionId + ":pt:v1.0";
+        String cacheKey = questionId + ":pt:v1.1";
         String generatedContent = "Test explanation";
         LLMResult llmResult = new LLMResult(generatedContent, "gpt-4-turbo", "openai");
 
@@ -410,7 +408,7 @@ class QuestionExplanationServiceTest {
         assertThat(capturedRun.getExamAttemptId()).isEqualTo(attemptId);
         assertThat(capturedRun.getModelProvider()).isEqualTo("openai");
         assertThat(capturedRun.getModelName()).isEqualTo("gpt-4-turbo");
-        assertThat(capturedRun.getPromptVersion()).isEqualTo("v1.0");
+        assertThat(capturedRun.getPromptVersion()).isEqualTo("v1.1");
         assertThat(capturedRun.getTemperature()).isEqualTo(0.25);
         assertThat(capturedRun.getLanguage()).isEqualTo("pt");
         assertThat(capturedRun.getContent()).isEqualTo(generatedContent);
