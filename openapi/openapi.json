@@ -602,7 +602,11 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "pt_br"
+              "default": "PT_BR",
+              "enum": [
+                "PT_BR",
+                "EN"
+              ]
             }
           }
         ],
@@ -1767,7 +1771,11 @@
             "required": false,
             "schema": {
               "type": "string",
-              "default": "pt_br"
+              "default": "PT_BR",
+              "enum": [
+                "PT_BR",
+                "EN"
+              ]
             }
           }
         ],
