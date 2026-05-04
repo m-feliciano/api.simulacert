@@ -26,7 +26,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,39 +50,53 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     @Transactional
     @XRaySubsegment("llm.requestExplanation")
     public ExplanationResponse requestExplanation(RequestExplanationCommand command, UUID userId) {
+
+        UUID questionId = command.questionId();
+        String targetLang = command.language();
+
         xray.putAnnotation("attemptId", command.examAttemptId());
-        xray.putAnnotation("questionId", command.questionId());
+        xray.putAnnotation("questionId", questionId);
 
-        Optional<List<QuestionExplanationRun>> explanation = explanationRunRepository
-                .findByQuestionIdAndLanguage(command.questionId(), command.language());
+        var existing = explanationRunRepository.findByQuestionIdAndLanguage(questionId, targetLang);
 
-        if (explanation.isPresent() && !explanation.get().isEmpty()) {
-            return questionMapper.toExplanationResponse(explanation.get().getFirst());
+        if (existing.isPresent() && !existing.get().isEmpty()) {
+            return questionMapper.toExplanationResponse(existing.get().getFirst());
         }
 
-        Question question = questionRepository.findById(command.questionId());
+        Question question = questionRepository.findById(questionId);
 
-        String translated = translationService.getOrTranslate(
-                "question", question.getId(), question.getText(), command.language());
+        boolean shouldTranslate = shouldTranslate(question.getLanguage(), targetLang);
+        xray.putAnnotation("translationUsed", shouldTranslate);
 
-        xray.putAnnotation("translationUsed", !translated.equals(question.getText()));
+        String questionText = resolveText(
+                "question",
+                question.getId(),
+                question.getText(),
+                targetLang,
+                shouldTranslate
+        );
 
         List<QuestionOption> options = question.getOptions()
                 .stream()
                 .map(opt -> {
-                    String translate = translationService.getOrTranslate(
-                            "question_option", opt.getId(), opt.getOptionText(), command.language());
-                    return questionMapper.toQuestionOptionTranslate(opt, translate);
+                    String text = resolveText(
+                            "question_option",
+                            opt.getId(),
+                            opt.getOptionText(),
+                            targetLang,
+                            shouldTranslate
+                    );
+
+                    return questionMapper.toQuestionOptionTranslate(opt, text);
                 })
-                .parallel()
                 .toList();
 
         String userPrompt = buildUserPrompt(
                 question.getId(),
-                question.getText(),
+                questionText,
                 options,
                 command.certification(),
-                command.language()
+                targetLang
         );
 
         LLMRequest llmRequest = new LLMRequest(
@@ -94,9 +107,14 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         );
 
         LLMResult llmResult = llmProvider.generate(llmRequest);
+
         log.info("Generated explanation using {} - {}", llmResult.provider(), llmResult.modelName());
 
-        return createExplanationResponse(llmResult.content(), llmResult.modelName(), command);
+        return createExplanationResponse(
+                llmResult.content(),
+                llmResult.modelName(),
+                command
+        );
     }
 
     @Override
@@ -231,6 +249,27 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         QuestionExplanationRun saved = explanationRunRepository.save(explanationRun);
 
         return questionMapper.toExplanationResponse(saved);
+    }
+
+    private boolean shouldTranslate(String baseLang, String targetLang) {
+        return !targetLang.equalsIgnoreCase(baseLang);
+    }
+
+    private String resolveText(
+            String entity,
+            UUID entityId,
+            String content,
+            String targetLang,
+            boolean shouldTranslate
+    ) {
+        if (!shouldTranslate) return content;
+
+        return translationService.getOrTranslate(
+                entity,
+                entityId,
+                content,
+                targetLang
+        );
     }
 }
 

@@ -207,6 +207,7 @@ class QuestionExplanationServiceTest {
                 .code(question.getCode())
                 .text(question.getText())
                 .domain(question.getDomain())
+                .language("pt_br")
                 .difficulty(question.getDifficulty())
                 .options(new java.util.ArrayList<>())
                 .build();

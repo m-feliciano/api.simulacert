@@ -308,7 +308,6 @@ public class AttemptService implements AttemptUseCase {
                             selectedOption
                     );
                 })
-                .parallel()
                 .toList();
 
         xray.putAnnotation("questionCount", responses.size());

@@ -43,6 +43,9 @@ public class Question {
     @Column(nullable = false, length = 50)
     private String difficulty;
 
+    @Column(nullable = false, name = "language")
+    private String language = "pt_br";
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<QuestionOption> options = new ArrayList<>();
