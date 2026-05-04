@@ -19,6 +19,7 @@ public interface QuestionMapper {
     List<QuestionResponse> toResponseList(List<Question> questions);
 
     @Mapping(target = "model", source = "modelName")
+    @Mapping(target = "explanationId", source = "id")
     ExplanationResponse toExplanationResponse(QuestionExplanationRun question);
 
     @Mapping(target = "optionText", source = "optionText")
