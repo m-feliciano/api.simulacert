@@ -33,6 +33,8 @@ public class SecurityConfigDev {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/swagger-ui.html",
+                                "/swagger-ui/index.html",
+                                "/swagger-ui",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/actuator/**"

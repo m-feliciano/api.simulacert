@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
 
@@ -93,6 +94,21 @@ public class GlobalExceptionHandler {
     ) {
         log.error("Global exception caught: ", ex);
         return buildResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR, request);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNoResourceFound(
+            NoResourceFoundException ignored,
+            HttpServletRequest request
+    ) {
+        log.warn("Resource not found: {}", request.getRequestURI());
+        ApiErrorResponse response = new ApiErrorResponse(
+                "NOT_FOUND",
+                "Resource not found",
+                Instant.now(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(404).body(response);
     }
 }
 
