@@ -263,13 +263,11 @@ public class AttemptService implements AttemptUseCase {
 
         List<AttemptQuestionResponse> responses = questionIds
                 .stream()
-                .map(questionId -> {
-                    var question = questions.get(questionId);
-                    if (question == null) {
-                        throw new IllegalStateException("Question not found: " + questionId);
-                    }
+                .filter(questions::containsKey)
+                .map(questions::get)
+                .map(question -> {
+                    UUID questionId = question.getId();
 
-                    // Count and verify question translations
                     if (!questionTranslations.containsKey(questionId)) {
                         questionsTranslated.incrementAndGet();
                     }
@@ -279,7 +277,6 @@ public class AttemptService implements AttemptUseCase {
                             translationService.getOrTranslate("question", questionId, question.getText(), language)
                     );
 
-                    // Count and verify question_options translations
                     var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
                     var options = questionOptions.stream()
                             .map(qo -> {
