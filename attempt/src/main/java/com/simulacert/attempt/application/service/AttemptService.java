@@ -269,10 +269,24 @@ public class AttemptService implements AttemptUseCase {
                         throw new IllegalStateException("Question not found: " + questionId);
                     }
 
-                    var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
+                    // Count and verify question translations
+                    if (!questionTranslations.containsKey(questionId)) {
+                        questionsTranslated.incrementAndGet();
+                    }
 
+                    String translatedText = questionTranslations.getOrDefault(
+                            questionId,
+                            translationService.getOrTranslate("question", questionId, question.getText(), language)
+                    );
+
+                    // Count and verify question_options translations
+                    var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
                     var options = questionOptions.stream()
                             .map(qo -> {
+                                if (language.equalsIgnoreCase(question.getLanguage())) {
+                                    return new QuestionOption(qo.key(), qo.text(), qo.isCorrect());
+                                }
+
                                 if (!optionTranslations.containsKey(qo.id())) {
                                     optionsTranslated.incrementAndGet();
                                 }
@@ -286,15 +300,6 @@ public class AttemptService implements AttemptUseCase {
                                 return new QuestionOption(qo.key(), questionOption, qo.isCorrect());
                             })
                             .toList();
-
-                    if (!questionTranslations.containsKey(questionId)) {
-                        questionsTranslated.incrementAndGet();
-                    }
-
-                    String translatedText = questionTranslations.getOrDefault(
-                            questionId,
-                            translationService.getOrTranslate("question", questionId, question.getText(), language)
-                    );
 
                     String selectedOption = answerMap.get(questionId);
 
