@@ -81,6 +81,10 @@ public class RateLimitFilter extends OncePerRequestFilter {
             return policies.expensive();
         }
 
+        if (path.contains("/questions/explanations")) {
+            return policies.defaultPolicy();
+        }
+
         // LLM operations
         if (path.contains("/questions/") && path.contains("/explanations")) {
             return policies.llm();
