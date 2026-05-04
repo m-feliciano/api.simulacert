@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.ExplanationControllerOpenApi;
+import com.simulacert.adapter.rest.controller.param.ContentLanguage;
 import com.simulacert.adapter.rest.controller.param.CsvUuidParam;
 import com.simulacert.auth.domain.User;
 import com.simulacert.exam.application.dto.request.RequestExplanationCommand;
@@ -55,9 +56,9 @@ public class ExplanationController implements ExplanationControllerOpenApi {
     @PreAuthorize("isAuthenticated()")
     public List<ExplanationResponse> getExplanationsByQuestionIds(
             @CsvUuidParam("questionIds") List<UUID> questionIds,
-            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") String language
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") ContentLanguage language
     ) {
-        return explanationUseCase.getExplanationsForQuestions(questionIds, language);
+        return explanationUseCase.getExplanationsForQuestions(questionIds, language.headerValue());
     }
 
     @Override

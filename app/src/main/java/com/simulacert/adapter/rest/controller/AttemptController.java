@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.AttemptControllerOpenApi;
+import com.simulacert.adapter.rest.controller.param.ContentLanguage;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptResponse;
@@ -99,8 +100,8 @@ public class AttemptController implements AttemptControllerOpenApi {
     @GetMapping("/{attemptId}/questions")
     public ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(
             @PathVariable UUID attemptId,
-            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") String language) {
-        List<AttemptQuestionResponse> questions = useCase.getAttemptQuestions(attemptId, language);
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") ContentLanguage language) {
+        List<AttemptQuestionResponse> questions = useCase.getAttemptQuestions(attemptId, language.headerValue());
         return ResponseEntity.ok(questions);
     }
 

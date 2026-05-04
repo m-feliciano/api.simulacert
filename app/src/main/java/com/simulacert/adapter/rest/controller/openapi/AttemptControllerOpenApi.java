@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.controller.param.ContentLanguage;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptResponse;
@@ -104,7 +105,7 @@ AttemptControllerOpenApi {
     })
     ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(
             @PathVariable UUID attemptId,
-            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") String language
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") ContentLanguage language
     );
 
     @Operation(
