@@ -268,14 +268,18 @@ public class AttemptService implements AttemptUseCase {
                 .map(question -> {
                     UUID questionId = question.getId();
 
-                    if (!questionTranslations.containsKey(questionId)) {
-                        questionsTranslated.incrementAndGet();
-                    }
+                    String translatedText = question.getText();
+                    if (!language.equalsIgnoreCase(question.getLanguage())) {
+                        if (!questionTranslations.containsKey(questionId)) {
+                            questionsTranslated.incrementAndGet();
+                        }
 
-                    String translatedText = questionTranslations.getOrDefault(
-                            questionId,
-                            translationService.getOrTranslate("question", questionId, question.getText(), language)
-                    );
+                        translatedText = questionTranslations.getOrDefault(
+                                questionId,
+                                translationService.getOrTranslate(
+                                        "question", questionId, question.getText(), language)
+                        );
+                    }
 
                     var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
                     var options = questionOptions.stream()
