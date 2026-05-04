@@ -23,4 +23,10 @@ public interface QuestionExplanationRunRepository extends JpaRepository<Question
             @Param("language") String language,
             @Param("now") Instant now
     );
+
+    @Query("SELECT q FROM QuestionExplanationRun q WHERE q.questionId IN :questionIds and q.expiresAt > :now")
+    List<QuestionExplanationRun> findByQuestionIdsAndExamId(
+            @Param("questionIds") List<UUID> questionIds,
+            @Param("now") Instant now
+    );
 }

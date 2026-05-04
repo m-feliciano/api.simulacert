@@ -13,4 +13,6 @@ public interface QuestionExplanationRunRepositoryPort {
     Optional<QuestionExplanationRun> findById(UUID id);
 
     Optional<List<QuestionExplanationRun>> findByQuestionIdAndLanguage(UUID questionId, String language);
+
+    List<QuestionExplanationRun> findByQuestionIdsAndExamId(List<UUID> uuids);
 }

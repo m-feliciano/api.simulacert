@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.ExplanationControllerOpenApi;
+import com.simulacert.adapter.rest.controller.param.CsvUuidParam;
 import com.simulacert.auth.domain.User;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import com.simulacert.llm.application.dto.RequestExplanationCommand;
@@ -13,12 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -45,6 +49,15 @@ public class ExplanationController implements ExplanationControllerOpenApi {
 
         ExplanationResponse response = explanationUseCase.requestExplanation(command, principal.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping("/questions/explanations")
+    @PreAuthorize("isAuthenticated()")
+    public List<ExplanationResponse> getExplanationsByQuestionIds(
+            @CsvUuidParam("questionIds") List<UUID> questionIds,
+            @RequestHeader(value = "Accept-Language", defaultValue = "pt_br") String language
+    ) {
+        return explanationUseCase.getExplanationsForQuestions(questionIds);
     }
 
     @Override
