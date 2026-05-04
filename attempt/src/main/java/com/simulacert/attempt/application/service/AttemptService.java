@@ -14,12 +14,14 @@ import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.Difficulty;
 import com.simulacert.common.ClockPort;
+import com.simulacert.exam.application.dto.response.QuestionOptionDto;
 import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.service.XRayTracingService;
+import com.simulacert.translation.application.service.TranslationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,9 +32,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
@@ -55,6 +60,7 @@ public class AttemptService implements AttemptUseCase {
     private final QuestionOptionQueryPort questionOptionQueryPort;
     private final ClockPort clock;
     private final XRayTracingService xray;
+    private final TranslationService translationService;
 
     @Scheduled(cron = "0 0 0 * * ?") // runs every day at midnight
     public void cleanUpOldInProgressAttempts() {
@@ -198,46 +204,118 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @XRaySubsegment("attempt.getAttemptQuestions")
-    public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
+    public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId, String language) {
         xray.putAnnotation("attemptId", attemptId);
+
         Attempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new IllegalArgumentException("Attempt not found: " + attemptId));
 
         xray.putAnnotation("examId", attempt.getExamId());
 
         var answers = answerRepository.findByAttemptId(attemptId);
+
         var answerMap = answers.stream()
                 .collect(Collectors.toMap(
                         Answer::getQuestionId,
                         Answer::getSelectedOption
                 ));
 
-        return attempt.getQuestionIds()
+        List<UUID> questionIds = attempt.getQuestionIds();
+        var questions = questionRepository.findByExamId(attempt.getExamId())
+                .stream()
+                .filter(q -> questionIds.contains(q.getId()))
+                .collect(Collectors.toMap(Question::getId, q -> q));
+
+        Map<UUID, List<QuestionOptionDto>> optionsByQuestionId = new HashMap<>();
+
+        for (UUID qid : questionIds) {
+            var opts = questionOptionQueryPort.findByQuestionId(qid);
+            optionsByQuestionId.put(qid, opts);
+        }
+
+        Map<UUID, String> questionTextById = questions.values()
+                .stream()
+                .collect(Collectors.toMap(Question::getId, Question::getText));
+
+        Map<UUID, String> questionTranslations = translationService.getExistingTranslations(
+                "question",
+                questionTextById,
+                language
+        );
+
+        Map<UUID, String> optionTextById = optionsByQuestionId.values()
+                .stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toMap(
+                        QuestionOptionDto::id,
+                        QuestionOptionDto::text,
+                        (a, b) -> a
+                ));
+
+        Map<UUID, String> optionTranslations = translationService.getExistingTranslations(
+                "question_option",
+                optionTextById,
+                language
+        );
+
+        AtomicInteger questionsTranslated = new AtomicInteger(0);
+        AtomicInteger optionsTranslated = new AtomicInteger(0);
+
+        List<AttemptQuestionResponse> responses = questionIds
                 .stream()
                 .map(questionId -> {
-                    var question = questionRepository.findById(questionId);
+                    var question = questions.get(questionId);
                     if (question == null) {
                         throw new IllegalStateException("Question not found: " + questionId);
                     }
 
-                    var questionOptions = questionOptionQueryPort.findByQuestionId(questionId);
+                    var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
+
                     var options = questionOptions.stream()
-                            .map(qo -> new QuestionOption(qo.key(), qo.text(), qo.isCorrect()))
+                            .map(qo -> {
+                                if (!optionTranslations.containsKey(qo.id())) {
+                                    optionsTranslated.incrementAndGet();
+                                }
+
+                                String questionOption = optionTranslations.getOrDefault(
+                                        qo.id(),
+                                        translationService.getOrTranslate(
+                                                "question_option", qo.id(), qo.text(), language)
+                                );
+
+                                return new QuestionOption(qo.key(), questionOption, qo.isCorrect());
+                            })
                             .toList();
+
+                    if (!questionTranslations.containsKey(questionId)) {
+                        questionsTranslated.incrementAndGet();
+                    }
+
+                    String translatedText = questionTranslations.getOrDefault(
+                            questionId,
+                            translationService.getOrTranslate("question", questionId, question.getText(), language)
+                    );
 
                     String selectedOption = answerMap.get(questionId);
 
                     return new AttemptQuestionResponse(
                             question.getId(),
                             question.getCode(),
-                            question.getText(),
+                            translatedText,
                             question.getDomain(),
                             question.getDifficulty(),
                             options,
                             selectedOption
                     );
                 })
+                .parallel()
                 .toList();
+
+        xray.putAnnotation("questionCount", responses.size());
+        xray.putAnnotation("questionsTranslated", questionsTranslated.get());
+        xray.putAnnotation("optionsTranslated", optionsTranslated.get());
+
+        return responses;
     }
 
     @Override

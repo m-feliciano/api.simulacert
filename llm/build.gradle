@@ -10,8 +10,6 @@ tasks.withType(JavaCompile).configureEach {
 
 dependencies {
     api project(':common')
-    api project(':exam')
-    api project(':attempt')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'

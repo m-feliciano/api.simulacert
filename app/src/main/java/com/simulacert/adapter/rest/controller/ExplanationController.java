@@ -3,10 +3,10 @@ package com.simulacert.adapter.rest.controller;
 import com.simulacert.adapter.rest.controller.openapi.ExplanationControllerOpenApi;
 import com.simulacert.adapter.rest.controller.param.CsvUuidParam;
 import com.simulacert.auth.domain.User;
+import com.simulacert.exam.application.dto.request.RequestExplanationCommand;
+import com.simulacert.exam.application.port.in.QuestionExplanationUseCase;
 import com.simulacert.llm.application.dto.ExplanationResponse;
-import com.simulacert.llm.application.dto.RequestExplanationCommand;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
-import com.simulacert.llm.application.port.in.QuestionExplanationUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,9 +55,9 @@ public class ExplanationController implements ExplanationControllerOpenApi {
     @PreAuthorize("isAuthenticated()")
     public List<ExplanationResponse> getExplanationsByQuestionIds(
             @CsvUuidParam("questionIds") List<UUID> questionIds,
-            @RequestHeader(value = "Accept-Language", defaultValue = "pt_br") String language
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") String language
     ) {
-        return explanationUseCase.getExplanationsForQuestions(questionIds);
+        return explanationUseCase.getExplanationsForQuestions(questionIds, language);
     }
 
     @Override

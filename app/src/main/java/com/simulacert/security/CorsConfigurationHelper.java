@@ -14,7 +14,7 @@ public final class CorsConfigurationHelper {
 
     public static CorsConfigurationSource build(CorsConfiguration configuration) {
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "x-content-language"));
         configuration.setExposedHeaders(List.of("Location"));
 
         configuration.setAllowCredentials(true);

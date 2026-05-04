@@ -7,6 +7,8 @@ description = 'Exam module'
 dependencies {
     implementation project(':common')
     implementation project(':auth')
+    implementation project(':llm')
+    implementation project(':translation')
 
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
