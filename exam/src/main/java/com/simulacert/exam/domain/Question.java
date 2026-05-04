@@ -44,7 +44,7 @@ public class Question {
     private String difficulty;
 
     @Column(nullable = false, name = "language")
-    private String language;
+    private String language = "pt_br";
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

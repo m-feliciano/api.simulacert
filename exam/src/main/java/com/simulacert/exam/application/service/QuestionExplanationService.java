@@ -252,7 +252,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     }
 
     private boolean shouldTranslate(String baseLang, String targetLang) {
-        return !baseLang.equalsIgnoreCase(targetLang);
+        return !targetLang.equalsIgnoreCase(baseLang);
     }
 
     private String resolveText(
