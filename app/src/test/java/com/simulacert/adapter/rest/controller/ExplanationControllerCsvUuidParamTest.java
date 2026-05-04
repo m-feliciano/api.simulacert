@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.param.CsvUuidParamArgumentResolver;
+import com.simulacert.adapter.rest.controller.param.ContentLanguageConverter;
 import com.simulacert.exam.application.port.in.QuestionExplanationUseCase;
 import com.simulacert.infrastructure.ratelimit.RateLimitFilter;
 import com.simulacert.security.JwtAuthenticationFilter;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,6 +48,12 @@ class ExplanationControllerCsvUuidParamTest {
 
     @TestConfiguration
     static class MvcTestConfig implements WebMvcConfigurer {
+
+        @Override
+        public void addFormatters(FormatterRegistry registry) {
+            registry.addConverter(new ContentLanguageConverter());
+        }
+
         @Override
         public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
             resolvers.add(new CsvUuidParamArgumentResolver());
