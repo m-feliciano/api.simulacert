@@ -595,6 +595,15 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "in": "header",
+            "name": "x-content-language",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "pt_br"
+            }
           }
         ],
         "responses": {
@@ -1754,7 +1763,7 @@
           },
           {
             "in": "header",
-            "name": "Accept-Language",
+            "name": "x-content-language",
             "required": false,
             "schema": {
               "type": "string",
@@ -2362,6 +2371,36 @@
         "summary": "Get attempt history",
         "tags": [
           "Statistics"
+        ]
+      }
+    },
+    "/api/v1/translations/translate": {
+      "post": {
+        "operationId": "translate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslateFieldCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TranslationResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "translation-controller"
         ]
       }
     }
@@ -3050,6 +3089,65 @@
         "required": [
           "rating"
         ]
+      },
+      "TranslateFieldCommand": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "[a-z]{2}(-[A-Z]{2})?"
+          }
+        },
+        "required": [
+          "content",
+          "entityId",
+          "entityType",
+          "language"
+        ]
+      },
+      "TranslationResponse": {
+        "type": "object",
+        "properties": {
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityType": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "language": {
+            "type": "string"
+          },
+          "reviewed": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
       },
       "UpdateExamRequest": {
         "type": "object",

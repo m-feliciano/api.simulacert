@@ -38,7 +38,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
     @Override
     @XRaySubsegment("ext.openai.chat.completions")
     public LLMResult generate(LLMRequest request) {
-        log.info("Calling OpenAI API with model: {}", properties.getModel());
+        log.info("Calling OpenAI API with model: {}", request.model() != null ? request.model() : properties.getModel());
         log.debug("Temperature: {}, Max Tokens: {}", request.temperature(), request.maxTokens());
 
         OpenAIRequest openAIRequest = buildOpenAIRequest(request);
@@ -68,7 +68,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         );
 
         return new OpenAIRequest(
-                properties.getModel(),
+                request.model() != null ? request.model() : properties.getModel(),
                 messages,
                 request.temperature(),
                 request.maxTokens()

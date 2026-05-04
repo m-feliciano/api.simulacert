@@ -16,6 +16,7 @@ dependencies {
     implementation project(':attempt')
     implementation project(':stats')
     implementation project(':llm')
+    implementation project(':translation')
     implementation project(':review')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'

@@ -14,5 +14,6 @@ include 'attempt'
 include 'stats'
 include 'llm'
 include 'review'
+include 'translation'
 include 'app'
 

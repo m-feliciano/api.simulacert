@@ -1,8 +1,8 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
 import com.simulacert.adapter.rest.controller.param.CsvUuidParam;
+import com.simulacert.exam.application.dto.request.RequestExplanationCommand;
 import com.simulacert.llm.application.dto.ExplanationResponse;
-import com.simulacert.llm.application.dto.RequestExplanationCommand;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -78,7 +78,7 @@ public interface ExplanationControllerOpenApi {
     })
     List<ExplanationResponse> getExplanationsByQuestionIds(
             @CsvUuidParam("questionIds") List<UUID> questionIds,
-            @RequestHeader(value = "Accept-Language", defaultValue = "pt_br") String language
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") String language
     );
 }
 

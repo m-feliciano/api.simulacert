@@ -1,5 +1,6 @@
 package com.simulacert.exam.infrastructure.persistence.adapter;
 
+import com.simulacert.exam.application.dto.response.QuestionOptionDto;
 import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.infrastructure.persistence.repository.QuestionOptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class QuestionOptionQueryAdapter implements QuestionOptionQueryPort {
     @Override
     public List<QuestionOptionDto> findByQuestionId(UUID questionId) {
         return repository.findByQuestionId(questionId).stream()
-                .map(qo -> new QuestionOptionDto(qo.getOptionKey(), qo.getOptionText(), qo.getIsCorrect()))
+                .map(qo -> new QuestionOptionDto(qo.getOptionKey(), qo.getOptionText(), qo.getIsCorrect(), qo.getId()))
                 .toList();
     }
 }

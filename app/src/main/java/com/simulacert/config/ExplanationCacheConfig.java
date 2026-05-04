@@ -15,10 +15,10 @@ public class ExplanationCacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("explanations", "requests");
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("explanations", "translations");
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .maximumSize(1000)
-                .expireAfterWrite(4, TimeUnit.HOURS)
+                .expireAfterWrite(1, TimeUnit.HOURS)
                 .recordStats());
         return cacheManager;
     }
