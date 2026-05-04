@@ -45,7 +45,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private final QuestionExplanationRunRepositoryPort explanationRunRepository;
     private final ExplanationLLMPort llmProvider;
     private final ClockPort clock;
-    private final ExplanationCacheService cacheService;
     private final XRayTracingService xray;
 
     @Override
@@ -66,6 +65,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
             QuestionExplanationRun run = explanation.get().getFirst();
             return new ExplanationResponse(
                     run.getId(),
+                    run.getQuestionId(),
                     run.getContent(),
                     run.getModelName(),
                     run.getExpiresAt()
@@ -102,6 +102,21 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         explanationRunRepository.save(explanationRun);
 
         log.info("Feedback submitted for explanation {}: rating={}", explanationId, command.rating());
+    }
+
+    @Override
+    public List<ExplanationResponse> getExplanationsForQuestions(List<UUID> uuids) {
+        List<QuestionExplanationRun> runs = explanationRunRepository.findByQuestionIdsAndExamId(uuids);
+
+        return runs.stream()
+                .map(run -> new ExplanationResponse(
+                        run.getId(),
+                        run.getQuestionId(),
+                        run.getContent(),
+                        run.getModelName(),
+                        run.getExpiresAt()
+                ))
+                .toList();
     }
 
 
@@ -226,6 +241,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
 
         return new ExplanationResponse(
                 saved.getId(),
+                saved.getQuestionId(),
                 saved.getContent(),
                 saved.getModelName(),
                 saved.getExpiresAt()

@@ -1735,6 +1735,108 @@
         ]
       }
     },
+    "/api/v1/questions/explanations": {
+      "get": {
+        "description": "Retrieve AI-generated explanations for a list of question IDs within an exam. This is an experimental feature and requires the exam attempt to be completed.",
+        "operationId": "getExplanationsByQuestionIds",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "questionIds",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "pt_br"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExplanationResponse"
+                }
+              }
+            },
+            "description": "Explanations retrieved successfully"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExplanationResponse"
+                  }
+                }
+              }
+            },
+            "description": "Invalid request or attempt not completed"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExplanationResponse"
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExplanationResponse"
+                  }
+                }
+              }
+            },
+            "description": "Attempt does not belong to user"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExplanationResponse"
+                  }
+                }
+              }
+            },
+            "description": "Exam or questions not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get explanations for multiple questions",
+        "tags": [
+          "Question Explanations"
+        ]
+      }
+    },
     "/api/v1/questions/{questionId}": {
       "get": {
         "description": "Retrieves detailed information about a specific question",
@@ -2604,6 +2706,10 @@
           },
           "model": {
             "type": "string"
+          },
+          "questionId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },

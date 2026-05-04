@@ -32,4 +32,9 @@ public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanat
     public Optional<List<QuestionExplanationRun>> findByQuestionIdAndLanguage(UUID questionId, String language) {
         return repository.findByQuestionIdAndLanguage(questionId, language, clock.now());
     }
+
+    @Override
+    public List<QuestionExplanationRun> findByQuestionIdsAndExamId(List<UUID> uuids) {
+        return repository.findByQuestionIdsAndExamId(uuids, clock.now());
+    }
 }
