@@ -263,16 +263,27 @@ public class AttemptService implements AttemptUseCase {
 
         List<AttemptQuestionResponse> responses = questionIds
                 .stream()
-                .map(questionId -> {
-                    var question = questions.get(questionId);
-                    if (question == null) {
-                        throw new IllegalStateException("Question not found: " + questionId);
+                .filter(questions::containsKey)
+                .map(questions::get)
+                .map(question -> {
+                    UUID questionId = question.getId();
+
+                    if (!questionTranslations.containsKey(questionId)) {
+                        questionsTranslated.incrementAndGet();
                     }
 
-                    var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
+                    String translatedText = questionTranslations.getOrDefault(
+                            questionId,
+                            translationService.getOrTranslate("question", questionId, question.getText(), language)
+                    );
 
+                    var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
                     var options = questionOptions.stream()
                             .map(qo -> {
+                                if (language.equalsIgnoreCase(question.getLanguage())) {
+                                    return new QuestionOption(qo.key(), qo.text(), qo.isCorrect());
+                                }
+
                                 if (!optionTranslations.containsKey(qo.id())) {
                                     optionsTranslated.incrementAndGet();
                                 }
@@ -286,15 +297,6 @@ public class AttemptService implements AttemptUseCase {
                                 return new QuestionOption(qo.key(), questionOption, qo.isCorrect());
                             })
                             .toList();
-
-                    if (!questionTranslations.containsKey(questionId)) {
-                        questionsTranslated.incrementAndGet();
-                    }
-
-                    String translatedText = questionTranslations.getOrDefault(
-                            questionId,
-                            translationService.getOrTranslate("question", questionId, question.getText(), language)
-                    );
 
                     String selectedOption = answerMap.get(questionId);
 
