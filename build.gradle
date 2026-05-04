@@ -46,7 +46,7 @@ subprojects {
 
         // Spring Framework Dependencies
         implementation 'org.springframework:spring-context'
-        implementation 'org.springframework:spring-tx:6.2.1'
+        implementation 'org.springframework:spring-tx:7.0.7'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
         annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
