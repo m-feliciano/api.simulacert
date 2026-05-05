@@ -4,9 +4,7 @@ on:
   pull_request:
     branches:
       - release/*
-  push:
-    branches:
-      - release/*
+      - master
 
 concurrency:
   group: pr-${{ github.ref }}
@@ -34,21 +32,6 @@ jobs:
 
       - name: Build
         run: ./gradlew build
-
-      - name: Build deployable JAR
-        run: ./gradlew :app:bootJar
-
-      - name: List built artifacts
-        run: ls -lah app/build/libs
-
-      - name: Prepare Docker context (app.jar)
-        run: cp app/build/libs/app.jar app.jar
-
-      - name: Upload build artifact (app.jar)
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-jar
-          path: app.jar
 
       - name: Upload test reports
         if: ${{ always() }}
