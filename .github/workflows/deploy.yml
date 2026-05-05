@@ -1,4 +1,4 @@
-name: CI + CodeQL + Deploy
+name: Master release build & deploy
 
 on:
   push:
