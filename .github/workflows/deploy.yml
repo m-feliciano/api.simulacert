@@ -3,8 +3,6 @@ name: CI + CodeQL + Deploy
 on:
   push:
     branches: ["master"]
-  pull_request:
-    branches: ["master"]
 
 concurrency:
   group: pipeline-${{ github.workflow }}-${{ github.ref }}
@@ -12,7 +10,6 @@ concurrency:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   build-and-test:
@@ -57,9 +54,11 @@ jobs:
 
   codeql:
     name: CodeQL Analyze
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     runs-on: ubuntu-latest
     needs: build-and-test
+    permissions:
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@v4
 
@@ -83,7 +82,7 @@ jobs:
   deploy:
     name: Deploy (ECR)
     needs: [build-and-test, codeql]
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && (needs.codeql.result == 'success' || needs.codeql.result == 'skipped') }}
+    if: ${{ needs.codeql.result == 'success' }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
