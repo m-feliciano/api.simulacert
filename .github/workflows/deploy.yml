@@ -38,7 +38,7 @@ jobs:
         run: ./gradlew :app:bootJar
 
       - name: Prepare deploy artifact (app.jar)
-        run: cp app/build/libs/*.jar app.jar
+        run: cp app/build/libs/app.jar app.jar
 
       - name: Upload deploy artifact (app.jar)
         uses: actions/upload-artifact@v4
