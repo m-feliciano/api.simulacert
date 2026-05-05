@@ -1,29 +1,25 @@
-name: Deploy
+name: CI + CodeQL + Deploy
 
 on:
   push:
     branches: ["master"]
+  pull_request:
+    branches: ["master"]
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: pipeline-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
-  id-token: write
   contents: read
+  security-events: write
 
 jobs:
-  build-and-push:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Configurar AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -32,14 +28,83 @@ jobs:
           java-version: 21
           cache: gradle
 
-      - name: Dar permissão ao gradlew
+      - name: Grant execute permission
         run: chmod +x gradlew
 
-      - name: Build JAR
+      - name: Build & Test
+        run: ./gradlew build
+
+      - name: Build deployable JAR
         run: ./gradlew :app:bootJar
 
-      - name: Copiar artefato
+      - name: Prepare deploy artifact (app.jar)
         run: cp app/build/libs/*.jar app.jar
+
+      - name: Upload deploy artifact (app.jar)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: app.jar
+
+      - name: Upload test reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/**
+            **/build/test-results/test/**
+
+  codeql:
+    name: CodeQL Analyze
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java
+
+      - name: Build (no tests)
+        run: ./gradlew build -x test
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+  deploy:
+    name: Deploy (ECR)
+    needs: [build-and-test, codeql]
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' && (needs.codeql.result == 'success' || needs.codeql.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download deploy artifact (app.jar)
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+
+      - name: Verify deploy artifact
+        run: ls -lah app.jar
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_NAME }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v4
