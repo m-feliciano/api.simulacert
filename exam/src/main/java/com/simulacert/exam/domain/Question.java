@@ -63,6 +63,7 @@ public class Question {
                 .text(text.trim())
                 .domain(domain.trim())
                 .difficulty(difficulty.trim())
+                .language("pt_br")
                 .code(code.trim())
                 .build();
     }
