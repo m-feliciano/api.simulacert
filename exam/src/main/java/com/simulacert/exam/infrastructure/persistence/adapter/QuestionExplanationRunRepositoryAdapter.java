@@ -1,6 +1,5 @@
 package com.simulacert.exam.infrastructure.persistence.adapter;
 
-import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.port.out.QuestionExplanationRunRepositoryPort;
 import com.simulacert.exam.domain.QuestionExplanationRun;
 import com.simulacert.exam.infrastructure.persistence.repository.QuestionExplanationRunRepository;
@@ -16,7 +15,6 @@ import java.util.UUID;
 public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanationRunRepositoryPort {
 
     private final QuestionExplanationRunRepository repository;
-    private final ClockPort clock;
 
     @Override
     public QuestionExplanationRun save(QuestionExplanationRun explanationRun) {
@@ -29,12 +27,7 @@ public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanat
     }
 
     @Override
-    public Optional<List<QuestionExplanationRun>> findByQuestionIdAndLanguage(UUID questionId, String language) {
-        return repository.findByQuestionIdAndLanguage(questionId, language, clock.now());
-    }
-
-    @Override
-    public List<QuestionExplanationRun> findByQuestionIdsAndExamIdAndLanguage(List<UUID> uuids, String language) {
-        return repository.findByQuestionIdsAndExamId(uuids, language, clock.now());
+    public Optional<List<QuestionExplanationRun>> findAllByQuestion(UUID questionId) {
+        return Optional.of(repository.findAllByQuestionId(questionId));
     }
 }

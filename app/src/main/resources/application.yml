@@ -2,13 +2,13 @@
 info:
   app:
     name: simulacert
-    version: 1.0.0
+    version: 1.1.0-STAGING
     description: Sistema de Simulados AWS - Monólito Modular
     architecture: modular-monolith
 
 spring:
   aop:
-    # Enable CGLIB proxies to allow proxying of classes without interfaces, which is common in modular monoliths.
+    # Enable CGLIB proxies to allow proxying of classes without interfaces.
     proxy-target-class: true
   profiles:
     active: prod
@@ -30,6 +30,11 @@ spring:
         one-indexed-parameters: false
       sort:
         sort-parameter: sort
+
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
 
 server:
   port: 8080

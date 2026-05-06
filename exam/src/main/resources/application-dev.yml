@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: exam-service-dev
-
-logging:
-  level:
-    root: DEBUG
-    br.com.simulacert.exam: DEBUG

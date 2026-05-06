@@ -30,12 +30,5 @@ public class ExamImportController implements ExamImportControllerOpenApi {
     public void importExams(@RequestParam("files") List<MultipartFile> files) {
         examUseCase.importExamsFiles(files);
     }
-
-    @Override
-    @PostMapping("/directory")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void importFromDirectory() {
-        examUseCase.importExamsFilesFromDirectory();
-    }
 }
 

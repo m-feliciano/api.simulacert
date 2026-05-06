@@ -3,7 +3,6 @@ package com.simulacert.exam.application.mapper;
 import com.simulacert.exam.application.dto.response.QuestionResponse;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.exam.domain.QuestionExplanationRun;
-import com.simulacert.exam.domain.QuestionOption;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,8 +20,4 @@ public interface QuestionMapper {
     @Mapping(target = "model", source = "modelName")
     @Mapping(target = "explanationId", source = "id")
     ExplanationResponse toExplanationResponse(QuestionExplanationRun question);
-
-    @Mapping(target = "optionText", source = "optionText")
-    @Mapping(target = "question", ignore = true)
-    QuestionOption toQuestionOptionTranslate(QuestionOption opt, String optionText);
 }

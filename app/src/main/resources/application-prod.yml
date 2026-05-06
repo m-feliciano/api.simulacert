@@ -110,7 +110,7 @@ springdoc:
 info:
   app:
     name: simulacert
-    version: 1.0.0
+    version: 1.1.0-PROD
     description: Sistema de Simulados AWS | Azure | Google - Production
     architecture: modular-monolith
     profile: prod

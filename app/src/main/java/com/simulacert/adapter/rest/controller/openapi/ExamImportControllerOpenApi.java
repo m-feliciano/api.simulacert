@@ -23,17 +23,5 @@ public interface ExamImportControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Not authorized (requires ADMIN role)")
     })
     void importExams(@RequestParam("files") List<MultipartFile> files);
-
-    @Operation(
-            summary = "Import exams from directory",
-            description = "Import all JSON files from 'fazer' directory and move to 'feito' after processing"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Exams imported successfully from directory"),
-            @ApiResponse(responseCode = "401", description = "Not authenticated"),
-            @ApiResponse(responseCode = "403", description = "Not authorized (requires ADMIN role)"),
-            @ApiResponse(responseCode = "500", description = "Error accessing directory")
-    })
-    void importFromDirectory();
 }
 
