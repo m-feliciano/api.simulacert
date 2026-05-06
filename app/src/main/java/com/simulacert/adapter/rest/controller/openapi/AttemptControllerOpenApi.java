@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.controller.param.ContentLanguage;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptResponse;
@@ -18,6 +19,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 import java.util.UUID;
@@ -101,7 +103,10 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Attempt questions retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Attempt not found")
     })
-    ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId);
+    ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(
+            @PathVariable UUID attemptId,
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") ContentLanguage language
+    );
 
     @Operation(
             summary = "Submit answer for question",

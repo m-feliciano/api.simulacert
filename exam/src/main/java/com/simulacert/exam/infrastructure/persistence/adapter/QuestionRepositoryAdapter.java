@@ -38,11 +38,6 @@ public class QuestionRepositoryAdapter implements QuestionRepositoryPort {
     }
 
     @Override
-    public List<UUID> findIdsByExamId(UUID examId) {
-        return repository.findIdsByExamId(examId);
-    }
-
-    @Override
     public Question save(Question question) {
         return repository.save(question);
     }

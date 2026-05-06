@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.AttemptControllerOpenApi;
+import com.simulacert.adapter.rest.controller.param.ContentLanguage;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptResponse;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -96,11 +98,10 @@ public class AttemptController implements AttemptControllerOpenApi {
 
     @Override
     @GetMapping("/{attemptId}/questions")
-    public ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId) {
-        log.debug("Getting questions for attempt {}", attemptId);
-
-        List<AttemptQuestionResponse> questions = useCase.getAttemptQuestions(attemptId);
-
+    public ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(
+            @PathVariable UUID attemptId,
+            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") ContentLanguage language) {
+        List<AttemptQuestionResponse> questions = useCase.getAttemptQuestions(attemptId, language.headerValue());
         return ResponseEntity.ok(questions);
     }
 

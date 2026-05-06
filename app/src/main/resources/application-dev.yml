@@ -13,7 +13,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 10
+      maximum-pool-size: 20
       minimum-idle: 2
       connection-timeout: 30000
       idle-timeout: 600000
@@ -48,16 +48,14 @@ app:
       jwks-uri: https://www.googleapis.com/oauth2/v3/certs
     frontend-callback-url: ${FRONTEND_CALLBACK_URL:http://localhost:4200/auth/callback}
     state-expiration-minutes: 5
-  import:
-    input-dir: ./conteudo/import/fazer
-    processed-dir: ./conteudo/import/feito
+
   llm:
     openai:
-      enabled: ${OPENAI_ENABLED:true}
+      enabled: ${OPENAI_ENABLED:false}
       api-key: ${OPENAI_API_KEY:}
-      model: gpt-4o-mini
+      model: gpt-4.1-mini
       base-url: https://api.openai.com/v1
-      timeout-seconds: 30
+      timeout-seconds: 60
 
 management:
   endpoints:
@@ -72,6 +70,7 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
+    enabled: true
     path: /swagger-ui
     operations-sorter: method
   writer-with-order-by-keys: true
@@ -79,7 +78,7 @@ springdoc:
 info:
   app:
     name: simulacert
-    version: 1.0.0-DEV
+    version: 1.1.0-DEV
     description: Sistema de Simulados AWS | Azure | Google - Development
     architecture: modular-monolith
     profile: dev

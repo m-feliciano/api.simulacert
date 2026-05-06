@@ -30,7 +30,7 @@ services:
 
     healthcheck:
       test: ["CMD", "curl", "-fsS", "--max-time", "4", "http://localhost:8080/actuator/health/liveness"]
-      interval: 30s
+      interval: 1m
       timeout: 5s
       retries: 3
       start_period: 30s

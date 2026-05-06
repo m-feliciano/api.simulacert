@@ -2,10 +2,10 @@ package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.ExplanationControllerOpenApi;
 import com.simulacert.auth.domain.User;
+import com.simulacert.exam.application.dto.request.RequestExplanationCommand;
+import com.simulacert.exam.application.port.in.QuestionExplanationUseCase;
 import com.simulacert.llm.application.dto.ExplanationResponse;
-import com.simulacert.llm.application.dto.RequestExplanationCommand;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
-import com.simulacert.llm.application.port.in.QuestionExplanationUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,17 +39,11 @@ public class ExplanationController implements ExplanationControllerOpenApi {
     ) {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        log.info("User {} requesting explanation for question {}", principal.getEmail(), questionId);
-
         if (!questionId.equals(command.questionId())) {
             throw new IllegalArgumentException("Question ID in path does not match request body");
         }
 
-        UUID userId = principal.getId();
-
-        ExplanationResponse response = explanationUseCase.requestExplanation(command, userId);
-        log.info("Explanation generated for question {}: {}", questionId, response.explanationId());
-
+        ExplanationResponse response = explanationUseCase.requestExplanation(command, principal.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -60,11 +54,7 @@ public class ExplanationController implements ExplanationControllerOpenApi {
             @RequestBody SubmitFeedbackCommand command,
             @PathVariable UUID explanationId
     ) {
-        log.info("Submitting feedback for explanation {}", explanationId);
-
         explanationUseCase.submitFeedback(explanationId, command);
-        log.info("Feedback submitted for explanation {}", explanationId);
-
         return ResponseEntity.noContent().build();
     }
 }

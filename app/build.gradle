@@ -16,6 +16,7 @@ dependencies {
     implementation project(':attempt')
     implementation project(':stats')
     implementation project(':llm')
+    implementation project(':translation')
     implementation project(':review')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -36,7 +37,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:11.20.0")
     implementation("org.flywaydb:flyway-database-postgresql:11.20.0")
 
-    runtimeOnly 'org.postgresql:postgresql:42.7.8'
+    runtimeOnly 'org.postgresql:postgresql:42.7.11'
     runtimeOnly 'com.h2database:h2'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

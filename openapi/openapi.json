@@ -595,6 +595,19 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "in": "header",
+            "name": "x-content-language",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "PT_BR",
+              "enum": [
+                "PT_BR",
+                "EN"
+              ]
+            }
           }
         ],
         "responses": {
@@ -1347,30 +1360,6 @@
         ]
       }
     },
-    "/api/v1/exams/import/directory": {
-      "post": {
-        "description": "Import all JSON files from 'fazer' directory and move to 'feito' after processing",
-        "operationId": "importFromDirectory",
-        "responses": {
-          "201": {
-            "description": "Exams imported successfully from directory"
-          },
-          "401": {
-            "description": "Not authenticated"
-          },
-          "403": {
-            "description": "Not authorized (requires ADMIN role)"
-          },
-          "500": {
-            "description": "Error accessing directory"
-          }
-        },
-        "summary": "Import exams from directory",
-        "tags": [
-          "Exam Import"
-        ]
-      }
-    },
     "/api/v1/exams/slug/{slug}": {
       "get": {
         "description": "Retrieves detailed information about a specific exam by its slug",
@@ -2009,6 +1998,65 @@
         ]
       }
     },
+    "/api/v1/reviews/summary/user/{userId}": {
+      "get": {
+        "description": "Returns aggregated review metrics for a given user",
+        "operationId": "getSummaryByUser",
+        "parameters": [
+          {
+            "description": "User ID",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewSummaryResponse"
+                }
+              }
+            },
+            "description": "Summary retrieved successfully"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewSummaryResponse"
+                }
+              }
+            },
+            "description": "Not authenticated"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReviewSummaryResponse"
+                }
+              }
+            },
+            "description": "Not authorized - can only view own summary or require Admin role"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get review summary for a user",
+        "tags": [
+          "Reviews"
+        ]
+      }
+    },
     "/api/v1/stats/user/{userId}": {
       "get": {
         "description": "Retrieves overall statistics for a specific user",
@@ -2203,6 +2251,36 @@
           "Statistics"
         ]
       }
+    },
+    "/api/v1/translations/translate": {
+      "post": {
+        "operationId": "translate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslateFieldCommand"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/TranslationResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "translation-controller"
+        ]
+      }
     }
   },
   "components": {
@@ -2268,6 +2346,9 @@
             "items": {
               "$ref": "#/components/schemas/QuestionOption"
             }
+          },
+          "questionCode": {
+            "type": "string"
           },
           "questionId": {
             "type": "string",
@@ -2432,6 +2513,11 @@
       "CreateQuestionRequest": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 0
+          },
           "difficulty": {
             "type": "string",
             "maxLength": 50,
@@ -2460,6 +2546,7 @@
           }
         },
         "required": [
+          "code",
           "difficulty",
           "domain",
           "examId",
@@ -2536,6 +2623,10 @@
           },
           "model": {
             "type": "string"
+          },
+          "questionId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -2680,6 +2771,9 @@
       "QuestionResponse": {
         "type": "object",
         "properties": {
+          "code": {
+            "type": "string"
+          },
           "difficulty": {
             "type": "string"
           },
@@ -2751,11 +2845,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "language": {
-            "type": "string",
-            "maxLength": 10,
-            "minLength": 2
-          },
           "questionId": {
             "type": "string",
             "format": "uuid"
@@ -2764,7 +2853,6 @@
         "required": [
           "certification",
           "examAttemptId",
-          "language",
           "questionId"
         ]
       },
@@ -2793,6 +2881,27 @@
           "userId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "ReviewSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "approved": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "detailed": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "submitted": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "useful": {
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -2852,6 +2961,65 @@
         "required": [
           "rating"
         ]
+      },
+      "TranslateFieldCommand": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityType": {
+            "type": "string",
+            "minLength": 1
+          },
+          "language": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "[a-z]{2}(-[A-Z]{2})?"
+          }
+        },
+        "required": [
+          "content",
+          "entityId",
+          "entityType",
+          "language"
+        ]
+      },
+      "TranslationResponse": {
+        "type": "object",
+        "properties": {
+          "entityId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entityType": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "language": {
+            "type": "string"
+          },
+          "reviewed": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
       },
       "UpdateExamRequest": {
         "type": "object",

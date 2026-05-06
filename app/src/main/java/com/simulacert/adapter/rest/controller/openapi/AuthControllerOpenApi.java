@@ -112,20 +112,11 @@ public interface AuthControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "Password changed successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid old password"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            )
+            @ApiResponse(responseCode = "204", description = "Password changed successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid old password"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
-    ResponseEntity<Void> changePassword(
+    void changePassword(
             @Parameter(description = "User ID", required = true)
             @PathVariable UUID userId,
             @RequestBody ChangePasswordRequest request
@@ -137,20 +128,11 @@ public interface AuthControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "User activated successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Not authorized - Admin role required"
-            )
+            @ApiResponse(responseCode = "204", description = "User activated successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
     })
-    ResponseEntity<Void> activateUser(
+    void activateUser(
             @Parameter(description = "User ID", required = true)
             @PathVariable UUID userId
     );
@@ -161,20 +143,11 @@ public interface AuthControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "User deactivated successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "User not found"
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "Not authorized - Admin role required"
-            )
+            @ApiResponse(responseCode = "204", description = "User deactivated successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
     })
-    ResponseEntity<Void> deactivateUser(
+    void deactivateUser(
             @Parameter(description = "User ID", required = true)
             @PathVariable UUID userId
     );

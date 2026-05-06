@@ -9,7 +9,6 @@ RUN apt-get update \
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
 COPY app.jar app.jar
-COPY conteudo/ /conteudo/
 
 EXPOSE 8080
 

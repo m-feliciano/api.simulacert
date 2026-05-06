@@ -25,6 +25,4 @@ public interface ExamUseCase {
     void importExamsFiles(List<MultipartFile> files);
 
     ExamResponse getExamBySlug(String slug);
-
-    void importExamsFilesFromDirectory();
 }
