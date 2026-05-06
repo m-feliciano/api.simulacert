@@ -1,5 +1,7 @@
 package com.simulacert.attempt.application.dto;
 
+import com.simulacert.exam.application.dto.response.QuestionOptionDto;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +11,7 @@ public record AttemptQuestionResponse(
         String text,
         String domain,
         String difficulty,
-        List<QuestionOption> options,
+        List<QuestionOptionDto> options,
         String selectedOption
 ) {
 }

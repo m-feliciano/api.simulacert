@@ -24,7 +24,7 @@ public enum Difficulty {
                 .toArray(Difficulty[]::new);
     }
 
-    public List<Difficulty> getLessDifficultyThanThis() {
+    public List<Difficulty> getEasierThanThis() {
         return Arrays.stream(all())
                 .filter(d -> d.level < this.level)
                 .toList();

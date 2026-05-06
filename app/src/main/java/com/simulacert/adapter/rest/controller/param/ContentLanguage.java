@@ -1,6 +1,7 @@
 package com.simulacert.adapter.rest.controller.param;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 
@@ -9,11 +10,8 @@ public enum ContentLanguage {
     PT_BR("pt_br"),
     EN("en");
 
+    @Getter
     private final String headerValue;
-
-    public String headerValue() {
-        return headerValue;
-    }
 
     public static ContentLanguage fromHeader(String raw) {
         if (raw == null || raw.isBlank()) {

@@ -27,7 +27,7 @@ public interface AttemptUseCase {
 
     List<AttemptVo> getAttemptsByUser(UUID userId);
 
-    List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId, String language);
+    List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId);
 
     AttemptResponse retakeAttempt(UUID attemptId);
 }
