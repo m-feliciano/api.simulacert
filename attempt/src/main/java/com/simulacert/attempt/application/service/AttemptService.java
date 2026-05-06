@@ -4,7 +4,6 @@ import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
-import com.simulacert.attempt.application.dto.QuestionOption;
 import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.port.in.AttemptUseCase;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
@@ -32,12 +31,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
@@ -204,7 +200,7 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @XRaySubsegment("attempt.getAttemptQuestions")
-    public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId, String language) {
+    public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
         xray.putAnnotation("attemptId", attemptId);
 
         Attempt attempt = attemptRepository.findById(attemptId)
@@ -226,99 +222,33 @@ public class AttemptService implements AttemptUseCase {
                 .filter(q -> questionIds.contains(q.getId()))
                 .collect(Collectors.toMap(Question::getId, q -> q));
 
-        Map<UUID, List<QuestionOptionDto>> optionsByQuestionId = new HashMap<>();
-
-        for (UUID qid : questionIds) {
-            var opts = questionOptionQueryPort.findByQuestionId(qid);
-            optionsByQuestionId.put(qid, opts);
-        }
-
-        Map<UUID, String> questionTextById = questions.values()
-                .stream()
-                .collect(Collectors.toMap(Question::getId, Question::getText));
-
-        Map<UUID, String> questionTranslations = translationService.getExistingTranslations(
-                "question",
-                questionTextById,
-                language
-        );
-
-        Map<UUID, String> optionTextById = optionsByQuestionId.values()
-                .stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toMap(
-                        QuestionOptionDto::id,
-                        QuestionOptionDto::text,
-                        (a, b) -> a
-                ));
-
-        Map<UUID, String> optionTranslations = translationService.getExistingTranslations(
-                "question_option",
-                optionTextById,
-                language
-        );
-
-        AtomicInteger questionsTranslated = new AtomicInteger(0);
-        AtomicInteger optionsTranslated = new AtomicInteger(0);
-
         List<AttemptQuestionResponse> responses = questionIds
                 .stream()
                 .filter(questions::containsKey)
                 .map(questions::get)
                 .map(question -> {
-                    UUID questionId = question.getId();
-
-                    String translatedText = question.getText();
-                    if (!language.equalsIgnoreCase(question.getLanguage())) {
-                        if (!questionTranslations.containsKey(questionId)) {
-                            questionsTranslated.incrementAndGet();
-                        }
-
-                        translatedText = questionTranslations.getOrDefault(
-                                questionId,
-                                translationService.getOrTranslate(
-                                        "question", questionId, question.getText(), language)
-                        );
-                    }
-
-                    var questionOptions = optionsByQuestionId.getOrDefault(questionId, List.of());
-                    var options = questionOptions.stream()
-                            .map(qo -> {
-                                if (language.equalsIgnoreCase(question.getLanguage())) {
-                                    return new QuestionOption(qo.key(), qo.text(), qo.isCorrect());
-                                }
-
-                                if (!optionTranslations.containsKey(qo.id())) {
-                                    optionsTranslated.incrementAndGet();
-                                }
-
-                                String questionOption = optionTranslations.getOrDefault(
-                                        qo.id(),
-                                        translationService.getOrTranslate(
-                                                "question_option", qo.id(), qo.text(), language)
-                                );
-
-                                return new QuestionOption(qo.key(), questionOption, qo.isCorrect());
-                            })
+                    var questionsDto = question.getOptions().stream()
+                            .map(qo -> new QuestionOptionDto(
+                                    qo.getOptionKey(),
+                                    qo.getOptionText(),
+                                    qo.getIsCorrect(),
+                                    qo.getId()
+                            ))
                             .toList();
-
-                    String selectedOption = answerMap.get(questionId);
 
                     return new AttemptQuestionResponse(
                             question.getId(),
                             question.getCode(),
-                            translatedText,
+                            question.getText(),
                             question.getDomain(),
                             question.getDifficulty(),
-                            options,
-                            selectedOption
+                            questionsDto,
+                            answerMap.get(question.getId())
                     );
                 })
                 .toList();
 
         xray.putAnnotation("questionCount", responses.size());
-        xray.putAnnotation("questionsTranslated", questionsTranslated.get());
-        xray.putAnnotation("optionsTranslated", optionsTranslated.get());
 
         return responses;
     }
@@ -400,7 +330,7 @@ public class AttemptService implements AttemptUseCase {
             List<Question> candidates = new ArrayList<>(filterByDifficulty(allQuestions, difficulty.name()));
 
             if (candidates.size() < questionCount) {
-                List<Difficulty> others = difficulty.getLessDifficultyThanThis();
+                List<Difficulty> others = difficulty.getEasierThanThis();
 
                 int i = others.size() - 1;
                 while (i-- >= 0 && candidates.size() < questionCount) {

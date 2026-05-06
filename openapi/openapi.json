@@ -595,19 +595,6 @@
               "type": "string",
               "format": "uuid"
             }
-          },
-          {
-            "in": "header",
-            "name": "x-content-language",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "PT_BR",
-              "enum": [
-                "PT_BR",
-                "EN"
-              ]
-            }
           }
         ],
         "responses": {
@@ -2344,7 +2331,7 @@
           "options": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/QuestionOption"
+              "$ref": "#/components/schemas/QuestionOptionDto"
             }
           },
           "questionCode": {
@@ -2716,20 +2703,6 @@
           },
           "page": {
             "$ref": "#/components/schemas/PageMetadata"
-          }
-        }
-      },
-      "QuestionOption": {
-        "type": "object",
-        "properties": {
-          "isCorrect": {
-            "type": "boolean"
-          },
-          "key": {
-            "type": "string"
-          },
-          "text": {
-            "type": "string"
           }
         }
       },
