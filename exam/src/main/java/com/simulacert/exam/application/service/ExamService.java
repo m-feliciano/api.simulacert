@@ -1,7 +1,6 @@
 package com.simulacert.exam.application.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.simulacert.exam.application.config.ImportProperties;
 import com.simulacert.exam.application.dto.request.CreateExamRequest;
 import com.simulacert.exam.application.dto.request.ExamImportDto;
 import com.simulacert.exam.application.dto.request.UpdateExamRequest;
@@ -21,16 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -42,7 +34,6 @@ public class ExamService implements ExamUseCase {
     private final QuestionRepositoryPort questionRepository;
     private final QuestionOptionRepository questionOptionRepository;
     private final ExamMapper examMapper;
-    private final ImportProperties importProperties;
 
     @Override
     public ExamResponse getExamById(UUID examId) {
@@ -116,46 +107,6 @@ public class ExamService implements ExamUseCase {
         return examRepository.findBySlug(slug)
                 .map(examMapper::toResponse)
                 .orElse(null);
-    }
-
-    @SneakyThrows
-    @Override
-    public void importExamsFilesFromDirectory() {
-        log.info("Starting directory-based exam import from: {}", importProperties.getInputDir());
-
-        Path importPath = Paths.get(importProperties.getInputDir());
-        Path processedPath = Paths.get(importProperties.getProcessedDir());
-
-        Files.createDirectories(importPath);
-        Files.createDirectories(processedPath);
-
-        List<Path> files;
-        try (Stream<Path> paths = Files.list(importPath)) {
-            files = paths.filter(Files::isRegularFile).toList();
-        }
-
-        Map<Path, ExamImportDto> fileMap = new java.util.HashMap<>();
-        for (Path path : files) {
-            log.info("Reading file: {}", path);
-            fileMap.put(path, objectMapper.readValue(path.toFile(), ExamImportDto.class));
-        }
-
-        if (fileMap.isEmpty()) {
-            log.warn("No exam files found in directory: {}", importProperties.getInputDir());
-            return;
-        }
-
-        List<ExamImportDto> exams = new ArrayList<>(fileMap.values());
-        this.importExams(exams);
-
-        for (Path source : fileMap.keySet()) {
-            try {
-                Path target = processedPath.resolve(source.getFileName());
-                Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                log.warn("Failed to move file: {}", source.getFileName(), e);
-            }
-        }
     }
 
     @SneakyThrows

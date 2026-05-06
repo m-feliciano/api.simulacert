@@ -1,7 +1,5 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
-import com.simulacert.adapter.rest.controller.param.CsvUuidParam;
-import com.simulacert.adapter.rest.controller.param.ContentLanguage;
 import com.simulacert.exam.application.dto.request.RequestExplanationCommand;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
@@ -15,9 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Question Explanations", description = "AI-generated explanations for exam questions (Experimental)")
@@ -59,27 +55,6 @@ public interface ExplanationControllerOpenApi {
     ResponseEntity<Void> submitFeedback(
             @Valid SubmitFeedbackCommand command,
             @Parameter(description = "Explanation ID") UUID explanationId
-    );
-
-
-    @Operation(
-            summary = "Get explanations for multiple questions",
-            description = "Retrieve AI-generated explanations for a list of question IDs within an exam. " +
-                          "This is an experimental feature and requires the exam attempt to be completed.",
-            security = @SecurityRequirement(name = "bearerAuth")
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Explanations retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = ExplanationResponse.class))
-            ),
-            @ApiResponse(responseCode = "400", description = "Invalid request or attempt not completed"),
-            @ApiResponse(responseCode = "403", description = "Attempt does not belong to user"),
-            @ApiResponse(responseCode = "404", description = "Exam or questions not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
-    })
-    List<ExplanationResponse> getExplanationsByQuestionIds(
-            @CsvUuidParam("questionIds") List<UUID> questionIds,
-            @RequestHeader(value = "x-content-language", required = false, defaultValue = "pt_br") ContentLanguage language
     );
 }
 

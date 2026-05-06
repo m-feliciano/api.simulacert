@@ -1360,30 +1360,6 @@
         ]
       }
     },
-    "/api/v1/exams/import/directory": {
-      "post": {
-        "description": "Import all JSON files from 'fazer' directory and move to 'feito' after processing",
-        "operationId": "importFromDirectory",
-        "responses": {
-          "201": {
-            "description": "Exams imported successfully from directory"
-          },
-          "401": {
-            "description": "Not authenticated"
-          },
-          "403": {
-            "description": "Not authorized (requires ADMIN role)"
-          },
-          "500": {
-            "description": "Error accessing directory"
-          }
-        },
-        "summary": "Import exams from directory",
-        "tags": [
-          "Exam Import"
-        ]
-      }
-    },
     "/api/v1/exams/slug/{slug}": {
       "get": {
         "description": "Retrieves detailed information about a specific exam by its slug",
@@ -1745,112 +1721,6 @@
         "summary": "Get questions by exam (paginated)",
         "tags": [
           "Questions"
-        ]
-      }
-    },
-    "/api/v1/questions/explanations": {
-      "get": {
-        "description": "Retrieve AI-generated explanations for a list of question IDs within an exam. This is an experimental feature and requires the exam attempt to be completed.",
-        "operationId": "getExplanationsByQuestionIds",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "questionIds",
-            "required": true,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          },
-          {
-            "in": "header",
-            "name": "x-content-language",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "default": "PT_BR",
-              "enum": [
-                "PT_BR",
-                "EN"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ExplanationResponse"
-                }
-              }
-            },
-            "description": "Explanations retrieved successfully"
-          },
-          "400": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExplanationResponse"
-                  }
-                }
-              }
-            },
-            "description": "Invalid request or attempt not completed"
-          },
-          "401": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExplanationResponse"
-                  }
-                }
-              }
-            },
-            "description": "Unauthorized"
-          },
-          "403": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExplanationResponse"
-                  }
-                }
-              }
-            },
-            "description": "Attempt does not belong to user"
-          },
-          "404": {
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExplanationResponse"
-                  }
-                }
-              }
-            },
-            "description": "Exam or questions not found"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "summary": "Get explanations for multiple questions",
-        "tags": [
-          "Question Explanations"
         ]
       }
     },
@@ -2975,11 +2845,6 @@
             "type": "string",
             "format": "uuid"
           },
-          "language": {
-            "type": "string",
-            "maxLength": 10,
-            "minLength": 2
-          },
           "questionId": {
             "type": "string",
             "format": "uuid"
@@ -2988,7 +2853,6 @@
         "required": [
           "certification",
           "examAttemptId",
-          "language",
           "questionId"
         ]
       },

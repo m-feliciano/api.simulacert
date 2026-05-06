@@ -84,7 +84,7 @@ class QuestionExplanationServiceTest {
         now = Instant.parse("2026-05-04T00:00:00Z");
         lenient().when(clock.now()).thenReturn(now);
 
-        lenient().when(explanationRunRepository.findByQuestionIdAndLanguage(any(UUID.class), anyString()))
+        lenient().when(explanationRunRepository.findAllByQuestion(any(UUID.class)))
                 .thenReturn(Optional.empty());
 
         question = Question.create(
@@ -105,7 +105,6 @@ class QuestionExplanationServiceTest {
         command = new RequestExplanationCommand(
                 questionId,
                 attemptId,
-                "pt",
                 "AWS-SAA-C03"
         );
 
@@ -125,19 +124,6 @@ class QuestionExplanationServiceTest {
                             run.getExpiresAt()
                     );
                 });
-
-        lenient().when(questionMapper.toQuestionOptionTranslate(any(QuestionOption.class), anyString()))
-                .thenAnswer(invocation -> {
-                    QuestionOption original = invocation.getArgument(0);
-                    String translatedText = invocation.getArgument(1);
-                    return QuestionOption.builder()
-                            .id(original.getId())
-                            .question(original.getQuestion())
-                            .optionKey(original.getOptionKey())
-                            .optionText(translatedText)
-                            .isCorrect(original.getIsCorrect())
-                            .build();
-                });
     }
 
     @Test
@@ -148,7 +134,7 @@ class QuestionExplanationServiceTest {
                 questionId, attemptId, "openai", "cached-model", "v1.1",
                 0.25, "pt", "cached explanation", now, now.plus(Duration.ofDays(30))
         );
-        when(explanationRunRepository.findByQuestionIdAndLanguage(questionId, "pt"))
+        when(explanationRunRepository.findAllByQuestion(questionId))
                 .thenReturn(Optional.of(List.of(existing)));
 
         // When
@@ -165,10 +151,6 @@ class QuestionExplanationServiceTest {
     @Test
     @DisplayName("Should generate explanation successfully when repository miss")
     void shouldGenerateExplanationSuccessfullyWhenRepositoryMiss() {
-        // Given
-        when(explanationRunRepository.findByQuestionIdAndLanguage(questionId, "pt"))
-                .thenReturn(Optional.empty());
-
         String generatedContent = "<div class=\"question-explanation\">explain</div>";
         when(llmProvider.generate(any(LLMRequest.class)))
                 .thenReturn(new LLMResult(generatedContent, "gpt-4", "openai"));
@@ -191,13 +173,12 @@ class QuestionExplanationServiceTest {
     @DisplayName("Should throw exception when question has no correct option")
     void shouldThrowWhenQuestionHasNoCorrectOption() {
         // Given
-        when(explanationRunRepository.findByQuestionIdAndLanguage(command.questionId(), "pt"))
+        when(explanationRunRepository.findAllByQuestion(command.questionId()))
                 .thenReturn(Optional.empty());
 
         RequestExplanationCommand localCommand = new RequestExplanationCommand(
                 command.questionId(),
                 command.examAttemptId(),
-                command.language(),
                 command.certification()
         );
 
@@ -230,7 +211,7 @@ class QuestionExplanationServiceTest {
     @DisplayName("Should build correct prompt with question and options")
     void shouldBuildCorrectPromptWithQuestionAndOptions() {
         // Given
-        when(explanationRunRepository.findByQuestionIdAndLanguage(questionId, "pt"))
+        when(explanationRunRepository.findAllByQuestion(questionId))
                 .thenReturn(Optional.empty());
 
         when(llmProvider.generate(any(LLMRequest.class)))
@@ -247,13 +228,13 @@ class QuestionExplanationServiceTest {
         verify(llmProvider).generate(requestCaptor.capture());
         LLMRequest captured = requestCaptor.getValue();
 
-        assertThat(captured.systemPrompt()).contains("AWS-certified solutions architect");
+        assertThat(captured.systemPrompt()).contains("solutions architect");
         assertThat(captured.userPrompt()).contains("Which AWS service is best for serverless computing?");
         assertThat(captured.userPrompt()).contains("A) EC2");
         assertThat(captured.userPrompt()).contains("B) Lambda");
         assertThat(captured.userPrompt()).contains("pt");
         assertThat(captured.temperature()).isEqualTo(0.25);
-        assertThat(captured.maxTokens()).isEqualTo(1000);
+        assertThat(captured.maxTokens()).isEqualTo(1200);
     }
 
     @Test
@@ -301,7 +282,7 @@ class QuestionExplanationServiceTest {
     @DisplayName("Should persist explanation run with correct metadata")
     void shouldPersistExplanationRunWithCorrectMetadata() {
         // Given
-        when(explanationRunRepository.findByQuestionIdAndLanguage(questionId, "pt"))
+        when(explanationRunRepository.findAllByQuestion(questionId))
                 .thenReturn(Optional.empty());
 
         String generated = "Test explanation";
@@ -325,7 +306,7 @@ class QuestionExplanationServiceTest {
         assertThat(saved.getModelName()).isEqualTo("gpt-4-turbo");
         assertThat(saved.getPromptVersion()).isEqualTo("v1.1");
         assertThat(saved.getTemperature()).isEqualTo(0.25);
-        assertThat(saved.getLanguage()).isEqualTo("pt");
+        assertThat(saved.getLanguage()).isEqualTo("pt_br");
         assertThat(saved.getContent()).isEqualTo(generated);
         assertThat(saved.getCreatedAt()).isEqualTo(now);
         assertThat(saved.getExpiresAt()).isEqualTo(now.plus(Duration.ofDays(30)));

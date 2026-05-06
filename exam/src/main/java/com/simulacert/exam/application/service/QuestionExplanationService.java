@@ -16,7 +16,6 @@ import com.simulacert.llm.application.dto.LLMResult;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.service.XRayTracingService;
-import com.simulacert.translation.application.service.TranslationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
 public class QuestionExplanationService implements QuestionExplanationUseCase {
     private static final String PROMPT_VERSION = "v1.1";
     private static final Double TEMPERATURE = 0.25;
-    private static final Integer MAX_TOKENS = 1000;
+    private static final Integer MAX_TOKENS = 1200;
     private static final Duration EXPIRATION_DURATION = Duration.ofDays(30);
 
     private final QuestionRepositoryPort questionRepository;
@@ -43,7 +42,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private final ExplanationLLMPort llmProvider;
     private final ClockPort clock;
     private final XRayTracingService xray;
-    private final TranslationService translationService;
     private final QuestionMapper questionMapper;
 
     @Override
@@ -52,51 +50,24 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     public ExplanationResponse requestExplanation(RequestExplanationCommand command, UUID userId) {
 
         UUID questionId = command.questionId();
-        String targetLang = command.language();
 
         xray.putAnnotation("attemptId", command.examAttemptId());
         xray.putAnnotation("questionId", questionId);
 
-        var existing = explanationRunRepository.findByQuestionIdAndLanguage(questionId, targetLang);
+        var existing = explanationRunRepository.findAllByQuestion(questionId);
 
         if (existing.isPresent() && !existing.get().isEmpty()) {
-            return questionMapper.toExplanationResponse(existing.get().getFirst());
+            return questionMapper.toExplanationResponse(existing.get().getLast());
         }
 
         Question question = questionRepository.findById(questionId);
 
-        boolean shouldTranslate = shouldTranslate(question.getLanguage(), targetLang);
-        xray.putAnnotation("translationUsed", shouldTranslate);
-
-        String questionText = resolveText(
-                "question",
-                question.getId(),
-                question.getText(),
-                targetLang,
-                shouldTranslate
-        );
-
-        List<QuestionOption> options = question.getOptions()
-                .stream()
-                .map(opt -> {
-                    String text = resolveText(
-                            "question_option",
-                            opt.getId(),
-                            opt.getOptionText(),
-                            targetLang,
-                            shouldTranslate
-                    );
-
-                    return questionMapper.toQuestionOptionTranslate(opt, text);
-                })
-                .toList();
-
         String userPrompt = buildUserPrompt(
                 question.getId(),
-                questionText,
-                options,
+                question.getText(),
+                question.getOptions(),
                 command.certification(),
-                targetLang
+                question.getLanguage()
         );
 
         LLMRequest llmRequest = new LLMRequest(
@@ -113,7 +84,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         return createExplanationResponse(
                 llmResult.content(),
                 llmResult.modelName(),
-                command
+                command,
+                question.getLanguage()
         );
     }
 
@@ -133,16 +105,9 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         log.info("Feedback submitted for explanation {}: rating={}", explanationId, command.rating());
     }
 
-    @Override
-    public List<ExplanationResponse> getExplanationsForQuestions(List<UUID> uuids, String language) {
-        return explanationRunRepository.findByQuestionIdsAndExamIdAndLanguage(uuids, language).stream()
-                .map(questionMapper::toExplanationResponse)
-                .toList();
-    }
-
     private String getSystemPrompt(String certification) {
         String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date());
-        return String.format("You are an AWS-certified solutions architect expert explaining exam questions for the %s certification in %s.", certification, year);
+        return String.format("You are an solutions architect expert explaining exam questions for the %s certification in %s.", certification, year);
     }
 
     private String buildUserPrompt(UUID questionId,
@@ -169,9 +134,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         String correctOption = String.join(", ", correctList);
 
         return String.format("""
-                You are explaining an AWS multiple-choice question.
-                
-                Task:
                 Explain why each option is correct or incorrect.
                 
                 Rules:
@@ -218,7 +180,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 Certification:
                 %s
                         """,
-                language.equalsIgnoreCase("en") ? "english" : language,
+                "en".equalsIgnoreCase(language) ? "english" : language,
                 text,
                 optionsText,
                 correctOption,
@@ -228,7 +190,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private ExplanationResponse createExplanationResponse(
             String content,
             String modelName,
-            RequestExplanationCommand command
+            RequestExplanationCommand command,
+            String language
     ) {
         Instant now = clock.now();
         Instant expiresAt = now.plus(EXPIRATION_DURATION);
@@ -240,7 +203,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 modelName,
                 PROMPT_VERSION,
                 TEMPERATURE,
-                command.language(),
+                language,
                 content,
                 now,
                 expiresAt
@@ -249,27 +212,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         QuestionExplanationRun saved = explanationRunRepository.save(explanationRun);
 
         return questionMapper.toExplanationResponse(saved);
-    }
-
-    private boolean shouldTranslate(String baseLang, String targetLang) {
-        return !targetLang.equalsIgnoreCase(baseLang);
-    }
-
-    private String resolveText(
-            String entity,
-            UUID entityId,
-            String content,
-            String targetLang,
-            boolean shouldTranslate
-    ) {
-        if (!shouldTranslate) return content;
-
-        return translationService.getOrTranslate(
-                entity,
-                entityId,
-                content,
-                targetLang
-        );
     }
 }
 
