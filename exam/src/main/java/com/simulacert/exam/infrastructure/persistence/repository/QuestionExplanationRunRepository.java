@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,4 +13,10 @@ public interface QuestionExplanationRunRepository extends JpaRepository<Question
 
     @Query("SELECT q FROM QuestionExplanationRun q WHERE q.questionId = :questionId")
     List<QuestionExplanationRun> findAllByQuestionId(@Param("questionId") UUID questionId);
+
+    @Query("SELECT COUNT(q) FROM QuestionExplanationRun q WHERE q.userId = :userId AND q.createdAt >= :today")
+    int countByUserIdAndCreatedAtAfter(
+            @Param("userId") UUID userId,
+            @Param("today") Instant today
+    );
 }

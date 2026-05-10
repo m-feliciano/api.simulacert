@@ -15,6 +15,7 @@ import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.service.XRayTracingService;
 import com.simulacert.translation.application.service.TranslationService;
+import com.simulacert.util.UserContextHolder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,7 +70,6 @@ class QuestionExplanationServiceTest {
 
     private UUID userId;
     private UUID questionId;
-    private UUID attemptId;
     private Question question;
     private RequestExplanationCommand command;
     private Instant now;
@@ -78,7 +78,7 @@ class QuestionExplanationServiceTest {
     void setUp() {
         userId = UUID.randomUUID();
         questionId = UUID.randomUUID();
-        attemptId = UUID.randomUUID();
+        UUID attemptId = UUID.randomUUID();
         UUID examId = UUID.randomUUID();
 
         now = Instant.parse("2026-05-04T00:00:00Z");
@@ -131,8 +131,9 @@ class QuestionExplanationServiceTest {
     void shouldReturnCachedExplanationWhenRepositoryHasIt() {
         // Given
         QuestionExplanationRun existing = QuestionExplanationRun.create(
-                questionId, attemptId, "openai", "cached-model", "v1.1",
-                0.25, "pt", "cached explanation", now, now.plus(Duration.ofDays(30))
+                questionId, "openai", "cached-model", "v1.1",
+                0.25, "pt", "cached explanation", now, now.plus(Duration.ofDays(30)),
+                userId
         );
         when(explanationRunRepository.findAllByQuestion(questionId))
                 .thenReturn(Optional.of(List.of(existing)));
@@ -243,8 +244,9 @@ class QuestionExplanationServiceTest {
         // Given
         UUID explanationId = UUID.randomUUID();
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                questionId, attemptId, "openai", "gpt-4", "v1.1",
-                0.25, "pt", "content", now, now.plus(Duration.ofDays(30))
+                questionId, "openai", "gpt-4", "v1.1",
+                0.25, "pt", "content", now, now.plus(Duration.ofDays(30)),
+                userId
         );
 
         when(explanationRunRepository.findById(explanationId)).thenReturn(Optional.of(run));
@@ -252,14 +254,16 @@ class QuestionExplanationServiceTest {
 
         SubmitFeedbackCommand feedback = new SubmitFeedbackCommand(5, "Excellent explanation!");
 
+        UserContextHolder.setUser(userId);
+
         // When
         service.submitFeedback(explanationId, feedback);
 
         // Then
         verify(explanationRunRepository).findById(explanationId);
         verify(explanationRunRepository).save(run);
-        assertThat(run.getUserRating()).isEqualTo(5);
-        assertThat(run.getUserFeedback()).isEqualTo("Excellent explanation!");
+        assertThat(run.getUserFeedbacks().getFirst().getUserRating()).isEqualTo(5);
+        assertThat(run.getUserFeedbacks().getLast().getFeedback()).isEqualTo("Excellent explanation!");
     }
 
     @Test
@@ -301,7 +305,6 @@ class QuestionExplanationServiceTest {
         QuestionExplanationRun saved = runCaptor.getValue();
 
         assertThat(saved.getQuestionId()).isEqualTo(questionId);
-        assertThat(saved.getExamAttemptId()).isEqualTo(attemptId);
         assertThat(saved.getModelProvider()).isEqualTo("openai");
         assertThat(saved.getModelName()).isEqualTo("gpt-4-turbo");
         assertThat(saved.getPromptVersion()).isEqualTo("v1.1");

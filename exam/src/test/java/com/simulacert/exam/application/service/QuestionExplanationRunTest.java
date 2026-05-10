@@ -13,12 +13,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("QuestionExplanationRun Domain Tests")
 class QuestionExplanationRunTest {
 
+    private static final UUID userId = UUID.randomUUID();
+
     @Test
     @DisplayName("Should create QuestionExplanationRun successfully")
     void shouldCreateQuestionExplanationRunSuccessfully() {
         // Given
         UUID questionId = UUID.randomUUID();
-        UUID attemptId = UUID.randomUUID();
         String provider = "openai";
         String model = "gpt-4";
         String version = "v1.0";
@@ -30,15 +31,14 @@ class QuestionExplanationRunTest {
 
         // When
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                questionId, attemptId, provider, model, version,
-                temperature, language, content, now, expiresAt
+                questionId, provider, model, version,
+                temperature, language, content, now, expiresAt, userId
         );
 
         // Then
         assertThat(run).isNotNull();
         assertThat(run.getId()).isNotNull();
         assertThat(run.getQuestionId()).isEqualTo(questionId);
-        assertThat(run.getExamAttemptId()).isEqualTo(attemptId);
         assertThat(run.getModelProvider()).isEqualTo(provider);
         assertThat(run.getModelName()).isEqualTo(model);
         assertThat(run.getPromptVersion()).isEqualTo(version);
@@ -47,34 +47,15 @@ class QuestionExplanationRunTest {
         assertThat(run.getContent()).isEqualTo(content);
         assertThat(run.getCreatedAt()).isEqualTo(now);
         assertThat(run.getExpiresAt()).isEqualTo(expiresAt);
-        assertThat(run.getUserRating()).isNull();
-        assertThat(run.getUserFeedback()).isNull();
-        assertThat(run.getRatedAt()).isNull();
-    }
-
-    @Test
-    @DisplayName("Should create QuestionExplanationRun with null attemptId")
-    void shouldCreateWithNullAttemptId() {
-        // Given
-        UUID questionId = UUID.randomUUID();
-        Instant now = Instant.now();
-
-        // When
-        QuestionExplanationRun run = QuestionExplanationRun.create(
-                questionId, null, "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", now, now.plusSeconds(3600)
-        );
-
-        // Then
-        assertThat(run.getExamAttemptId()).isNull();
+        assertThat(run.getUserFeedbacks()).isNull();
     }
 
     @Test
     @DisplayName("Should throw exception when questionId is null")
     void shouldThrowExceptionWhenQuestionIdIsNull() {
         assertThatThrownBy(() -> QuestionExplanationRun.create(
-                null, UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now()
+                null, "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now(), userId
         ))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("questionId cannot be null");
@@ -84,8 +65,8 @@ class QuestionExplanationRunTest {
     @DisplayName("Should throw exception when modelProvider is null")
     void shouldThrowExceptionWhenModelProviderIsNull() {
         assertThatThrownBy(() -> QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), null, "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now()
+                UUID.randomUUID(), null, "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now(), userId
         ))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("modelProvider cannot be null");
@@ -95,8 +76,8 @@ class QuestionExplanationRunTest {
     @DisplayName("Should throw exception when temperature is below 0")
     void shouldThrowExceptionWhenTemperatureBelowZero() {
         assertThatThrownBy(() -> QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                -0.1, "en", "content", Instant.now(), Instant.now()
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                -0.1, "en", "content", Instant.now(), Instant.now(), userId
         ))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("temperature must be between 0.0 and 2.0");
@@ -106,8 +87,8 @@ class QuestionExplanationRunTest {
     @DisplayName("Should throw exception when temperature is above 2.0")
     void shouldThrowExceptionWhenTemperatureAboveTwo() {
         assertThatThrownBy(() -> QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                2.1, "en", "content", Instant.now(), Instant.now()
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                2.1, "en", "content", Instant.now(), Instant.now(), userId
         ))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("temperature must be between 0.0 and 2.0");
@@ -118,20 +99,19 @@ class QuestionExplanationRunTest {
     void shouldAddFeedbackSuccessfully() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
         Integer rating = 5;
         String feedback = "Excellent explanation!";
         Instant ratedAt = Instant.now();
 
         // When
-        run.addFeedback(rating, feedback, ratedAt);
+        run.addFeedback(rating, feedback, ratedAt, userId);
 
         // Then
-        assertThat(run.getUserRating()).isEqualTo(rating);
-        assertThat(run.getUserFeedback()).isEqualTo(feedback);
-        assertThat(run.getRatedAt()).isEqualTo(ratedAt);
+        assertThat(run.getUserFeedbacks().getFirst().getFeedback()).isEqualTo(feedback);
     }
 
     @Test
@@ -139,32 +119,34 @@ class QuestionExplanationRunTest {
     void shouldTrimFeedbackWhenAdding() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When
-        run.addFeedback(4, "  Feedback with spaces  ", Instant.now());
+        run.addFeedback(4, "  Feedback with spaces  ", Instant.now(), userId);
 
         // Then
-        assertThat(run.getUserFeedback()).isEqualTo("Feedback with spaces");
+        assertThat(run.getUserFeedbacks().getFirst().getFeedback()).isEqualTo("Feedback with spaces");
     }
 
     @Test
-    @DisplayName("Should accept null feedback")
+    @DisplayName("Should accept empty feedback")
     void shouldAcceptNullFeedback() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When
-        run.addFeedback(3, null, Instant.now());
+        run.addFeedback(3, "", Instant.now(), userId);
 
         // Then
-        assertThat(run.getUserRating()).isEqualTo(3);
-        assertThat(run.getUserFeedback()).isNull();
+        assertThat(run.getUserFeedbacks().getFirst().getUserRating()).isEqualTo(3);
+        assertThat(run.getUserFeedbacks()).isNotNull();
     }
 
     @Test
@@ -172,12 +154,13 @@ class QuestionExplanationRunTest {
     void shouldThrowExceptionWhenRatingIsNull() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When/Then
-        assertThatThrownBy(() -> run.addFeedback(null, "feedback", Instant.now()))
+        assertThatThrownBy(() -> run.addFeedback(null, "feedback", Instant.now(), userId))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("rating cannot be null");
     }
@@ -187,12 +170,13 @@ class QuestionExplanationRunTest {
     void shouldThrowExceptionWhenRatingBelowOne() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When/Then
-        assertThatThrownBy(() -> run.addFeedback(0, "feedback", Instant.now()))
+        assertThatThrownBy(() -> run.addFeedback(0, "feedback", Instant.now(), userId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("rating must be between 1 and 5");
     }
@@ -202,12 +186,13 @@ class QuestionExplanationRunTest {
     void shouldThrowExceptionWhenRatingAboveFive() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When/Then
-        assertThatThrownBy(() -> run.addFeedback(6, "feedback", Instant.now()))
+        assertThatThrownBy(() -> run.addFeedback(6, "feedback", Instant.now(), userId))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("rating must be between 1 and 5");
     }
@@ -217,12 +202,13 @@ class QuestionExplanationRunTest {
     void shouldThrowExceptionWhenRatedAtIsNull() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When/Then
-        assertThatThrownBy(() -> run.addFeedback(5, "feedback", null))
+        assertThatThrownBy(() -> run.addFeedback(5, "feedback", null, userId))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("ratedAt cannot be null");
     }
@@ -232,17 +218,18 @@ class QuestionExplanationRunTest {
     void shouldUpdateFeedbackWhenCalledMultipleTimes() {
         // Given
         QuestionExplanationRun run = QuestionExplanationRun.create(
-                UUID.randomUUID(), UUID.randomUUID(), "openai", "gpt-4", "v1.0",
-                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600)
+                UUID.randomUUID(), "openai", "gpt-4", "v1.0",
+                0.25, "en", "content", Instant.now(), Instant.now().plusSeconds(3600),
+                userId
         );
 
         // When
-        run.addFeedback(3, "First feedback", Instant.now());
-        run.addFeedback(5, "Updated feedback", Instant.now());
+        run.addFeedback(3, "First feedback", Instant.now(), userId);
+        run.addFeedback(5, "Last feedback", Instant.now(), userId);
 
         // Then
-        assertThat(run.getUserRating()).isEqualTo(5);
-        assertThat(run.getUserFeedback()).isEqualTo("Updated feedback");
+        assertThat(run.getUserFeedbacks().getFirst().getUserRating()).isEqualTo(3);
+        assertThat(run.getUserFeedbacks().getLast().getFeedback()).isEqualTo("Last feedback");
     }
 }
 

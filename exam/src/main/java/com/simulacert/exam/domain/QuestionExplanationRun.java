@@ -1,9 +1,11 @@
 package com.simulacert.exam.domain;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,9 +31,6 @@ public class QuestionExplanationRun {
     @Column(nullable = false, name = "question_id")
     private UUID questionId;
 
-    @Column(name = "exam_attempt_id")
-    private UUID examAttemptId;
-
     @Column(nullable = false, length = 50, name = "model_provider")
     private String modelProvider;
 
@@ -39,6 +39,9 @@ public class QuestionExplanationRun {
 
     @Column(nullable = false, length = 20, name = "prompt_version")
     private String promptVersion;
+
+    @Column(name = "user_id")
+    private UUID userId; // who requested the explanation, can be null
 
     @Column(nullable = false)
     private Double temperature;
@@ -49,14 +52,8 @@ public class QuestionExplanationRun {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "user_rating")
-    private Integer userRating;
-
-    @Column(name = "user_feedback", length = 1000)
-    private String userFeedback;
-
-    @Column(name = "rated_at")
-    private Instant ratedAt;
+    @OneToMany(mappedBy = "questionExplanationRun", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFeedback> userFeedbacks;
 
     @Column(nullable = false, name = "created_at")
     private Instant createdAt;
@@ -66,7 +63,6 @@ public class QuestionExplanationRun {
 
     public static QuestionExplanationRun create(
             UUID questionId,
-            UUID examAttemptId,
             String modelProvider,
             String modelName,
             String promptVersion,
@@ -74,7 +70,8 @@ public class QuestionExplanationRun {
             String language,
             String content,
             Instant createdAt,
-            Instant expiresAt
+            Instant expiresAt,
+            UUID userId
     ) {
         Objects.requireNonNull(questionId, "questionId cannot be null");
         Objects.requireNonNull(modelProvider, "modelProvider cannot be null");
@@ -85,6 +82,7 @@ public class QuestionExplanationRun {
         Objects.requireNonNull(content, "content cannot be null");
         Objects.requireNonNull(createdAt, "createdAt cannot be null");
         Objects.requireNonNull(expiresAt, "expiresAt cannot be null");
+        Objects.requireNonNull(userId, "userId cannot be null");
 
         if (temperature < 0.0 || temperature > 2.0) {
             throw new IllegalArgumentException("temperature must be between 0.0 and 2.0");
@@ -93,7 +91,6 @@ public class QuestionExplanationRun {
         return QuestionExplanationRun.builder()
                 .id(UuidCreator.getTimeOrdered())
                 .questionId(questionId)
-                .examAttemptId(examAttemptId)
                 .modelProvider(modelProvider)
                 .modelName(modelName)
                 .promptVersion(promptVersion)
@@ -102,20 +99,16 @@ public class QuestionExplanationRun {
                 .content(content)
                 .createdAt(createdAt)
                 .expiresAt(expiresAt)
+                .userId(userId)
                 .build();
     }
 
-    public void addFeedback(Integer rating, String feedback, Instant ratedAt) {
-        Objects.requireNonNull(rating, "rating cannot be null");
-        Objects.requireNonNull(ratedAt, "ratedAt cannot be null");
-
-        if (rating < 1 || rating > 5) {
-            throw new IllegalArgumentException("rating must be between 1 and 5");
+    public void addFeedback(Integer rating, String content, Instant ratedAt, UUID userId) {
+        if (this.userFeedbacks == null) {
+            this.userFeedbacks = new java.util.ArrayList<>();
         }
 
-        this.userRating = rating;
-        this.userFeedback = feedback != null ? feedback.trim() : null;
-        this.ratedAt = ratedAt;
+        this.userFeedbacks.add(UserFeedback.create(rating, content, ratedAt, userId, this.id));
     }
 }
 
