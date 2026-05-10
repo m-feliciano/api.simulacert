@@ -19,6 +19,22 @@ public record AttemptVo(
         Instant endsAt,
         boolean paused,
         Instant pausedAt,
-        Long pausedRemainingSeconds
+        Long pausedRemainingSeconds,
+        String mode
 ) {
+
+    public AttemptVo(UUID id,
+                     UUID examId,
+                     UUID userId,
+                     List<UUID> questionIds,
+                     String status,
+                     Integer score,
+                     Instant startedAt,
+                     Instant finishedAt,
+                     Instant endsAt,
+                     boolean paused,
+                     Instant pausedAt,
+                     Long pausedRemainingSeconds) {
+        this(id, examId, userId, questionIds, status, score, startedAt, finishedAt, endsAt, paused, pausedAt, pausedRemainingSeconds, null);
+    }
 }

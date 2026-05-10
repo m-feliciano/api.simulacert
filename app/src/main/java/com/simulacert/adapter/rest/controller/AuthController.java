@@ -8,7 +8,7 @@ import com.simulacert.auth.application.dto.RefreshTokenRequest;
 import com.simulacert.auth.application.dto.RegisterRequest;
 import com.simulacert.auth.application.dto.UserResponse;
 import com.simulacert.auth.application.port.in.AuthUseCase;
-import com.simulacert.auth.domain.User;
+import com.simulacert.util.UserContextHolder;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.validation.Valid;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,7 +60,7 @@ public class AuthController implements AuthControllerOpenApi {
 
     @Override
     @GetMapping("/users/{userId}")
-    @PreAuthorize("hasRole('ADMIN') or #userId == principal.id")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.id")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId) {
         return ResponseEntity.ok(authUseCase.getUserById(userId));
     }
@@ -79,7 +78,7 @@ public class AuthController implements AuthControllerOpenApi {
     }
 
     @PutMapping("/users/{userId}/password")
-    @PreAuthorize("hasRole('USER') and #userId == principal.id")
+    @PreAuthorize("hasRole('USER') and #userId == authentication.principal.id")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(
             @PathVariable UUID userId,
@@ -103,14 +102,9 @@ public class AuthController implements AuthControllerOpenApi {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> getCurrentUser() {
-        User user = (User) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
-
-        UserResponse response = authUseCase.getUserById(user.getId());
-        return ResponseEntity.ok(response);
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse getCurrentUser() {
+        return authUseCase.getUserById(UserContextHolder.getUser());
     }
 
     @PostMapping("/users/anonymous")

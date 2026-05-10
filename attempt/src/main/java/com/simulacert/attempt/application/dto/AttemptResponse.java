@@ -16,6 +16,20 @@ public record AttemptResponse(
         Integer score,
         List<UUID> questionIds,
         long seed,
-        Instant endsAt) {
+        Instant endsAt,
+        String mode) {
+
+    public AttemptResponse(UUID id,
+                           UUID userId,
+                           UUID examId,
+                           AttemptStatus status,
+                           Instant startedAt,
+                           Instant finishedAt,
+                           Integer score,
+                           List<UUID> questionIds,
+                           long seed,
+                           Instant endsAt) {
+        this(id, userId, examId, status, startedAt, finishedAt, score, questionIds, seed, endsAt, null);
+    }
 }
 

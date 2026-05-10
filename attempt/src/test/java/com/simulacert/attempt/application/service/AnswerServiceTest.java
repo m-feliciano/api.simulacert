@@ -58,7 +58,7 @@ class AnswerServiceTest {
         now = Instant.parse("2026-01-04T10:00:00Z");
 
         List<UUID> questionIds = List.of(questionId, UUID.randomUUID(), UUID.randomUUID());
-        testAttempt = Attempt.create(userId, examId, questionIds, now, 12345L);
+        testAttempt = Attempt.create(userId, examId, questionIds, now, 12345L, "exam");
         attemptId = testAttempt.getId();
     }
 

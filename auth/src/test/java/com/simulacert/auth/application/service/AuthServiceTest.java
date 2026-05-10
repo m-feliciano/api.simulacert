@@ -82,7 +82,7 @@ class AuthServiceTest {
         when(passwordEncoder.encode(request.password())).thenReturn("hashedPassword");
         when(clock.now()).thenReturn(now);
         when(userRepository.save(any(User.class))).thenReturn(testUser);
-        when(userMapper.toResponse(testUser)).thenReturn(expectedResponse);
+        when(userMapper.toResponse(any(User.class))).thenReturn(expectedResponse);
 
         UserResponse response = authService.register(request);
 
@@ -113,10 +113,6 @@ class AuthServiceTest {
     void shouldLoginSuccessfullyWithValidCredentials() {
         LoginRequest request = new LoginRequest("test@example.com", "password123");
         String token = "jwt.token.here";
-        AuthResponse expectedResponse = new AuthResponse(token, "Bearer ", new UserResponse(
-                testUser.getId(),
-                "mock", "mock", UserRole.USER, true, now
-        ), null);
 
         when(userRepository.findByEmail(request.email())).thenReturn(Optional.of(testUser));
         when(passwordEncoder.matches(request.password(), testUser.getPasswordHash())).thenReturn(true);

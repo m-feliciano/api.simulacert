@@ -58,7 +58,7 @@ public class ReviewService implements CreateReviewUseCase {
                 clock.now()
         );
 
-        review = reviewRepository.save(review);
+        reviewRepository.save(review);
         log.info("Review created successfully: {}", review.getId());
 
         return new ReviewResponse(
