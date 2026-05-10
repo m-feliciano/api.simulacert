@@ -16,6 +16,7 @@ import com.simulacert.llm.application.dto.LLMResult;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.service.XRayTracingService;
+import com.simulacert.util.UserContextHolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,10 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
             return questionMapper.toExplanationResponse(existing.get().getLast());
         }
 
+        if (explanationRunRepository.countExplanationsByUserIdToday(userId) >= 10) {
+            throw new IllegalStateException("User %s has reached the maximum number of explanations for today: ".formatted(userId));
+        }
+
         Question question = questionRepository.findById(questionId);
 
         String userPrompt = buildUserPrompt(
@@ -85,7 +90,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 llmResult.content(),
                 llmResult.modelName(),
                 command,
-                question.getLanguage()
+                question.getLanguage(),
+                UserContextHolder.getUser()
         );
     }
 
@@ -99,7 +105,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         QuestionExplanationRun explanationRun = explanationRunRepository.findById(explanationId)
                 .orElseThrow(() -> new IllegalArgumentException("Explanation not found: " + explanationId));
 
-        explanationRun.addFeedback(command.rating(), command.comment(), clock.now());
+        explanationRun.addFeedback(command.rating(), command.comment(), clock.now(), UserContextHolder.getUser());
         explanationRunRepository.save(explanationRun);
 
         log.info("Feedback submitted for explanation {}: rating={}", explanationId, command.rating());
@@ -191,14 +197,14 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
             String content,
             String modelName,
             RequestExplanationCommand command,
-            String language
+            String language,
+            UUID userId
     ) {
         Instant now = clock.now();
         Instant expiresAt = now.plus(EXPIRATION_DURATION);
 
         QuestionExplanationRun explanationRun = QuestionExplanationRun.create(
                 command.questionId(),
-                command.examAttemptId(),
                 "openai", // TODO: make configurable
                 modelName,
                 PROMPT_VERSION,
@@ -206,7 +212,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 language,
                 content,
                 now,
-                expiresAt
+                expiresAt,
+                userId
         );
 
         explanationRunRepository.save(explanationRun);

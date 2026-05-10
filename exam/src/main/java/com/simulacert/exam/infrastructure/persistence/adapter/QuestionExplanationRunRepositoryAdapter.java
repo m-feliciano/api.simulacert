@@ -6,6 +6,7 @@ import com.simulacert.exam.infrastructure.persistence.repository.QuestionExplana
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,5 +30,11 @@ public class QuestionExplanationRunRepositoryAdapter implements QuestionExplanat
     @Override
     public Optional<List<QuestionExplanationRun>> findAllByQuestion(UUID questionId) {
         return Optional.of(repository.findAllByQuestionId(questionId));
+    }
+
+    @Override
+    public int countExplanationsByUserIdToday(UUID userId) {
+        Instant today = Instant.now().truncatedTo(java.time.temporal.ChronoUnit.DAYS);
+        return repository.countByUserIdAndCreatedAtAfter(userId, today);
     }
 }

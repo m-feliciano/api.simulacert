@@ -13,4 +13,6 @@ public interface QuestionExplanationRunRepositoryPort {
     Optional<QuestionExplanationRun> findById(UUID id);
 
     Optional<List<QuestionExplanationRun>> findAllByQuestion(UUID questionId);
+
+    int countExplanationsByUserIdToday(UUID userId);
 }
