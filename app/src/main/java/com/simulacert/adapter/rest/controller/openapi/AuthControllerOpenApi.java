@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -119,7 +120,7 @@ public interface AuthControllerOpenApi {
     void changePassword(
             @Parameter(description = "User ID", required = true)
             @PathVariable UUID userId,
-            @RequestBody ChangePasswordRequest request
+            @RequestBody @Valid ChangePasswordRequest request
     );
 
     @Operation(
@@ -168,7 +169,7 @@ public interface AuthControllerOpenApi {
                     description = "Unauthorized - Invalid or missing token"
             )
     })
-    ResponseEntity<UserResponse> getCurrentUser();
+    UserResponse getCurrentUser();
 
     @Operation(
             summary = "Create anonymous user",

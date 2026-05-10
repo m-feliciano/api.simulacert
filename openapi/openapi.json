@@ -2368,6 +2368,9 @@
             "type": "string",
             "format": "uuid"
           },
+          "mode": {
+            "type": "string"
+          },
           "questionIds": {
             "type": "array",
             "items": {
@@ -2891,6 +2894,9 @@
           "limitSeconds": {
             "type": "integer",
             "format": "int32"
+          },
+          "mode": {
+            "type": "string"
           },
           "questionCount": {
             "type": "integer",

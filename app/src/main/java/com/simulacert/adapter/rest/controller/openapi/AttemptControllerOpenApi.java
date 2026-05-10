@@ -116,7 +116,7 @@ AttemptControllerOpenApi {
     void submitAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId,
-            @RequestBody SubmitAnswerRequest request);
+            @RequestBody @Valid SubmitAnswerRequest request);
 
     @Operation(
             summary = "Delete answer for question",

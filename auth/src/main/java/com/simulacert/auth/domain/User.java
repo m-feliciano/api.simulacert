@@ -124,7 +124,7 @@ public class User {
                 .build();
     }
 
-    public void register(String email, String name, String passwordHash, Instant updatedAt) {
+    public void change(String email, String name, String passwordHash, Instant updatedAt) {
         this.email = email.toLowerCase().trim();
         this.name = name.trim();
         this.passwordHash = passwordHash;
@@ -143,12 +143,6 @@ public class User {
 
     public void activate() {
         this.active = true;
-    }
-
-    public void updateProfile(String name) {
-        if (name != null && !name.isBlank()) {
-            this.name = name.trim();
-        }
     }
 
     public boolean isAdmin() {

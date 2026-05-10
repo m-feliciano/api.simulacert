@@ -1,18 +1,16 @@
 package com.simulacert.adapter.rest.controller;
 
 import com.simulacert.adapter.rest.controller.openapi.ReviewControllerOpenApi;
-import com.simulacert.auth.domain.User;
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
 import com.simulacert.review.application.dto.ReviewSummaryResponse;
 import com.simulacert.review.application.port.in.CreateReviewUseCase;
+import com.simulacert.util.UserContextHolder;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,26 +33,20 @@ public class ReviewController implements ReviewControllerOpenApi {
     @Override
     @PostMapping
     public ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody CreateReviewRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-
-        ReviewResponse response = createReviewUseCase.createReview(user.getId(), request);
+        ReviewResponse response = createReviewUseCase.createReview(UserContextHolder.getUser(), request);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(response.id())
                 .toUri();
 
-        return ResponseEntity.created(location).body(response);
+        return ResponseEntity.created(location).build();
     }
 
     @Override
     @GetMapping("/by-attempt/{attemptId}")
     public ResponseEntity<ReviewResponse> getReviewByAttempt(@PathVariable UUID attemptId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-
-        return createReviewUseCase.getReviewByAttempt(user.getId(), attemptId)
+        return createReviewUseCase.getReviewByAttempt(UserContextHolder.getUser(), attemptId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.noContent().build());
     }

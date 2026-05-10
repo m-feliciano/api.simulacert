@@ -96,7 +96,7 @@ class AttemptServiceTest {
                 UUID.randomUUID()
         );
 
-        testAttempt = Attempt.create(userId, examId, questionIds, now, 12345L);
+        testAttempt = Attempt.create(userId, examId, questionIds, now, 12345L, "exam");
     }
 
     @Test
@@ -250,7 +250,7 @@ class AttemptServiceTest {
     @Test
     @DisplayName("Should get attempts by user ID")
     void shouldGetAttemptsByUserId() {
-        Attempt attempt2 = Attempt.create(userId, examId, testAttempt.getQuestionIds(), now, 54321L);
+        Attempt attempt2 = Attempt.create(userId, examId, testAttempt.getQuestionIds(), now, 54321L, "exam");
 
         when(attemptRepository.findByUserIdOrderByStartedAtDesc(userId))
                 .thenReturn(List.of(testAttempt, attempt2));
