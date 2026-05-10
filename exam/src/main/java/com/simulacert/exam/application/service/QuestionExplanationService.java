@@ -62,7 +62,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         }
 
         if (explanationRunRepository.countExplanationsByUserIdToday(userId) >= 10) {
-            throw new IllegalStateException("User %s has reached the maximum number of explanations for today: ".formatted(userId));
+            throw new IllegalStateException("You have reached the daily limit of 10 explanations. Please try again tomorrow.");
         }
 
         Question question = questionRepository.findById(questionId);
