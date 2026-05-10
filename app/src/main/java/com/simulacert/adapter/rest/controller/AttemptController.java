@@ -48,12 +48,7 @@ public class AttemptController implements AttemptControllerOpenApi {
     @PostMapping
     @PreAuthorize("#request.userId() == authentication.principal.id")
     public ResponseEntity<Void> startAttempt(@RequestBody @Valid StartAttemptRequest request) {
-        log.info("Starting attempt for user {} on exam {}", request.userId(), request.examId());
-
         AttemptVo attemptVo = useCase.startAttempt(request);
-
-        log.info("Attempt started with id: {}", attemptVo.id());
-
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(attemptVo.id())
@@ -64,41 +59,29 @@ public class AttemptController implements AttemptControllerOpenApi {
     @Override
     @PostMapping("/{attemptId}/finish")
     public ResponseEntity<AttemptResponse> finishAttempt(@PathVariable UUID attemptId) {
-        log.info("Finishing attempt {}", attemptId);
-
         AttemptVo response = useCase.finishAttempt(attemptId);
-
-        log.info("Attempt {} finished with score {}", attemptId, response.score());
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @Override
     @GetMapping("/{attemptId}")
     public ResponseEntity<AttemptResponse> getAttempt(@PathVariable UUID attemptId) {
-        log.debug("Getting attempt {}", attemptId);
-
         AttemptVo response = useCase.getAttemptById(attemptId);
-
-        AttemptResponse body = mapper.toResponse(response);
-        return ResponseEntity.ok(body);
+        return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @Override
     @GetMapping("/user/{userId}")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
     public ResponseEntity<List<AttemptResponse>> getAttemptsByUser(@PathVariable UUID userId) {
-        log.debug("Getting all attempts for user {}", userId);
-
         List<AttemptVo> attempts = useCase.getAttemptsByUser(userId);
-
         return ResponseEntity.ok(mapper.toResponseList(attempts));
     }
 
     @Override
     @GetMapping("/{attemptId}/questions")
     public ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId) {
-        List<AttemptQuestionResponse> questions = useCase.getAttemptQuestions(attemptId);
-        return ResponseEntity.ok(questions);
+        return ResponseEntity.ok(useCase.getAttemptQuestions(attemptId));
     }
 
     @Override
@@ -107,8 +90,7 @@ public class AttemptController implements AttemptControllerOpenApi {
     public void submitAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId,
-            @RequestBody SubmitAnswerRequest request) {
-        log.info("Submitting answer for attempt {} question {}", attemptId, questionId);
+            @RequestBody @Valid SubmitAnswerRequest request) {
         answerUseCase.submitAnswer(attemptId, questionId, request);
     }
 
@@ -116,7 +98,6 @@ public class AttemptController implements AttemptControllerOpenApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{attemptId}/answers")
     public List<AnswerResponse> getAnswer(@PathVariable UUID attemptId) {
-        log.debug("Getting answers for attempt {}", attemptId);
         return answerUseCase.getAnswer(attemptId);
     }
 
@@ -126,7 +107,6 @@ public class AttemptController implements AttemptControllerOpenApi {
     public void deleteAnswer(
             @PathVariable UUID attemptId,
             @PathVariable UUID questionId) {
-        log.info("Deleting answer for attempt {} question {}", attemptId, questionId);
         answerUseCase.deleteAnswer(attemptId, questionId);
     }
 
@@ -134,28 +114,24 @@ public class AttemptController implements AttemptControllerOpenApi {
     @PostMapping("/{attemptId}/cancel")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelAttempt(@PathVariable UUID attemptId) {
-        log.info("Cancelling attempt {}", attemptId);
         useCase.cancelAttempt(attemptId);
     }
 
     @Override
     @PostMapping("/{attemptId}/pause")
     public ResponseEntity<AttemptTimingResponse> pauseAttempt(@PathVariable UUID attemptId) {
-        log.info("Pausing attempt {}", attemptId);
         return ResponseEntity.ok(useCase.pauseAttempt(attemptId));
     }
 
     @Override
     @PostMapping("/{attemptId}/resume")
     public ResponseEntity<AttemptTimingResponse> resumeAttempt(@PathVariable UUID attemptId) {
-        log.info("Resuming attempt {}", attemptId);
         return ResponseEntity.ok(useCase.resumeAttempt(attemptId));
     }
 
     @Override
     @PostMapping("/{attemptId}/heartbeat")
     public ResponseEntity<AttemptTimingResponse> heartbeatAttempt(@PathVariable UUID attemptId) {
-        log.debug("Heartbeat attempt {}", attemptId);
         return ResponseEntity.ok(useCase.heartbeatAttempt(attemptId));
     }
 
@@ -164,7 +140,6 @@ public class AttemptController implements AttemptControllerOpenApi {
     @ResponseStatus(HttpStatus.OK)
     @PostAuthorize("returnObject.userId() == authentication.principal.id or hasRole('ADMIN')")
     public AttemptResponse retakeAttempt(@PathVariable UUID attemptId) {
-        log.debug("Heartbeat attempt {}", attemptId);
         return useCase.retakeAttempt(attemptId);
     }
 }

@@ -52,7 +52,7 @@ public interface ExplanationControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Explanation not found"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    ResponseEntity<Void> submitFeedback(
+    void submitFeedback(
             @Valid SubmitFeedbackCommand command,
             @Parameter(description = "Explanation ID") UUID explanationId
     );

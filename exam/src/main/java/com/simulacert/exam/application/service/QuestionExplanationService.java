@@ -209,9 +209,9 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 expiresAt
         );
 
-        QuestionExplanationRun saved = explanationRunRepository.save(explanationRun);
+        explanationRunRepository.save(explanationRun);
 
-        return questionMapper.toExplanationResponse(saved);
+        return questionMapper.toExplanationResponse(explanationRun);
     }
 }
 

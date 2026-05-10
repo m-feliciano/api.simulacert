@@ -76,10 +76,13 @@ public class Attempt {
     @Column(nullable = false)
     private long seed;
 
+    @Column(length = 20)
+    private String mode = "exam"; // or practice
+
     @Version
     private long version;
 
-    public static Attempt create(UUID userId, UUID examId, List<UUID> questionIds, Instant startedAt, long seed) {
+    public static Attempt create(UUID userId, UUID examId, List<UUID> questionIds, Instant startedAt, long seed, String mode) {
         Objects.requireNonNull(userId, "userId cannot be null");
         Objects.requireNonNull(examId, "examId cannot be null");
         Objects.requireNonNull(questionIds, "questionIds cannot be null");
@@ -95,6 +98,7 @@ public class Attempt {
                 .questionIds(new ArrayList<>(questionIds))
                 .seed(seed)
                 .paused(false)
+                .mode(mode)
                 .build();
     }
 
@@ -129,6 +133,7 @@ public class Attempt {
                 .paused(paused)
                 .pausedAt(pausedAt)
                 .pausedRemainingSeconds(pausedRemainingSeconds)
+                .mode(mode)
                 .build();
     }
 
@@ -224,7 +229,8 @@ public class Attempt {
                 score,
                 new ArrayList<>(questionIds),
                 seed,
-                endsAt
+                endsAt,
+                mode
         );
     }
 }

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +55,9 @@ public interface ExamControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Exam not found"),
             @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
     })
-    ResponseEntity<ExamResponse> updateExam(@Parameter(description = "Exam ID", required = true) @PathVariable UUID examId, @RequestBody UpdateExamRequest request);
+    ResponseEntity<ExamResponse> updateExam(@Parameter(description = "Exam ID", required = true)
+                                            @PathVariable UUID examId,
+                                            @Valid @RequestBody UpdateExamRequest request);
 
     @Operation(summary = "Delete exam", description = "Deletes an exam. Admin only.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {

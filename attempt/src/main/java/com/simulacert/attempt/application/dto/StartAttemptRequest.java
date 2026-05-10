@@ -10,10 +10,11 @@ public record StartAttemptRequest(
         @NotNull UUID examId,
         @NotNull int questionCount,
         @NotNull @Positive Integer limitSeconds,
-        String difficulty
+        String difficulty,
+        String mode
 ) {
 
     public StartAttemptRequest(UUID userId, UUID examId, int questionCount, Integer limitSeconds) {
-        this(userId, examId, questionCount, limitSeconds, null);
+        this(userId, examId, questionCount, limitSeconds, null, null);
     }
 }

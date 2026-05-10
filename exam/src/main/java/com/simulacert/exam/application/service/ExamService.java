@@ -77,11 +77,11 @@ public class ExamService implements ExamUseCase {
                 .orElseThrow(() -> new IllegalArgumentException("Exam not found: " + examId));
 
         exam.update(request.title(), request.description());
-        Exam updatedExam = examRepository.save(exam);
+        examRepository.save(exam);
 
         log.info("Exam updated: {}", examId);
 
-        return examMapper.toResponse(updatedExam);
+        return examMapper.toResponse(exam);
     }
 
     @Override
@@ -123,8 +123,7 @@ public class ExamService implements ExamUseCase {
                 continue;
             }
 
-            ExamImportDto dto = objectMapper.readValue(file.getInputStream(), ExamImportDto.class);
-            exams.add(dto);
+            exams.add(objectMapper.readValue(file.getInputStream(), ExamImportDto.class));
         }
 
         if (exams.isEmpty()) {

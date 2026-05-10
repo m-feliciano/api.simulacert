@@ -185,7 +185,7 @@ public class AuthService implements AuthUseCase {
         String hash = UUID.randomUUID().toString().substring(0, 12).replace("-", "");
         String dummyPassword = Base64.getEncoder().encodeToString(hash.getBytes());
         User user = User.createAnon(dummyPassword);
-        user = userRepository.save(user);
+        userRepository.save(user);
 
         log.info("Anonymous user created with id: {}", user.getId());
 
@@ -259,35 +259,32 @@ public class AuthService implements AuthUseCase {
             name = request.email().split("@")[0];
         }
 
-        String passwordHash = passwordEncoder.encode(request.password());
-        User user = User.create(request.email(), name, passwordHash, clock.now());
-
-        user = userRepository.save(user);
+        User user = User.create(request.email(), name, passwordEncoder.encode(request.password()), clock.now());
+        userRepository.save(user);
         log.info("User registered successfully with id: {}", user.getId());
 
         return userMapper.toResponse(user);
     }
 
     private UserResponse updateAnonymousUser(RegisterRequest request) {
-        User anonUser = userRepository.findById(request.id())
+        User user = userRepository.findById(request.id())
                 .orElseThrow(() -> {
                     log.warn("Anonymous user not found with id: {}", request.id());
                     return new IllegalArgumentException("Anonymous user not found");
                 });
 
-        if (!anonUser.isAnonymous()) {
+        if (!user.isAnonymous()) {
             log.warn("User with id {} is not anonymous", request.id());
             throw new ForbiddenException("User ID is not associated with an anonymous user");
         }
 
-        String passwordHash = passwordEncoder.encode(request.password());
         String name = request.name() != null && !request.name().isEmpty() ? request.name() : request.email().split("@")[0];
 
-        anonUser.register(request.email(), name, passwordHash, clock.now());
-        anonUser = userRepository.save(anonUser);
-        log.info("Anonymous user registered successfully with id: {}", anonUser.getId());
+        user.change(request.email(), name, passwordEncoder.encode(request.password()), clock.now());
+        userRepository.save(user);
+        log.info("Anonymous user registered successfully with id: {}", user.getId());
 
-        return userMapper.toResponse(anonUser);
+        return userMapper.toResponse(user);
     }
 }
 
