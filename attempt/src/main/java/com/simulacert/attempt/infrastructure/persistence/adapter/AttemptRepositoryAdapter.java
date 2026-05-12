@@ -5,6 +5,8 @@ import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
 import com.simulacert.attempt.infrastructure.persistence.repository.AttemptRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -34,11 +36,6 @@ public class AttemptRepositoryAdapter implements AttemptRepositoryPort {
     }
 
     @Override
-    public List<Attempt> findByUserIdOrderByStartedAtDesc(UUID userId) {
-        return repository.findByUserIdOrderByStartedAtDesc(userId);
-    }
-
-    @Override
     public List<Attempt> findByStatusAndStartedAtBefore(AttemptStatus attemptStatus, Instant cutoff) {
         return repository.findByStatusAndStartedAtBefore(attemptStatus, cutoff);
     }
@@ -46,6 +43,11 @@ public class AttemptRepositoryAdapter implements AttemptRepositoryPort {
     @Override
     public int countByStatus(UUID userId, AttemptStatus attemptStatus) {
         return repository.countByStatus(userId, attemptStatus);
+    }
+
+    @Override
+    public Page<Attempt> findByUserIdPaginated(UUID userId, Pageable pageable) {
+        return repository.findByUserId(userId, pageable);
     }
 }
 

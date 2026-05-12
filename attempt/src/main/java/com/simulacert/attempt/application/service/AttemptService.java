@@ -15,14 +15,14 @@ import com.simulacert.attempt.domain.Difficulty;
 import com.simulacert.common.ClockPort;
 import com.simulacert.exam.application.dto.response.QuestionOptionDto;
 import com.simulacert.exam.application.port.out.ExamQueryPort;
-import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.service.XRayTracingService;
-import com.simulacert.translation.application.service.TranslationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -194,11 +194,9 @@ public class AttemptService implements AttemptUseCase {
 
     @Override
     @XRaySubsegment("attempt.getAttemptsByUser")
-    public List<AttemptVo> getAttemptsByUser(UUID userId) {
-        return attemptRepository.findByUserIdOrderByStartedAtDesc(userId)
-                .stream()
-                .map(Attempt::toVo)
-                .toList();
+    public Page<AttemptVo> getAttemptsByUser(UUID userId, Pageable pageable) {
+        return attemptRepository.findByUserIdPaginated(userId, pageable)
+                .map(Attempt::toVo);
     }
 
     @Override
@@ -302,67 +300,11 @@ public class AttemptService implements AttemptUseCase {
             throw new IllegalStateException("Exam has only " + allQuestions.size() + " questions");
         }
 
-        List<UUID> selected;
-
         if (difficultyLevel == null || Difficulty.ANY.name().equalsIgnoreCase(difficultyLevel)) {
-            int easyCount = (int) Math.round(questionCount * 0.3);
-            int mediumCount = (int) Math.round(questionCount * 0.5);
-            int hardCount = questionCount - easyCount - mediumCount;
-
-            var easyQuestions = filterByDifficulty(allQuestions, Difficulty.EASY.name());
-            var mediumQuestions = filterByDifficulty(allQuestions, Difficulty.MEDIUM.name());
-            var hardQuestions = filterByDifficulty(allQuestions, Difficulty.HARD.name());
-
-            if (hardQuestions.size() < hardCount) {
-                mediumCount += (hardCount - hardQuestions.size());
-                hardCount = hardQuestions.size();
-            }
-
-            if (mediumQuestions.size() < mediumCount) {
-                easyCount += (mediumCount - mediumQuestions.size());
-                mediumCount = mediumQuestions.size();
-            }
-
-            selected = new ArrayList<>();
-            selected.addAll(selectRandom(easyQuestions, easyCount));
-            selected.addAll(selectRandom(mediumQuestions, mediumCount));
-            selected.addAll(selectRandom(hardQuestions, hardCount));
-
+            return filterRandomQuestions(questionCount, allQuestions);
         } else {
-            Difficulty difficulty = Difficulty.valueOf(difficultyLevel.toUpperCase());
-            List<Question> candidates = new ArrayList<>(filterByDifficulty(allQuestions, difficulty.name()));
-
-            if (candidates.size() < questionCount) {
-                List<Difficulty> others = difficulty.getEasierThanThis();
-
-                int i = others.size() - 1;
-                while (i-- >= 0 && candidates.size() < questionCount) {
-                    candidates.addAll(filterByDifficulty(allQuestions, others.get(i).name()));
-                }
-            }
-
-            if (candidates.size() < questionCount) {
-                for (Difficulty d : Difficulty.all()) {
-                    if (d == difficulty) continue;
-
-                    List<Question> questions = filterByDifficulty(allQuestions, d.name());
-                    for (Question q : questions) {
-                        if (candidates.stream().noneMatch(c -> c.getId().equals(q.getId()))) {
-                            candidates.add(q);
-                        }
-
-                        if (candidates.size() >= questionCount) break;
-                    }
-
-                    if (candidates.size() >= questionCount) break;
-                }
-            }
-
-            selected = selectRandom(candidates, questionCount);
+            return filterQuestionsByLevel(questionCount, Difficulty.of(difficultyLevel), allQuestions);
         }
-
-        Collections.shuffle(selected, random);
-        return selected;
     }
 
     private List<Question> filterByDifficulty(List<Question> questions, String difficulty) {
@@ -376,18 +318,15 @@ public class AttemptService implements AttemptUseCase {
             return new ArrayList<>();
         }
 
-        if (questions.size() <= count) {
-            return questions.stream()
-                    .map(Question::getId)
-                    .collect(Collectors.toList());
-        }
-
         var shuffled = new ArrayList<>(questions);
         Collections.shuffle(shuffled, random);
-        return shuffled.stream()
-                .limit(count)
-                .map(Question::getId)
-                .collect(Collectors.toList());
+
+        var questionStream = shuffled.stream();
+        if (questions.size() > count) {
+            questionStream = questionStream.limit(count);
+        }
+
+        return questionStream.map(Question::getId).toList();
     }
 
     private void ensureTimerInitialized(Attempt attempt, Integer limitSeconds) {
@@ -409,5 +348,65 @@ public class AttemptService implements AttemptUseCase {
                 attempt.isPaused(),
                 pausedAt != null ? pausedAt.toString() : null
         );
+    }
+
+    private List<UUID> filterRandomQuestions(int questionCount, List<Question> allQuestions) {
+        int easyCount = (int) Math.round(questionCount * 0.3);
+        int mediumCount = (int) Math.round(questionCount * 0.5);
+        int hardCount = questionCount - easyCount - mediumCount;
+
+        var easyQuestions = filterByDifficulty(allQuestions, Difficulty.EASY.name());
+        var mediumQuestions = filterByDifficulty(allQuestions, Difficulty.MEDIUM.name());
+        var hardQuestions = filterByDifficulty(allQuestions, Difficulty.HARD.name());
+
+        if (hardQuestions.size() < hardCount) {
+            mediumCount += (hardCount - hardQuestions.size());
+            hardCount = hardQuestions.size();
+        }
+
+        if (mediumQuestions.size() < mediumCount) {
+            easyCount += (mediumCount - mediumQuestions.size());
+            mediumCount = mediumQuestions.size();
+        }
+
+        List<UUID> selected = new ArrayList<>();
+        selected.addAll(selectRandom(easyQuestions, easyCount));
+        selected.addAll(selectRandom(mediumQuestions, mediumCount));
+        selected.addAll(selectRandom(hardQuestions, hardCount));
+
+        Collections.shuffle(selected, random);
+        return selected;
+    }
+
+    private List<UUID> filterQuestionsByLevel(int questionCount, Difficulty difficulty, List<Question> allQuestions) {
+        List<Question> candidates = new ArrayList<>(filterByDifficulty(allQuestions, difficulty.name()));
+
+        if (candidates.size() < questionCount) {
+            List<Difficulty> others = difficulty.getEasierThanThis();
+
+            int i = others.size() - 1;
+            while (i-- >= 0 && candidates.size() < questionCount) {
+                candidates.addAll(filterByDifficulty(allQuestions, others.get(i).name()));
+            }
+        }
+
+        if (candidates.size() < questionCount) {
+            for (Difficulty d : Difficulty.specifics()) {
+                if (d == difficulty) continue;
+
+                List<Question> questions = filterByDifficulty(allQuestions, d.name());
+                for (Question q : questions) {
+                    if (candidates.stream().noneMatch(c -> c.getId().equals(q.getId()))) {
+                        candidates.add(q);
+                    }
+
+                    if (candidates.size() >= questionCount) break;
+                }
+
+                if (candidates.size() >= questionCount) break;
+            }
+        }
+
+        return selectRandom(candidates, questionCount);
     }
 }

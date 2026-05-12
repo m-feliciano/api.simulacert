@@ -5,6 +5,8 @@ import com.simulacert.attempt.application.dto.AttemptResponse;
 import com.simulacert.attempt.application.dto.AttemptTimingResponse;
 import com.simulacert.attempt.application.dto.AttemptVo;
 import com.simulacert.attempt.application.dto.StartAttemptRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +27,7 @@ public interface AttemptUseCase {
 
     AttemptVo getAttemptById(UUID attemptId);
 
-    List<AttemptVo> getAttemptsByUser(UUID userId);
+    Page<AttemptVo> getAttemptsByUser(UUID userId, Pageable pageable);
 
     List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId);
 

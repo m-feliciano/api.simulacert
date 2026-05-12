@@ -15,6 +15,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -90,7 +94,11 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "403", description = "Not authorized - can only view own attempts or require Admin role"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    ResponseEntity<List<AttemptResponse>> getAttemptsByUser(@Parameter(description = "User ID", required = true) @PathVariable UUID userId);
+    ResponseEntity<Page<AttemptResponse>> getAttemptsByUser(@Parameter(description = "User ID", required = true) @PathVariable UUID userId,
+                                                            @PageableDefault(
+                                                                    size = 5,
+                                                                    sort = "startedAt",
+                                                                    direction = Sort.Direction.DESC) Pageable pageable);
 
     @Operation(
             summary = "Get attempt questions",

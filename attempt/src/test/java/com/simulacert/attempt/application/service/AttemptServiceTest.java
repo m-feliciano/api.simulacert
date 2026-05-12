@@ -5,7 +5,6 @@ import com.simulacert.attempt.application.dto.StartAttemptRequest;
 import com.simulacert.attempt.application.port.out.AnswerRepositoryPort;
 import com.simulacert.attempt.application.port.out.AttemptQueryPort;
 import com.simulacert.attempt.application.port.out.AttemptRepositoryPort;
-import com.simulacert.attempt.domain.Answer;
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
 import com.simulacert.common.ClockPort;
@@ -22,6 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -103,7 +105,7 @@ class AttemptServiceTest {
     @DisplayName("Should start attempt successfully")
     void shouldStartAttemptSuccessfully() {
         int questionCount = 15;
-        List<Question> mockQuestions = createMockQuestions(examId, 50);
+        List<Question> mockQuestions = createMockQuestions(examId);
 
         when(examQueryPort.existsById(examId)).thenReturn(true);
         when(attemptRepository.findByUserIdAndExamIdAndStatus(userId, examId, AttemptStatus.IN_PROGRESS))
@@ -252,18 +254,20 @@ class AttemptServiceTest {
     void shouldGetAttemptsByUserId() {
         Attempt attempt2 = Attempt.create(userId, examId, testAttempt.getQuestionIds(), now, 54321L, "exam");
 
-        when(attemptRepository.findByUserIdOrderByStartedAtDesc(userId))
-                .thenReturn(List.of(testAttempt, attempt2));
+        Pageable pageable = Pageable.ofSize(2);
 
-        List<AttemptVo> results = attemptService.getAttemptsByUser(userId);
+        when(attemptRepository.findByUserIdPaginated(userId, pageable))
+                .thenReturn(new PageImpl<>(List.of(testAttempt, attempt2)));
+
+        Page<AttemptVo> results = attemptService.getAttemptsByUser(userId, pageable);
 
         assertThat(results).hasSize(2);
-        verify(attemptRepository).findByUserIdOrderByStartedAtDesc(userId);
+        verify(attemptRepository).findByUserIdPaginated(userId, pageable);
     }
 
-    private List<Question> createMockQuestions(UUID examId, int count) {
+    private List<Question> createMockQuestions(UUID examId) {
         List<Question> questions = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < 50; i++) {
             String code = String.format("T%019d", i); // 20 chars
             Question q = Question.create(
                     examId,
@@ -275,15 +279,6 @@ class AttemptServiceTest {
             questions.add(q);
         }
         return questions;
-    }
-
-    private List<Answer> createMockAnswers(UUID attemptId, List<UUID> questionIds) {
-        List<Answer> answers = new ArrayList<>();
-        for (UUID questionId : questionIds) {
-            Answer answer = Answer.create(attemptId, questionId, "A", now);
-            answers.add(answer);
-        }
-        return answers;
     }
 }
 
