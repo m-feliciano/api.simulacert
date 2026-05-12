@@ -2,6 +2,8 @@ package com.simulacert.attempt.infrastructure.persistence.repository;
 
 import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +22,6 @@ public interface AttemptRepository extends JpaRepository<Attempt, UUID> {
             @Param("status") AttemptStatus status
     );
 
-    List<Attempt> findByUserIdOrderByStartedAtDesc(UUID userId);
-
     @Query("SELECT a FROM Attempt a WHERE a.status = :status AND a.startedAt < :cutoff")
     List<Attempt> findByStatusAndStartedAtBefore(
             @Param("status") AttemptStatus status,
@@ -30,5 +30,7 @@ public interface AttemptRepository extends JpaRepository<Attempt, UUID> {
 
     @Query("SELECT COUNT(a) FROM Attempt a WHERE a.userId = :userId AND a.status = :status")
     int countByStatus(@Param("userId") UUID userId, @Param("status") AttemptStatus status);
+
+    Page<Attempt> findByUserId(UUID userId, Pageable pageable);
 }
 

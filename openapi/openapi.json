@@ -107,6 +107,14 @@
               "type": "string",
               "format": "uuid"
             }
+          },
+          {
+            "in": "query",
+            "name": "pageable",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Pageable"
+            }
           }
         ],
         "responses": {
@@ -114,10 +122,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttemptResponse"
-                  }
+                  "$ref": "#/components/schemas/PagedModelAttemptResponse"
                 }
               }
             },
@@ -127,10 +132,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttemptResponse"
-                  }
+                  "$ref": "#/components/schemas/PagedModelAttemptResponse"
                 }
               }
             },
@@ -140,10 +142,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AttemptResponse"
-                  }
+                  "$ref": "#/components/schemas/PagedModelAttemptResponse"
                 }
               }
             },
@@ -2692,6 +2691,20 @@
             "items": {
               "type": "string"
             }
+          }
+        }
+      },
+      "PagedModelAttemptResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttemptResponse"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
           }
         }
       },

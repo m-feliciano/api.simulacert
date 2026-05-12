@@ -14,6 +14,10 @@ import com.simulacert.attempt.mapper.AttemptMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -73,9 +77,14 @@ public class AttemptController implements AttemptControllerOpenApi {
     @Override
     @GetMapping("/user/{userId}")
     @PreAuthorize("#userId == authentication.principal.id or hasRole('ADMIN')")
-    public ResponseEntity<List<AttemptResponse>> getAttemptsByUser(@PathVariable UUID userId) {
-        List<AttemptVo> attempts = useCase.getAttemptsByUser(userId);
-        return ResponseEntity.ok(mapper.toResponseList(attempts));
+    public ResponseEntity<Page<AttemptResponse>> getAttemptsByUser(@PathVariable UUID userId,
+                                                                   @PageableDefault(
+                                                                           size = 5,
+                                                                           sort = "finishedAt",
+                                                                           direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<AttemptResponse> attempts = useCase.getAttemptsByUser(userId, pageable)
+                .map(mapper::toResponse);
+        return ResponseEntity.ok(attempts);
     }
 
     @Override
