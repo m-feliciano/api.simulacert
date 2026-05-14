@@ -31,7 +31,7 @@ dependencies {
 
     implementation("com.amazonaws:aws-xray-recorder-sdk-spring:2.21.0")
 
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.3'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.4'
     implementation 'io.micrometer:micrometer-core'
 
     implementation("org.flywaydb:flyway-core:11.20.0")
