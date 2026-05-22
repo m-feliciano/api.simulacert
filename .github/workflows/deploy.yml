@@ -35,14 +35,14 @@ jobs:
         run: cp app/build/libs/app.jar app.jar
 
       - name: Upload deploy artifact (app.jar)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: app-jar
           path: app.jar
 
       - name: Upload test reports
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-reports
           path: |
