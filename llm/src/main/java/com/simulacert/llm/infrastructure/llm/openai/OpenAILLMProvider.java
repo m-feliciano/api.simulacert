@@ -41,7 +41,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         log.debug("Temperature: {}, Max Tokens: {}", request.temperature(), request.maxTokens());
 
         OpenAIRequest openAIRequest = buildOpenAIRequest(request);
-        var responseEntity = openAIClient.createChatCompletion(openAIRequest, apiKey);
+        var responseEntity = openAIClient.createChatCompletion(openAIRequest, "Bearer " + apiKey);
         if (responseEntity == null || responseEntity.getBody() == null) {
             throw new IllegalStateException("OpenAI returned empty response");
         }
