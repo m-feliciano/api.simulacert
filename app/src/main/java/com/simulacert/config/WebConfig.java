@@ -1,6 +1,6 @@
 package com.simulacert.config;
 
-import com.simulacert.adapter.rest.controller.param.ContentLanguageConverter;
+import com.simulacert.rest.controller.param.ContentLanguageConverter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
