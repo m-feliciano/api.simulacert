@@ -1,5 +1,7 @@
 # SimulaCert — API de Simulados AWS (Monólito Modular)
 
+[![Push build & deploy](https://github.com/m-feliciano/api.simulacert/actions/workflows/deploy.yml/badge.svg)](https://github.com/m-feliciano/api.simulacert/actions/workflows/deploy.yml)
+
 Este repositório contém a API do SimulaCert: um sistema de simulados / exames focado em conteúdos AWS. O projeto é organizado como um monólito modular com vários módulos separados por responsabilidade (auth, exam, attempt, stats, llm, review, common, app).
 
 Resumo rápido
