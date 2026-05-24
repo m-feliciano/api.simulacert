@@ -1,6 +1,9 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,9 +21,9 @@ public interface ExamImportControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Exams imported successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid file format"),
-            @ApiResponse(responseCode = "401", description = "Not authenticated"),
-            @ApiResponse(responseCode = "403", description = "Not authorized (requires ADMIN role)")
+            @ApiResponse(responseCode = "400", description = "Invalid file format", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Not authenticated", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized (requires ADMIN role)", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void importExams(@RequestParam("files") List<MultipartFile> files);
 }

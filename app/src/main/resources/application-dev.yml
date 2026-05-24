@@ -54,8 +54,6 @@ app:
       enabled: ${OPENAI_ENABLED:false}
       api-key: ${OPENAI_API_KEY:}
       model: gpt-4.1-mini
-      base-url: https://api.openai.com/v1
-      timeout-seconds: 60
 
 management:
   endpoints:
@@ -90,5 +88,9 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-
+feign:
+  client:
+    config:
+      openai:
+        url: localhost:8081/llm/openai
 

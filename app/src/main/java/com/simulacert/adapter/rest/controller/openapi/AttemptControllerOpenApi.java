@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.attempt.application.dto.AnswerResponse;
 import com.simulacert.attempt.application.dto.AttemptQuestionResponse;
 import com.simulacert.attempt.application.dto.AttemptResponse;
@@ -37,9 +38,9 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Attempt started successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request data"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself"),
-            @ApiResponse(responseCode = "404", description = "Exam not found")
+            @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Exam not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<Void> startAttempt(@RequestBody @Valid StartAttemptRequest request);
 
@@ -48,9 +49,9 @@ AttemptControllerOpenApi {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Attempt started successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid request data"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself"),
-            @ApiResponse(responseCode = "404", description = "Exam not found")
+            @ApiResponse(responseCode = "400", description = "Invalid request data", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only start attempts for yourself", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Exam not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     AttemptResponse retakeAttempt(@PathVariable UUID attemptId);
 
@@ -63,8 +64,8 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Attempt finished successfully",
                     content = @Content(schema = @Schema(implementation = AttemptResponse.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Invalid score value (must be between 0 and 100)"),
-            @ApiResponse(responseCode = "404", description = "Attempt not found")
+            @ApiResponse(responseCode = "400", description = "Invalid score value (must be between 0 and 100)", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<AttemptResponse> finishAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 
@@ -79,8 +80,8 @@ AttemptControllerOpenApi {
                     description = "Attempt found",
                     content = @Content(schema = @Schema(implementation = AttemptResponse.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Attempt not found"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<AttemptResponse> getAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 
@@ -91,8 +92,8 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User attempts retrieved successfully"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - can only view own attempts or require Admin role"),
-            @ApiResponse(responseCode = "404", description = "User not found")
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only view own attempts or require Admin role", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<Page<AttemptResponse>> getAttemptsByUser(@Parameter(description = "User ID", required = true) @PathVariable UUID userId,
                                                             @PageableDefault(
@@ -107,7 +108,7 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Attempt questions retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Attempt not found")
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<List<AttemptQuestionResponse>> getAttemptQuestions(@PathVariable UUID attemptId);
 
@@ -118,8 +119,8 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Answer submitted successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid answer data"),
-            @ApiResponse(responseCode = "404", description = "Attempt or question not found")
+            @ApiResponse(responseCode = "400", description = "Invalid answer data", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Attempt or question not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void submitAnswer(
             @PathVariable UUID attemptId,
@@ -133,7 +134,7 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Answer deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Attempt or question not found")
+            @ApiResponse(responseCode = "404", description = "Attempt or question not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void deleteAnswer(@PathVariable UUID attemptId, @PathVariable UUID questionId);
 
@@ -144,7 +145,7 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Attempt cancelled successfully"),
-            @ApiResponse(responseCode = "404", description = "Attempt not found")
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void cancelAttempt(@Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);
 
@@ -157,8 +158,8 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Attempt paused",
                     content = @Content(schema = @Schema(implementation = AttemptTimingResponse.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Attempt not found"),
-            @ApiResponse(responseCode = "409", description = "Attempt not in progress")
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Attempt not in progress", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<AttemptTimingResponse> pauseAttempt(@PathVariable UUID attemptId);
 
@@ -171,8 +172,8 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Attempt resumed",
                     content = @Content(schema = @Schema(implementation = AttemptTimingResponse.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Attempt not found"),
-            @ApiResponse(responseCode = "409", description = "Attempt not paused or not in progress")
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Attempt not paused or not in progress", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<AttemptTimingResponse> resumeAttempt(@PathVariable UUID attemptId);
 
@@ -185,8 +186,8 @@ AttemptControllerOpenApi {
             @ApiResponse(responseCode = "200", description = "Heartbeat OK",
                     content = @Content(schema = @Schema(implementation = AttemptTimingResponse.class))
             ),
-            @ApiResponse(responseCode = "404", description = "Attempt not found"),
-            @ApiResponse(responseCode = "409", description = "Attempt not in progress")
+            @ApiResponse(responseCode = "404", description = "Attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "Attempt not in progress", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<AttemptTimingResponse> heartbeatAttempt(@PathVariable UUID attemptId);
 
@@ -197,7 +198,7 @@ AttemptControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Answer retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Answer not found")
+            @ApiResponse(responseCode = "404", description = "Answer not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     List<AnswerResponse> getAnswer(
             @Parameter(description = "Attempt ID", required = true) @PathVariable UUID attemptId);

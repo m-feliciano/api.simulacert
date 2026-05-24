@@ -1,4 +1,4 @@
-package com.simulacert.llm.infrastructure.llm.openai;
+package com.simulacert.llm.infrastructure.llm.openai.transfer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

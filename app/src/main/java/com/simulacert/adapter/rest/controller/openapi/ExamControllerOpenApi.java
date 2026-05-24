@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.exam.application.dto.request.CreateExamRequest;
 import com.simulacert.exam.application.dto.request.UpdateExamRequest;
 import com.simulacert.exam.application.dto.response.ExamResponse;
@@ -31,7 +32,7 @@ public interface ExamControllerOpenApi {
     @Operation(summary = "Get exam by ID", description = "Retrieves detailed information about a specific exam")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Exam found", content = @Content(schema = @Schema(implementation = ExamResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Exam not found")
+            @ApiResponse(responseCode = "404", description = "Exam not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<ExamResponse> getExam(@Parameter(description = "Exam ID", required = true) @PathVariable UUID examId);
 
@@ -44,16 +45,16 @@ public interface ExamControllerOpenApi {
     @Operation(summary = "Create new exam", description = "Creates a new exam. Admin only.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Exam created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input data"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<Void> createExam(@RequestBody CreateExamRequest request);
 
     @Operation(summary = "Update exam", description = "Updates an existing exam. Admin only.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Exam updated successfully", content = @Content(schema = @Schema(implementation = ExamResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Exam not found"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
+            @ApiResponse(responseCode = "404", description = "Exam not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<ExamResponse> updateExam(@Parameter(description = "Exam ID", required = true)
                                             @PathVariable UUID examId,
@@ -62,15 +63,15 @@ public interface ExamControllerOpenApi {
     @Operation(summary = "Delete exam", description = "Deletes an exam. Admin only.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Exam deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Exam not found"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
+            @ApiResponse(responseCode = "404", description = "Exam not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<Void> deleteExam(@Parameter(description = "Exam ID", required = true) @PathVariable UUID examId);
 
     @Operation(summary = "Get exam by slug", description = "Retrieves detailed information about a specific exam by its slug")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Exam found", content = @Content(schema = @Schema(implementation = ExamResponse.class))),
-            @ApiResponse(responseCode = "404", description = "Exam not found")
+            @ApiResponse(responseCode = "404", description = "Exam not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<ExamResponse> getExamBySlug(@Parameter(description = "Exam Slug", required = true) @PathVariable String slug);
 }

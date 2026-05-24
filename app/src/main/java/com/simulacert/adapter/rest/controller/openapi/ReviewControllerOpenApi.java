@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.review.application.dto.CreateReviewRequest;
 import com.simulacert.review.application.dto.ReviewResponse;
 import com.simulacert.review.application.dto.ReviewSummaryResponse;
@@ -34,15 +35,18 @@ public interface ReviewControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request - attempt not found or validation failed"
+                    description = "Invalid request - attempt not found or validation failed",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "409",
-                    description = "Review already exists for this attempt"
+                    description = "Review already exists for this attempt",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Not authenticated"
+                    description = "Not authenticated",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<ReviewResponse> createReview(@Valid @RequestBody CreateReviewRequest request);
@@ -60,11 +64,13 @@ public interface ReviewControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Review not found for this attempt"
+                    description = "Review not found for this attempt",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Not authenticated"
+                    description = "Not authenticated",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<ReviewResponse> getReviewByAttempt(
@@ -83,8 +89,8 @@ public interface ReviewControllerOpenApi {
                     description = "Summary retrieved successfully",
                     content = @Content(schema = @Schema(implementation = ReviewSummaryResponse.class))
             ),
-            @ApiResponse(responseCode = "403", description = "Not authorized - can only view own summary or require Admin role"),
-            @ApiResponse(responseCode = "401", description = "Not authenticated")
+            @ApiResponse(responseCode = "403", description = "Not authorized - can only view own summary or require Admin role", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Not authenticated", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<ReviewSummaryResponse> getSummaryByUser(
             @Parameter(description = "User ID", required = true)
