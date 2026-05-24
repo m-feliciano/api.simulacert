@@ -1,11 +1,12 @@
 FROM gradle:8.14.3-jdk21 AS builder
+
 WORKDIR /workspace
 
-# Copy only the necessary files for dependency resolution to leverage Docker caching
 COPY gradlew .
-COPY gradle ./gradle
+COPY gradle gradle
 COPY settings.gradle .
 COPY build.gradle .
+
 COPY app/build.gradle app/
 COPY auth/build.gradle auth/
 COPY attempt/build.gradle attempt/
@@ -18,28 +19,27 @@ COPY translation/build.gradle translation/
 
 RUN chmod +x gradlew
 
-RUN ./gradlew :app:dependencies --no-daemon > /dev/null || true
+RUN --mount=type=cache,target=/home/gradle/.gradle \
+    ./gradlew dependencies --no-daemon
 
-# Now copy the rest of the source code
 COPY . .
 
-RUN ./gradlew :app:bootJar --no-daemon
+RUN --mount=type=cache,target=/home/gradle/.gradle \
+    ./gradlew :app:bootJar --no-daemon
 
 FROM eclipse-temurin:21-jre-jammy
+
 WORKDIR /app
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates \
-  && rm -rf /var/lib/apt/lists/* \
-  && groupadd -r appuser && useradd -r -g appuser appuser \
-  && mkdir -p /app/logs \
-  && chown -R appuser:appuser /app
+RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-COPY --from=builder /workspace/app/build/libs/app.jar /app/app.jar
+COPY --from=builder /workspace/app/build/libs/app.jar app.jar
 
-EXPOSE 8080
+RUN chown appuser:appuser app.jar
 
 USER appuser
+
+EXPOSE 8080
 
 ENTRYPOINT ["java", \
   "-XX:+HeapDumpOnOutOfMemoryError", \
