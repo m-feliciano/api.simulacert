@@ -4,8 +4,10 @@ import com.simulacert.exception.ForbiddenException;
 import com.simulacert.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -16,18 +18,13 @@ import java.time.Instant;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static ApiErrorResponse build(ErrorCode errorCode, HttpServletRequest request) {
+    private static ApiErrorResponse buildResponse(ErrorCode errorCode, HttpServletRequest request) {
         return new ApiErrorResponse(
                 errorCode.name(),
                 errorCode.getDefaultMessage(),
                 Instant.now(),
                 request.getRequestURI()
         );
-    }
-
-    private static ResponseEntity<ApiErrorResponse> buildResponseEntity(ErrorCode errorCode, HttpServletRequest request) {
-        ApiErrorResponse response = build(errorCode, request);
-        return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
     }
 
     private static ErrorCode mapToErrorCode(String message) {
@@ -56,59 +53,56 @@ public class GlobalExceptionHandler {
             HttpClientErrorException.BadRequest.class,
             IllegalArgumentException.class
     })
-    public ResponseEntity<ApiErrorResponse> handleBadRequest(Exception ex, HttpServletRequest request) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleBadRequest(Exception ex, HttpServletRequest request) {
         log.error("Illegal state exception caught: ", ex);
         ErrorCode errorCode = mapToErrorCode(ex.getMessage());
-        return buildResponseEntity(errorCode, request);
+        return buildResponse(errorCode, request);
     }
 
     @ExceptionHandler({
             ForbiddenException.class
     })
-    public ResponseEntity<ApiErrorResponse> handleForbidden(ForbiddenException ex, HttpServletRequest request) {
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiErrorResponse handleForbidden(ForbiddenException ex, HttpServletRequest request) {
         log.error("Forbidden exception caught: ", ex);
-        return buildResponseEntity(ErrorCode.FORBIDDEN, request);
+        return buildResponse(ErrorCode.FORBIDDEN, request);
     }
 
     @ExceptionHandler({
             UnauthorizedException.class
     })
-    public ResponseEntity<ApiErrorResponse> handleUnauthorized(UnauthorizedException ex, HttpServletRequest request) {
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrorResponse handleUnauthorized(UnauthorizedException ex, HttpServletRequest request) {
         log.error("Unauthorized exception caught: ", ex);
-        return buildResponseEntity(ErrorCode.UNAUTHORIZED, request);
+        return buildResponse(ErrorCode.UNAUTHORIZED, request);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
-    public ResponseEntity<ApiErrorResponse> handleUnsupportedOperationException(
-            UnsupportedOperationException ex,
-            HttpServletRequest request
-    ) {
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public ApiErrorResponse handleUnsupportedOperationException(Exception ex, HttpServletRequest request) {
         log.error("Unsupported operation exception caught: ", ex);
-        return buildResponseEntity(ErrorCode.NOT_IMPLEMENTED, request);
+        return buildResponse(ErrorCode.NOT_IMPLEMENTED, request);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGenericException(
-            Exception ex,
-            HttpServletRequest request
-    ) {
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrorResponse handleGenericException(Exception ex, HttpServletRequest request) {
         log.error("Global exception caught: ", ex);
-        return buildResponseEntity(ErrorCode.INTERNAL_SERVER_ERROR, request);
+        return buildResponse(ErrorCode.INTERNAL_SERVER_ERROR, request);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleNoResourceFound(
-            NoResourceFoundException ignored,
-            HttpServletRequest request
-    ) {
-        log.warn("Resource not found: {}", request.getRequestURI());
-        ApiErrorResponse response = new ApiErrorResponse(
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse handleNoResourceFound(Exception ignored, HttpServletRequest request) {
+        log.error("Resource not found: {}", request.getRequestURI());
+
+        return new ApiErrorResponse(
                 "NOT_FOUND",
                 "Resource not found",
                 Instant.now(),
                 request.getRequestURI()
         );
-        return ResponseEntity.status(404).body(response);
     }
 }
 

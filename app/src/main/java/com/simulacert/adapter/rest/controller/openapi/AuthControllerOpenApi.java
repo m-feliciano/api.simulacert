@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.auth.application.dto.AuthResponse;
 import com.simulacert.auth.application.dto.ChangePasswordRequest;
 import com.simulacert.auth.application.dto.LoginRequest;
@@ -35,7 +36,8 @@ public interface AuthControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid input data or email already exists"
+                    description = "Invalid input data or email already exists",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<Void> register(@RequestBody RegisterRequest request);
@@ -52,11 +54,13 @@ public interface AuthControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Invalid credentials"
+                    description = "Invalid credentials",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "User account is inactive"
+                    description = "User account is inactive",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request);
@@ -74,7 +78,8 @@ public interface AuthControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "User not found"
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<UserResponse> getUserById(
@@ -95,11 +100,13 @@ public interface AuthControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "User not found"
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Not authorized - Admin role required"
+                    description = "Not authorized - Admin role required",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<UserResponse> getUserByEmail(
@@ -114,8 +121,8 @@ public interface AuthControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Password changed successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid old password"),
-            @ApiResponse(responseCode = "404", description = "User not found")
+            @ApiResponse(responseCode = "400", description = "Invalid old password", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void changePassword(
             @Parameter(description = "User ID", required = true)
@@ -130,8 +137,8 @@ public interface AuthControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User activated successfully"),
-            @ApiResponse(responseCode = "404", description = "User not found"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void activateUser(
             @Parameter(description = "User ID", required = true)
@@ -145,8 +152,8 @@ public interface AuthControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deactivated successfully"),
-            @ApiResponse(responseCode = "404", description = "User not found"),
-            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required")
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Not authorized - Admin role required", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void deactivateUser(
             @Parameter(description = "User ID", required = true)
@@ -166,7 +173,8 @@ public interface AuthControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized - Invalid or missing token"
+                    description = "Unauthorized - Invalid or missing token",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     UserResponse getCurrentUser();

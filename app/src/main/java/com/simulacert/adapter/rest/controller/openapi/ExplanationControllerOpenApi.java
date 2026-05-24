@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.exam.application.dto.request.RequestExplanationCommand;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
@@ -31,10 +32,10 @@ public interface ExplanationControllerOpenApi {
                     description = "Explanation generated successfully",
                     content = @Content(schema = @Schema(implementation = ExplanationResponse.class))
             ),
-            @ApiResponse(responseCode = "400", description = "Invalid request or attempt not completed"),
-            @ApiResponse(responseCode = "403", description = "Attempt does not belong to user"),
-            @ApiResponse(responseCode = "404", description = "Question or attempt not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "400", description = "Invalid request or attempt not completed", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "403", description = "Attempt does not belong to user", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Question or attempt not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     ResponseEntity<ExplanationResponse> requestExplanation(
             @Parameter(description = "Question ID") UUID questionId,
@@ -48,9 +49,9 @@ public interface ExplanationControllerOpenApi {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Feedback submitted successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid rating or feedback"),
-            @ApiResponse(responseCode = "404", description = "Explanation not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "400", description = "Invalid rating or feedback", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "Explanation not found", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     void submitFeedback(
             @Valid SubmitFeedbackCommand command,

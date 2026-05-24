@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.exam.application.dto.request.CreateQuestionRequest;
 import com.simulacert.exam.application.dto.response.QuestionResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,11 +36,13 @@ public interface QuestionControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Question not found"
+                    description = "Question not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Not authenticated"
+                    description = "Not authenticated",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<QuestionResponse> getQuestion(
@@ -59,7 +62,8 @@ public interface QuestionControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Not authenticated"
+                    description = "Not authenticated",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<Page<QuestionResponse>> getQuestionsByExam(
@@ -79,11 +83,13 @@ public interface QuestionControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "Invalid request data"
+                    description = "Invalid request data",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Not authenticated"
+                    description = "Not authenticated",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<Void> createQuestion(@Valid @RequestBody CreateQuestionRequest request);

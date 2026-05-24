@@ -40,11 +40,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = extractJwtFromRequest(request);
 
             if (jwt == null) {
+                log.warn("No JWT token found in request");
                 filterChain.doFilter(request, response);
                 return;
             }
 
             if (!tokenProvider.validateAccessToken(jwt)) {
+                log.warn("Invalid JWT token");
                 SecurityContextHolder.clearContext();
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

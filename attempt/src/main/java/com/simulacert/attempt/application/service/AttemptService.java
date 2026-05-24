@@ -65,7 +65,7 @@ public class AttemptService implements AttemptUseCase {
     public void cleanUpOldInProgressAttempts() {
         log.info("Starting cleanup of old in-progress attempts");
 
-        var cutoff = clock.now().minus(Duration.ofDays(14));
+        var cutoff = clock.now().minus(Duration.ofDays(30));
         var oldAttempts = attemptRepository.findByStatusAndStartedAtBefore(IN_PROGRESS, cutoff);
         for (var attempt : oldAttempts) {
             log.info("Cancelling old in-progress attempt: {} which started at {}", attempt.getId(), attempt.getStartedAt());

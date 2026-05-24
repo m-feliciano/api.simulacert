@@ -4,14 +4,15 @@ import com.simulacert.infrastructure.xray.XRaySubsegment;
 import com.simulacert.llm.application.dto.LLMRequest;
 import com.simulacert.llm.application.dto.LLMResult;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
-import jakarta.annotation.PostConstruct;
+import com.simulacert.llm.infrastructure.llm.openai.client.OpenAIClient;
+import com.simulacert.llm.infrastructure.llm.openai.transfer.OpenAIRequest;
+import com.simulacert.llm.infrastructure.llm.openai.transfer.OpenAIResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
@@ -20,45 +21,38 @@ import java.util.List;
 @ConditionalOnProperty(prefix = "app.llm.openai", name = "enabled", havingValue = "true")
 public class OpenAILLMProvider implements ExplanationLLMPort {
 
+    @Value("${app.llm.openai.model:gpt-4.1-mini}")
+    private String model;
+
+    @Value("${app.llm.openai.api-key}")
+    private String apiKey;
+
+    private final OpenAIClient openAIClient;
+
     @Autowired
-    private OpenAIProperties properties;
-    private RestClient restClient;
-
-    @PostConstruct
-    public void init() {
-        this.restClient = RestClient.builder()
-                .baseUrl(properties.getBaseUrl())
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + properties.getApiKey())
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-
-        log.info("OpenAI LLM Provider initialized with model: {}", properties.getModel());
+    public OpenAILLMProvider(OpenAIClient openAIClient) {
+        this.openAIClient = openAIClient;
     }
 
     @Override
     @XRaySubsegment("ext.openai.chat.completions")
     public LLMResult generate(LLMRequest request) {
-        log.info("Calling OpenAI API with model: {}", request.model() != null ? request.model() : properties.getModel());
+        log.info("Calling OpenAI API with model: {}", request.model() != null ? request.model() : model);
         log.debug("Temperature: {}, Max Tokens: {}", request.temperature(), request.maxTokens());
 
         OpenAIRequest openAIRequest = buildOpenAIRequest(request);
-
-        OpenAIResponse response = restClient.post()
-                .uri("/chat/completions")
-                .body(openAIRequest)
-                .retrieve()
-                .body(OpenAIResponse.class);
-
-        if (response == null || response.choices() == null || response.choices().isEmpty()) {
+        var responseEntity = openAIClient.createChatCompletion(openAIRequest, apiKey);
+        if (responseEntity == null || responseEntity.getBody() == null) {
             throw new IllegalStateException("OpenAI returned empty response");
         }
 
-        String content = response.choices().getFirst().message().content();
+        OpenAIResponse openAIResponse = responseEntity.getBody();
+        String content = openAIResponse.choices().getFirst().message().content();
 
         log.info("OpenAI API call successful. Tokens used: {}",
-                response.usage() != null ? response.usage().totalTokens() : "unknown");
+                openAIResponse.usage() != null ? openAIResponse.usage().totalTokens() : "unknown");
 
-        return new LLMResult(content, response.model(), "openai");
+        return new LLMResult(content, openAIResponse.model(), "openai");
     }
 
     private OpenAIRequest buildOpenAIRequest(LLMRequest request) {
@@ -68,7 +62,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         );
 
         return new OpenAIRequest(
-                request.model() != null ? request.model() : properties.getModel(),
+                ObjectUtils.defaultIfNull(request.model(), model),
                 messages,
                 request.temperature(),
                 request.maxTokens()

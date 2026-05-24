@@ -71,6 +71,7 @@ public class User {
     private Boolean supporter;
 
     @Column(name = "type")
+    @Builder.Default
     private String type = "AUTHENTICATED"; // or anonymous
 
     public static User create(String email, String name, String passwordHash, Instant createdAt) {

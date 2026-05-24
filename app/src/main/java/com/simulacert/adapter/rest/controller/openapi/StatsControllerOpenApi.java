@@ -1,5 +1,6 @@
 package com.simulacert.adapter.rest.controller.openapi;
 
+import com.simulacert.adapter.rest.exception.ApiErrorResponse;
 import com.simulacert.stats.application.dto.AttemptHistoryItemDto;
 import com.simulacert.stats.application.dto.AwsDomainStatsDto;
 import com.simulacert.stats.application.dto.UserStatsDto;
@@ -33,11 +34,13 @@ public interface StatsControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Not authorized - can only view own statistics or require Admin role"
+                    description = "Not authorized - can only view own statistics or require Admin role",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "User not found"
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<UserStatsDto> getUserStatistics(
@@ -56,11 +59,13 @@ public interface StatsControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Not authorized - can only view own history or require Admin role"
+                    description = "Not authorized - can only view own history or require Admin role",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "User not found"
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<List<AttemptHistoryItemDto>> getAttemptHistory(
@@ -79,11 +84,13 @@ public interface StatsControllerOpenApi {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "Not authorized - can only view own statistics or require Admin role"
+                    description = "Not authorized - can only view own statistics or require Admin role",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "User not found"
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = ApiErrorResponse.class))
             )
     })
     ResponseEntity<List<AwsDomainStatsDto>> getPerformanceByDomain(
