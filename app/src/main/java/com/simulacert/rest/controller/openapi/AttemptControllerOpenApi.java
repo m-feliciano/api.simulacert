@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "Attempts", description = "Exam attempt management endpoints")
-public interface
-AttemptControllerOpenApi {
+public interface AttemptControllerOpenApi {
 
     @Operation(
             summary = "Start exam attempt",
