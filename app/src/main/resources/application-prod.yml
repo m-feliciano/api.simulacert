@@ -97,6 +97,8 @@ management:
     health:
       probes:
         enabled: true
+    env:
+      access: none
 
 springdoc:
   api-docs:
