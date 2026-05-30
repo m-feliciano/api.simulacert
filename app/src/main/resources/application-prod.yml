@@ -117,7 +117,7 @@ info:
 
 logging:
   level:
-    root: INFO
+    root: WARN
     br.com.simulacert: INFO
     org.springframework.web: ERROR
     org.hibernate.SQL: WARN
