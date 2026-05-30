@@ -74,8 +74,8 @@ public class XRayTracingService {
 
     private void putAnnotationInternal(String key, String stringValue) {
         String safeValue = stringValue;
-        if (safeValue.length() > 128) {
-            safeValue = safeValue.substring(0, 128);
+        if (safeValue.length() > 512) {
+            safeValue = safeValue.substring(0, 512);
         }
 
         try {

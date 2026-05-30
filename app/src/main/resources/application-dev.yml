@@ -62,6 +62,8 @@ management:
         include: health,info,metrics
   endpoint:
     health:
+      probes:
+        enabled: true
       show-details: always
 
 springdoc:
@@ -83,7 +85,7 @@ info:
 
 logging:
   level:
-    root: INFO
+    root: DEBUG
     br.com.simulacert: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE

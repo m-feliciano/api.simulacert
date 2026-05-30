@@ -97,6 +97,8 @@ management:
     health:
       probes:
         enabled: true
+    env:
+      access: none
 
 springdoc:
   api-docs:
@@ -115,7 +117,7 @@ info:
 
 logging:
   level:
-    root: INFO
+    root: WARN
     br.com.simulacert: INFO
     org.springframework.web: ERROR
     org.hibernate.SQL: WARN

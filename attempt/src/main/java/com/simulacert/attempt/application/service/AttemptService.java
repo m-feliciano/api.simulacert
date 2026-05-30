@@ -36,6 +36,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.simulacert.attempt.application.dto.AttemptLogVo.fromAttemptVo;
 import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
 
 @Slf4j
@@ -191,7 +192,7 @@ public class AttemptService implements AttemptUseCase {
         AttemptVo attemptVo = attemptRepository.findById(attemptId)
                 .map(Attempt::toVo)
                 .orElseThrow(() -> new IllegalArgumentException(ATTEMPT_NOT_FOUND + attemptId));
-        xray.putAnnotation(ATTEMPT_RESPONSE, attemptVo);
+        xray.putAnnotation(ATTEMPT_RESPONSE, fromAttemptVo(attemptVo));
         return attemptVo;
     }
 
