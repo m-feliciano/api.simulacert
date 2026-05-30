@@ -49,6 +49,7 @@ public class AttemptService implements AttemptUseCase {
     private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofHours(4).toSeconds();
     private static final String EXAM_ID = "examId";
     private static final String ATTEMPT_ID = "attemptId";
+    private static final String ATTEMPT_RESPONSE = "attemptResponse";
     private static final String ATTEMPT_NOT_FOUND = "Attempt not found: ";
 
     private final Random random = new Random();
@@ -187,9 +188,11 @@ public class AttemptService implements AttemptUseCase {
     @XRaySubsegment("attempt.getAttemptById")
     public AttemptVo getAttemptById(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
-        return attemptRepository.findById(attemptId)
+        AttemptVo attemptVo = attemptRepository.findById(attemptId)
                 .map(Attempt::toVo)
                 .orElseThrow(() -> new IllegalArgumentException(ATTEMPT_NOT_FOUND + attemptId));
+        xray.putAnnotation(ATTEMPT_RESPONSE, attemptVo);
+        return attemptVo;
     }
 
     @Override
