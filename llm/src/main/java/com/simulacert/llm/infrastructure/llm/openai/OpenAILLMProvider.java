@@ -27,6 +27,8 @@ import java.util.Objects;
 @ConditionalOnProperty(prefix = "app.llm.openai", name = "enabled", havingValue = "true")
 public class OpenAILLMProvider implements ExplanationLLMPort {
 
+    private static final String PROMPT_VERSION = "4";
+
     @Value("${app.llm.openai.model}")
     private String model;
 
@@ -107,7 +109,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
                 .prompt(
                         new OpenAIPromptRequest.Prompt(
                                 request.prompt().id(),
-                                "2",
+                                PROMPT_VERSION,
                                 variables
                         )
                 )
