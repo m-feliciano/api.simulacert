@@ -11,11 +11,13 @@ import com.simulacert.exam.domain.QuestionOption;
 import com.simulacert.llm.application.dto.ExplanationResponse;
 import com.simulacert.llm.application.dto.LLMRequest;
 import com.simulacert.llm.application.dto.LLMResult;
+import com.simulacert.llm.application.dto.PromptRequest;
 import com.simulacert.llm.application.dto.SubmitFeedbackCommand;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
-import com.simulacert.service.XRayTracingService;
+import com.simulacert.service.TracingService;
 import com.simulacert.translation.application.service.TranslationService;
 import com.simulacert.util.UserContextHolder;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -34,6 +38,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
@@ -57,7 +62,7 @@ class QuestionExplanationServiceTest {
     private ClockPort clock;
 
     @Mock
-    private XRayTracingService xray;
+    private TracingService xray;
 
     @Mock
     private TranslationService translationService;
@@ -124,6 +129,14 @@ class QuestionExplanationServiceTest {
                             run.getExpiresAt()
                     );
                 });
+
+        UserContextHolder.setUser(userId);
+        ReflectionTestUtils.setField(service, "promptId", "question-explanation-prompt");
+    }
+
+    @AfterEach
+    void tearDown() {
+        UserContextHolder.clear();
     }
 
     @Test
@@ -131,10 +144,11 @@ class QuestionExplanationServiceTest {
     void shouldReturnCachedExplanationWhenRepositoryHasIt() {
         // Given
         QuestionExplanationRun existing = QuestionExplanationRun.create(
-                questionId, "openai", "cached-model", "v1.1",
+                questionId, "openai", "cached-model", "v1.2",
                 0.25, "pt", "cached explanation", now, now.plus(Duration.ofDays(30)),
                 userId
         );
+
         when(explanationRunRepository.findAllByQuestion(questionId))
                 .thenReturn(Optional.of(List.of(existing)));
 
@@ -145,7 +159,7 @@ class QuestionExplanationServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.content()).isEqualTo("cached explanation");
         assertThat(response.model()).isEqualTo("cached-model");
-        verify(llmProvider, never()).generate(any(LLMRequest.class));
+        verify(llmProvider, never()).generate(any(LLMRequest.class), anyInt());
         verify(explanationRunRepository, never()).save(any(QuestionExplanationRun.class));
     }
 
@@ -153,8 +167,10 @@ class QuestionExplanationServiceTest {
     @DisplayName("Should generate explanation successfully when repository miss")
     void shouldGenerateExplanationSuccessfullyWhenRepositoryMiss() {
         String generatedContent = "<div class=\"question-explanation\">explain</div>";
-        when(llmProvider.generate(any(LLMRequest.class)))
-                .thenReturn(new LLMResult(generatedContent, "gpt-4", "openai"));
+        LLMResult llmResult = new LLMResult(generatedContent, "gpt-4", "openai");
+
+        when(llmProvider.generate(any(PromptRequest.class), anyInt()))
+                .thenReturn(llmResult);
 
         when(explanationRunRepository.save(any(QuestionExplanationRun.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -166,7 +182,7 @@ class QuestionExplanationServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.content()).isEqualTo(generatedContent);
         assertThat(response.model()).isEqualTo("gpt-4");
-        verify(llmProvider).generate(any(LLMRequest.class));
+        verify(llmProvider).generate(any(PromptRequest.class), anyInt());
         verify(explanationRunRepository).save(any(QuestionExplanationRun.class));
     }
 
@@ -205,18 +221,20 @@ class QuestionExplanationServiceTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("Question has no correct option defined");
 
-        verify(llmProvider, never()).generate(any(LLMRequest.class));
+        verify(llmProvider, never()).generate(any(LLMRequest.class), anyInt());
     }
 
     @Test
     @DisplayName("Should build correct prompt with question and options")
     void shouldBuildCorrectPromptWithQuestionAndOptions() {
         // Given
+        LLMResult llmResult = new LLMResult("explanation", "gpt-4", "openai");
+
         when(explanationRunRepository.findAllByQuestion(questionId))
                 .thenReturn(Optional.empty());
 
-        when(llmProvider.generate(any(LLMRequest.class)))
-                .thenReturn(new LLMResult("explanation", "gpt-4", "openai"));
+        when(llmProvider.generate(any(PromptRequest.class), anyInt()))
+                .thenReturn(llmResult);
 
         when(explanationRunRepository.save(any(QuestionExplanationRun.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
@@ -225,17 +243,14 @@ class QuestionExplanationServiceTest {
         service.requestExplanation(command, userId);
 
         // Then
-        ArgumentCaptor<LLMRequest> requestCaptor = ArgumentCaptor.forClass(LLMRequest.class);
-        verify(llmProvider).generate(requestCaptor.capture());
-        LLMRequest captured = requestCaptor.getValue();
+        ArgumentCaptor<PromptRequest> requestCaptor = ArgumentCaptor.forClass(PromptRequest.class);
+        verify(llmProvider).generate(requestCaptor.capture(), anyInt());
+        PromptRequest captured = requestCaptor.getValue();
 
-        assertThat(captured.systemPrompt()).contains("solutions architect");
-        assertThat(captured.userPrompt()).contains("Which AWS service is best for serverless computing?");
-        assertThat(captured.userPrompt()).contains("A) EC2");
-        assertThat(captured.userPrompt()).contains("B) Lambda");
-        assertThat(captured.userPrompt()).contains("pt");
-        assertThat(captured.temperature()).isEqualTo(0.25);
-        assertThat(captured.maxTokens()).isEqualTo(1200);
+        assertThat(captured).isNotNull();
+        assertThat(captured.prompt()).isNotNull();
+        assertThat(captured.variables().question()).isEqualTo(question.getText());
+        assertThat(captured.variables().options()).isEqualTo("A) EC2\nB) Lambda");
     }
 
     @Test
@@ -253,8 +268,6 @@ class QuestionExplanationServiceTest {
         when(explanationRunRepository.save(any(QuestionExplanationRun.class))).thenReturn(run);
 
         SubmitFeedbackCommand feedback = new SubmitFeedbackCommand(5, "Excellent explanation!");
-
-        UserContextHolder.setUser(userId);
 
         // When
         service.submitFeedback(explanationId, feedback);
@@ -290,7 +303,7 @@ class QuestionExplanationServiceTest {
                 .thenReturn(Optional.empty());
 
         String generated = "Test explanation";
-        when(llmProvider.generate(any(LLMRequest.class)))
+        when(llmProvider.generate(any(PromptRequest.class), anyInt()))
                 .thenReturn(new LLMResult(generated, "gpt-4-turbo", "openai"));
 
         when(explanationRunRepository.save(any(QuestionExplanationRun.class)))
@@ -307,7 +320,7 @@ class QuestionExplanationServiceTest {
         assertThat(saved.getQuestionId()).isEqualTo(questionId);
         assertThat(saved.getModelProvider()).isEqualTo("openai");
         assertThat(saved.getModelName()).isEqualTo("gpt-4-turbo");
-        assertThat(saved.getPromptVersion()).isEqualTo("v1.1");
+        assertThat(saved.getPromptVersion()).isEqualTo("question-explanation-prompt-v2");
         assertThat(saved.getTemperature()).isEqualTo(0.25);
         assertThat(saved.getLanguage()).isEqualTo("pt_br");
         assertThat(saved.getContent()).isEqualTo(generated);

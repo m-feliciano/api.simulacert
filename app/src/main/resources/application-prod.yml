@@ -19,19 +19,6 @@ spring:
       idle-timeout: 600000
       max-lifetime: 1800000
 
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: false
-        jdbc:
-          batch_size: 20
-        order_inserts: true
-        order_updates: true
-
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -87,6 +74,9 @@ app:
       jwks-uri: https://www.googleapis.com/oauth2/v3/certs
     frontend-callback-url: ${FRONTEND_CALLBACK_URL:https://app.simulacert.com/auth/callback}
     state-expiration-minutes: 5
+
+  xray:
+    enabled: true
 
 management:
   endpoints:

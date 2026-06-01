@@ -13,7 +13,7 @@ import com.simulacert.exam.application.port.out.QuestionOptionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
-import com.simulacert.service.XRayTracingService;
+import com.simulacert.service.TracingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,7 @@ class AttemptServiceTest {
     private ClockPort clock;
 
     @Mock
-    private XRayTracingService xray;
+    private TracingService xray;
 
     @InjectMocks
     private AttemptService attemptService;

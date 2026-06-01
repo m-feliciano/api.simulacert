@@ -6,7 +6,6 @@ import com.simulacert.auth.domain.OAuthState;
 import com.simulacert.auth.infrastructure.persistence.repository.OAuthStateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -28,7 +27,6 @@ public class OAuthStateRepositoryAdapter implements OAuthStateRepositoryPort {
     }
 
     @Override
-    @Transactional
     public void deleteExpired(Instant now) {
         repository.deleteExpired(now);
     }
