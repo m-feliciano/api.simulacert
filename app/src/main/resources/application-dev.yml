@@ -20,17 +20,7 @@ spring:
       max-lifetime: 1800000
 
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
-    properties:
-      hibernate:
-        format_sql: false
-        jdbc:
-          batch_size: 20
-        order_inserts: true
-        order_updates: true
+    show-sql: true
 
 server:
   port: 8080
@@ -49,12 +39,6 @@ app:
     frontend-callback-url: ${FRONTEND_CALLBACK_URL:http://localhost:4200/auth/callback}
     state-expiration-minutes: 5
 
-  llm:
-    openai:
-      enabled: ${OPENAI_ENABLED:false}
-      api-key: ${OPENAI_API_KEY:}
-      model: gpt-4.1-mini
-
 management:
   endpoints:
     web:
@@ -62,6 +46,8 @@ management:
         include: health,info,metrics
   endpoint:
     health:
+      probes:
+        enabled: true
       show-details: always
 
 springdoc:
@@ -83,14 +69,14 @@ info:
 
 logging:
   level:
-    root: INFO
+    root: WARN
     br.com.simulacert: DEBUG
-    org.hibernate.SQL: DEBUG
+    org.hibernate.SQL: WARN
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 feign:
   client:
     config:
       openai:
-        url: localhost:8081/llm/openai
+        url: ${OPENAI_BASE_URL:http://localhost:8081/llm/openai}
 

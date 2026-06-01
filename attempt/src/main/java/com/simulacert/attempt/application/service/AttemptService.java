@@ -18,7 +18,7 @@ import com.simulacert.exam.application.port.out.ExamQueryPort;
 import com.simulacert.exam.application.port.out.QuestionRepositoryPort;
 import com.simulacert.exam.domain.Question;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
-import com.simulacert.service.XRayTracingService;
+import com.simulacert.service.TracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,6 +36,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.simulacert.attempt.application.dto.AttemptLogVo.fromAttemptVo;
 import static com.simulacert.attempt.domain.AttemptStatus.IN_PROGRESS;
 
 @Slf4j
@@ -49,6 +50,7 @@ public class AttemptService implements AttemptUseCase {
     private static final long MAX_ATTEMPT_DURATION_SECONDS = Duration.ofHours(4).toSeconds();
     private static final String EXAM_ID = "examId";
     private static final String ATTEMPT_ID = "attemptId";
+    private static final String ATTEMPT_RESPONSE = "attemptResponse";
     private static final String ATTEMPT_NOT_FOUND = "Attempt not found: ";
 
     private final Random random = new Random();
@@ -59,9 +61,10 @@ public class AttemptService implements AttemptUseCase {
     private final ExamQueryPort examQueryPort;
     private final QuestionRepositoryPort questionRepository;
     private final ClockPort clock;
-    private final XRayTracingService xray;
+    private final TracingService xray;
 
     @Scheduled(cron = "0 0 0 * * ?") // runs every day at midnight
+    @Transactional
     public void cleanUpOldInProgressAttempts() {
         log.info("Starting cleanup of old in-progress attempts");
 
@@ -75,6 +78,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional
     @XRaySubsegment("attempt.startAttempt")
     public AttemptVo startAttempt(StartAttemptRequest request) {
         xray.putAnnotation(EXAM_ID, request.examId());
@@ -114,6 +118,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional
     @XRaySubsegment("attempt.pauseAttempt")
     public AttemptTimingResponse pauseAttempt(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
@@ -126,6 +131,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional
     @XRaySubsegment("attempt.resumeAttempt")
     public AttemptTimingResponse resumeAttempt(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
@@ -138,6 +144,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional
     @XRaySubsegment("attempt.heartbeatAttempt")
     public AttemptTimingResponse heartbeatAttempt(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
@@ -173,6 +180,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @XRaySubsegment("attempt.cancelAttempt")
+    @Transactional
     public void cancelAttempt(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
         log.info("Cancelling attempt {}", attemptId);
@@ -184,15 +192,19 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @XRaySubsegment("attempt.getAttemptById")
     public AttemptVo getAttemptById(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
-        return attemptRepository.findById(attemptId)
+        AttemptVo attemptVo = attemptRepository.findById(attemptId)
                 .map(Attempt::toVo)
                 .orElseThrow(() -> new IllegalArgumentException(ATTEMPT_NOT_FOUND + attemptId));
+        xray.putAnnotation(ATTEMPT_RESPONSE, fromAttemptVo(attemptVo));
+        return attemptVo;
     }
 
     @Override
+    @Transactional(readOnly = true)
     @XRaySubsegment("attempt.getAttemptsByUser")
     public Page<AttemptVo> getAttemptsByUser(UUID userId, Pageable pageable) {
         return attemptRepository.findByUserIdPaginated(userId, pageable)
@@ -200,6 +212,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @XRaySubsegment("attempt.getAttemptQuestions")
     public List<AttemptQuestionResponse> getAttemptQuestions(UUID attemptId) {
         xray.putAnnotation(ATTEMPT_ID, attemptId);
@@ -255,6 +268,7 @@ public class AttemptService implements AttemptUseCase {
     }
 
     @Override
+    @Transactional
     @XRaySubsegment("attempt.retakeAttempt")
     public AttemptResponse retakeAttempt(UUID attemptId) {
         Attempt attempt = attemptRepository.findById(attemptId)

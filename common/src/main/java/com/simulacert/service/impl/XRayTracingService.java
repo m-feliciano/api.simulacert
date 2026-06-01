@@ -1,13 +1,15 @@
-package com.simulacert.service;
+package com.simulacert.service.impl;
 
 import com.amazonaws.xray.AWSXRay;
 import com.amazonaws.xray.entities.Subsegment;
 import com.simulacert.infrastructure.xray.XRayAnnotation;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
+import com.simulacert.service.TracingService;
 import com.simulacert.util.UserContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
-public class XRayTracingService {
+@ConditionalOnProperty(prefix = "app.xray.enabled", name = "enabled", havingValue = "true")
+public class XRayTracingService implements TracingService {
 
     private final Map<Method, String> methodNameCache = new ConcurrentHashMap<>();
 
@@ -74,8 +77,8 @@ public class XRayTracingService {
 
     private void putAnnotationInternal(String key, String stringValue) {
         String safeValue = stringValue;
-        if (safeValue.length() > 128) {
-            safeValue = safeValue.substring(0, 128);
+        if (safeValue.length() > 512) {
+            safeValue = safeValue.substring(0, 512);
         }
 
         try {
