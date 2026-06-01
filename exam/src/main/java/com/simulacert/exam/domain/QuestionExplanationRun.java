@@ -37,11 +37,11 @@ public class QuestionExplanationRun {
     @Column(nullable = false, length = 100, name = "model_name")
     private String modelName;
 
-    @Column(nullable = false, length = 20, name = "prompt_version")
+    @Column(nullable = false, length = 50, name = "prompt_version")
     private String promptVersion;
 
     @Column(name = "user_id")
-    private UUID userId; // who requested the explanation, can be null
+    private UUID userId;
 
     @Column(nullable = false)
     private Double temperature;

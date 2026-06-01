@@ -30,12 +30,14 @@ public class QuestionService implements QuestionUseCase {
     private final QuestionMapper questionMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<QuestionResponse> getQuestionsByExamId(UUID examId) {
         var questions = questionRepository.findByExamId(examId);
         return questionMapper.toResponseList(questions);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<QuestionResponse> getQuestionsByExamIdPaginated(UUID examId, Pageable pageable) {
         log.debug("Getting paginated questions for exam {} with pageable: {}", examId, pageable);
         Page<Question> questionsPage = questionRepository.findByExamIdPaginated(examId, pageable);
@@ -43,12 +45,14 @@ public class QuestionService implements QuestionUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public QuestionResponse getQuestionById(UUID questionId) {
         var question = questionRepository.findById(questionId);
         return question != null ? questionMapper.toResponse(question) : null;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public long countQuestionsByExamId(UUID examId) {
         return questionRepository.countByExamId(examId);
     }

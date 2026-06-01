@@ -58,6 +58,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @XRaySubsegment("auth.login")
     public AuthResponse login(LoginRequest request) {
         log.info("Login attempt for email: {}", request.email());
@@ -93,6 +94,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getUserById(UUID userId) {
         log.debug("Getting user by id: {}", userId);
 
@@ -103,6 +105,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getUserByEmail(String email) {
         log.debug("Getting user by email: {}", email);
 
@@ -168,6 +171,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> getUsers() {
         log.debug("Getting all users");
 
@@ -193,6 +197,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @XRaySubsegment("auth.loginAnonymous")
     public AuthResponse loginAnonymous(UUID anonymousUserId, String dummyPassword) {
         log.info("Anonymous login attempt for user id: {}", anonymousUserId);
@@ -226,6 +231,7 @@ public class AuthService implements AuthUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @XRaySubsegment("auth.refreshToken")
     public AuthResponse refreshToken(String refreshToken) {
         log.info("Refreshing token");

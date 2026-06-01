@@ -1,6 +1,6 @@
 package com.simulacert.infrastructure.xray;
 
-import com.simulacert.service.XRayTracingService;
+import com.simulacert.service.TracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class XRayTracingAspect {
 
-    private final XRayTracingService xray;
+    private final TracingService xray;
 
     @Around("@annotation(com.simulacert.infrastructure.xray.XRaySubsegment)")
     public Object aroundSubsegment(ProceedingJoinPoint pjp) throws Throwable {

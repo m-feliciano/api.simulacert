@@ -1,6 +1,7 @@
 package com.simulacert.translation.application.service;
 
 import com.simulacert.common.ClockPort;
+import com.simulacert.llm.application.dto.LLMRequest;
 import com.simulacert.llm.application.dto.LLMResult;
 import com.simulacert.llm.application.port.out.ExplanationLLMPort;
 import com.simulacert.translation.application.port.out.TranslationRepositoryPort;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -50,7 +52,7 @@ class TranslationServiceTest {
         String value = service.getOrTranslate("question", entityId, "text", "en");
 
         assertThat(value).isEqualTo("Hello");
-        verify(llm, never()).generate(any());
+        verify(llm, never()).generate(any(LLMRequest.class), anyInt());
     }
 
     @Test
@@ -59,7 +61,8 @@ class TranslationServiceTest {
         Instant now = Instant.parse("2026-05-04T00:00:00Z");
 
         when(repository.find("question", entityId, "en")).thenReturn(Optional.empty());
-        when(llm.generate(any())).thenReturn(new LLMResult("Hello world", "gpt-4.1-mini", "openai"));
+        when(llm.generate(any(LLMRequest.class), anyInt()))
+                .thenReturn(new LLMResult("Hello world", "gpt-4.1-mini", "openai"));
         when(clock.now()).thenReturn(now);
 
         // ensure @Value content is set (otherwise can be null under unit tests)
@@ -72,7 +75,7 @@ class TranslationServiceTest {
         String value = service.getOrTranslate("question", entityId, "text", "en");
 
         assertThat(value).isEqualTo("Hello world");
-        verify(llm).generate(any());
+        verify(llm).generate(any(LLMRequest.class), anyInt());
         assertThat(captor.getValue().getEntityType()).isEqualTo("question");
         assertThat(captor.getValue().getLanguage()).isEqualTo("en");
     }
