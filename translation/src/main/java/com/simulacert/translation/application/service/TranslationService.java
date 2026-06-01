@@ -27,7 +27,7 @@ import java.util.UUID;
 public class TranslationService implements TranslationUseCase {
 
     private static final Double TEMPERATURE = 0.0;
-    private static final Integer MAX_TOKENS = 600;
+    private static final int MAX_OUTPUT_TOKENS = 900;
 
     private final TranslationRepositoryPort repository;
     private final ExplanationLLMPort llm;
@@ -78,14 +78,13 @@ public class TranslationService implements TranslationUseCase {
 
     private TranslationResponse generateAndPersist(TranslateFieldCommand command) {
         LLMRequest llmRequest = new LLMRequest(
-                PromptTemplates.systemPrompt(),
-                PromptTemplates.userPrompt(command.content(), command.language()),
+                PromptTemplates.systemTranslatePrompt(),
+                PromptTemplates.userTranslatePrompt(command.content(), command.language()),
                 TEMPERATURE,
-                MAX_TOKENS,
                 modelName
         );
 
-        LLMResult result = llm.generate(llmRequest);
+        LLMResult result = llm.generate(llmRequest, MAX_OUTPUT_TOKENS);
         String content = normalize(result.content());
 
         Translation translation = Translation.createLLM(

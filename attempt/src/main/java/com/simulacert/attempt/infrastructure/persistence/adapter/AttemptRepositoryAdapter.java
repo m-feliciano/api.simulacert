@@ -42,7 +42,7 @@ public class AttemptRepositoryAdapter implements AttemptRepositoryPort {
 
     @Override
     public int countByStatus(UUID userId, AttemptStatus attemptStatus) {
-        return repository.countByStatus(userId, attemptStatus);
+        return repository.countByUserIdAndStatus(userId, attemptStatus);
     }
 
     @Override

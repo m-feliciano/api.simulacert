@@ -10,7 +10,7 @@ import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
 import com.simulacert.common.ClockPort;
 import com.simulacert.infrastructure.xray.XRaySubsegment;
-import com.simulacert.service.XRayTracingService;
+import com.simulacert.service.TracingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class AnswerService implements AnswerUseCase {
     private final AnswerRepositoryPort answerRepository;
     private final AttemptRepositoryPort attemptRepository;
     private final ClockPort clock;
-    private final XRayTracingService xray;
+    private final TracingService xray;
 
     @Override
     @Transactional

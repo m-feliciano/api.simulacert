@@ -1,10 +1,12 @@
-package com.simulacert.llm.infrastructure.llm.openai.transfer;
+package com.simulacert.llm.infrastructure.llm.openai.transfer.completion;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public record OpenAIResponse(
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record OpenAIChatCompletionResponse(
         String id,
         String object,
         Long created,

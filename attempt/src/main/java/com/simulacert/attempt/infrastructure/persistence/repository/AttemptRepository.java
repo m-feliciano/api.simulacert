@@ -4,33 +4,40 @@ import com.simulacert.attempt.domain.Attempt;
 import com.simulacert.attempt.domain.AttemptStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface AttemptRepository extends JpaRepository<Attempt, UUID> {
 
-    @Query("SELECT a FROM Attempt a WHERE a.userId = :userId AND a.examId = :examId AND a.status = :status")
+    @EntityGraph(attributePaths = "questionIds")
     Optional<Attempt> findByUserIdAndExamIdAndStatus(
-            @Param("userId") UUID userId,
-            @Param("examId") UUID examId,
-            @Param("status") AttemptStatus status
+            UUID userId,
+            UUID examId,
+            AttemptStatus status
     );
 
-    @Query("SELECT a FROM Attempt a WHERE a.status = :status AND a.startedAt < :cutoff")
+    @EntityGraph(attributePaths = "questionIds")
     List<Attempt> findByStatusAndStartedAtBefore(
-            @Param("status") AttemptStatus status,
-            @Param("cutoff") Instant cutoff
+            AttemptStatus status,
+            Instant cutoff
     );
 
-    @Query("SELECT COUNT(a) FROM Attempt a WHERE a.userId = :userId AND a.status = :status")
-    int countByStatus(@Param("userId") UUID userId, @Param("status") AttemptStatus status);
+    int countByUserIdAndStatus(
+            UUID userId,
+            AttemptStatus status
+    );
 
-    Page<Attempt> findByUserId(UUID userId, Pageable pageable);
+    @EntityGraph(attributePaths = "questionIds")
+    Page<Attempt> findByUserId(
+            UUID userId,
+            Pageable pageable
+    );
 }
 

@@ -38,6 +38,20 @@ spring:
     openfeign:
       enabled: true
 
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+
 server:
   port: 8080
 
@@ -94,7 +108,11 @@ app:
     openai:
       enabled: true
       api-key: ${OPENAI_API_KEY:}
-      model: gpt-4.1-mini  # or gpt-4, gpt-4-turbo, gpt-3.5-turbo
+      model: gpt-5.4-mini  # or gpt-4, gpt-4-turbo, gpt-3.5-turbo
+      prompt-id: ${OPENAI_PROMPT_ID:}
+
+  xray:
+    enabled: false
 
 feign:
   client:
@@ -109,7 +127,7 @@ feign:
           maxAttempts: ${FEIGN_RETRYER_MAX_ATTEMPTS:2}
         followRedirects: false
       openai:
-        url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+        url: ${OPENAI_BASE_URL:https://api.openai.com}
         connectTimeout: ${OPENAI_FEIGN_CONNECT_TIMEOUT_MS:2000}
         readTimeout: ${OPENAI_FEIGN_READ_TIMEOUT_MS:60000}
         loggerLevel: ${OPENAI_FEIGN_LOGGER_LEVEL:basic}

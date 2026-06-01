@@ -36,6 +36,7 @@ public class ExamService implements ExamUseCase {
     private final ExamMapper examMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public ExamResponse getExamById(UUID examId) {
         return examRepository.findById(examId)
                 .map(examMapper::toResponse)
@@ -43,11 +44,13 @@ public class ExamService implements ExamUseCase {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean examExists(UUID examId) {
         return examRepository.existsById(examId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ExamResponse> getAllExams() {
         return examRepository.findAll()
                 .stream()
@@ -98,11 +101,13 @@ public class ExamService implements ExamUseCase {
         log.info("Exam deleted: {}", examId);
     }
 
+    @Transactional(readOnly = true)
     public boolean hasMinimumQuestions(UUID examId) {
         return questionRepository.countByExamId(examId) >= 10;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ExamResponse getExamBySlug(String slug) {
         return examRepository.findBySlug(slug)
                 .map(examMapper::toResponse)
@@ -110,8 +115,8 @@ public class ExamService implements ExamUseCase {
     }
 
     @SneakyThrows
-    @Transactional
     @Override
+    @Transactional
     public void importExamsFiles(List<MultipartFile> files) {
         log.info("Starting exam import for {} files", files.size());
 
@@ -135,6 +140,7 @@ public class ExamService implements ExamUseCase {
         log.info("Successfully imported exam: {}", exams.size());
     }
 
+    @Transactional
     public void importExams(List<ExamImportDto> exams) {
         log.info("Starting bulk exam import for {} exams", exams.size());
 
