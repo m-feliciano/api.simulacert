@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.simulacert.constants.Constants.PT_BR;
+
 @Entity
 @Table(name = "questions")
 @Getter
@@ -44,7 +46,8 @@ public class Question {
     private String difficulty;
 
     @Column(nullable = false, name = "language")
-    private String language = "pt_br";
+    @Builder.Default
+    private String language = PT_BR;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -63,7 +66,7 @@ public class Question {
                 .text(text.trim())
                 .domain(domain.trim())
                 .difficulty(difficulty.trim())
-                .language("pt_br")
+                .language(PT_BR)
                 .code(code.trim())
                 .build();
     }
