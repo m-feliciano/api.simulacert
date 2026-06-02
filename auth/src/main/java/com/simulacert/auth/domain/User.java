@@ -19,6 +19,8 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.simulacert.constants.Constants.AUTHENTICATED;
+
 @Entity
 @Table(name = "users")
 @Builder
@@ -72,7 +74,7 @@ public class User {
 
     @Column(name = "type")
     @Builder.Default
-    private String type = "AUTHENTICATED"; // or anonymous
+    private String type = AUTHENTICATED; // or anonymous
 
     public static User create(String email, String name, String passwordHash, Instant createdAt) {
         Objects.requireNonNull(email, "email cannot be null");
@@ -85,7 +87,7 @@ public class User {
                 .name(name.trim())
                 .passwordHash(passwordHash)
                 .role(UserRole.USER)
-                .type("AUTHENTICATED")
+                .type(AUTHENTICATED)
                 .provider(AuthProvider.LOCAL)
                 .active(true)
                 .createdAt(createdAt)
@@ -129,7 +131,7 @@ public class User {
         this.email = email.toLowerCase().trim();
         this.name = name.trim();
         this.passwordHash = passwordHash;
-        this.type = "AUTHENTICATED";
+        this.type = AUTHENTICATED;
         this.updatedAt = updatedAt;
     }
 

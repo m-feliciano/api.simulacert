@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.simulacert.constants.Constants.EXAM;
+
 @Entity
 @Table(name = "attempts")
 @Builder
@@ -77,7 +79,8 @@ public class Attempt {
     private long seed;
 
     @Column(length = 20)
-    private String mode = "exam"; // or practice
+    @Builder.Default
+    private String mode = EXAM;
 
     @Version
     private long version;
