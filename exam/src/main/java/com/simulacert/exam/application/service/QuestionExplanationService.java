@@ -38,7 +38,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     private static final String PROMPT_VERSION = "2";
     private static final Double TEMPERATURE = 0.25;
     private static final int MAX_OUTPUT_TOKENS = 2000;
-    private static final Duration EXPIRATION_DURATION = Duration.ofDays(30);
+    private static final Duration EXPIRATION_DURATION = Duration.ofDays(60);
+    private static final String PROVIDER = "AWS";
 
     private final QuestionRepositoryPort questionRepository;
     private final QuestionExplanationRunRepositoryPort explanationRunRepository;
@@ -66,11 +67,12 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
             return questionMapper.toExplanationResponse(existing.get().getLast());
         }
 
-        if (explanationRunRepository.countExplanationsByUserIdToday(userId) >= 10) {
-            throw new IllegalStateException("You have reached the daily limit of 10 explanations. Please try again tomorrow.");
+        if (explanationRunRepository.countExplanationsByUserIdToday(userId) >= 5) {
+            throw new IllegalStateException("You have reached the daily limit of 5 explanations. Please try again tomorrow.");
         }
 
         Question question = questionRepository.findById(questionId);
+        // TODO: Use a dynamic provider below
         PromptRequest llmRequest = buildLLMRequest(question, command.certification());
         LLMResult llmResult = llmProvider.generate(llmRequest, MAX_OUTPUT_TOKENS);
 
@@ -102,9 +104,8 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
     }
 
 
-    private PromptRequest buildLLMRequest(Question question, String provider) {
+    private PromptRequest buildLLMRequest(Question question, String certification) {
         Objects.requireNonNull(promptId, "Prompt ID cannot be null");
-        Objects.requireNonNull(provider, "Provider cannot be null");
         Objects.requireNonNull(question, "Question cannot be null");
         Objects.requireNonNull(question.getOptions(), "Question options cannot be null");
 
@@ -123,17 +124,17 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 .map(opt -> opt.getOptionKey() + ") " + opt.getOptionText())
                 .collect(Collectors.joining("\n"));
 
-        String correctOption = String.join(", ", correctList);
+        String correctAnswers = String.join(", ", correctList);
 
         return PromptRequest.builder()
                 .prompt(new PromptRequest.Prompt(promptId, PROMPT_VERSION))
                 .variables(new PromptRequest.Variables(
                         question.getLanguage(),
-                        provider,
+                        PROVIDER,
                         question.getText(),
                         optionsText,
-                        correctOption,
-                        provider
+                        correctAnswers,
+                        certification
                 ))
                 .build();
     }

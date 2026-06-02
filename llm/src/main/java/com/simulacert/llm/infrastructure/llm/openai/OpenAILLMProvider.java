@@ -11,6 +11,7 @@ import com.simulacert.llm.infrastructure.llm.openai.transfer.completion.OpenAICh
 import com.simulacert.llm.infrastructure.llm.openai.transfer.completion.OpenAIChatCompletionResponse;
 import com.simulacert.llm.infrastructure.llm.openai.transfer.prompt.OpenAIPromptRequest;
 import com.simulacert.llm.infrastructure.llm.openai.transfer.prompt.OpenAIPromptResponse;
+import com.simulacert.service.TracingService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,6 @@ import java.util.Objects;
 @ConditionalOnProperty(prefix = "app.llm.openai", name = "enabled", havingValue = "true")
 public class OpenAILLMProvider implements ExplanationLLMPort {
 
-    private static final String PROMPT_VERSION = "4";
-
     @Value("${app.llm.openai.model}")
     private String model;
 
@@ -37,12 +36,13 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
 
     private final OpenAIClient openAIClient;
     private final ObjectMapper objectMapper;
+    private final TracingService tracingService;
 
     @Autowired
-    public OpenAILLMProvider(OpenAIClient openAIClient,
-                             ObjectMapper objectMapper) {
+    public OpenAILLMProvider(OpenAIClient openAIClient, ObjectMapper objectMapper, TracingService tracingService) {
         this.openAIClient = openAIClient;
         this.objectMapper = objectMapper;
+        this.tracingService = tracingService;
     }
 
     @Override
@@ -76,8 +76,8 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         return new LLMResult(content, openAIResponse.model(), "openai");
     }
 
-
     @Override
+    @XRaySubsegment("ext.openai.response")
     public LLMResult generate(PromptRequest request, int maxOutputTokens) {
         Objects.requireNonNull(request, "PromptRequest cannot be null");
         Objects.requireNonNull(request.variables(), "PromptRequest variables cannot be null");
@@ -91,13 +91,10 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         }
 
         OpenAIPromptResponse.Usage usage = body.usage();
-        if (usage == null) {
-            log.warn("OpenAI response does not contain usage information");
-        } else {
-            log.info("OpenAI API call successful.\nInput Tokens: {}, Output Tokens: {}, Total Tokens: {}",
-                    usage.inputTokens(), usage.outputTokens(), usage.totalTokens());
-        }
+        log.info("OpenAI API call successful.\nInput Tokens: {}, Output Tokens: {}, Total Tokens: {}",
+                usage.inputTokens(), usage.outputTokens(), usage.totalTokens());
 
+        tracingService.putAnnotation("openApiTotalTokens", usage.totalTokens() != null ? usage.totalTokens() : "unknown");
         return new LLMResult(extractContent(body), body.model(), "openai");
     }
 
@@ -109,7 +106,7 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
                 .prompt(
                         new OpenAIPromptRequest.Prompt(
                                 request.prompt().id(),
-                                PROMPT_VERSION,
+                                null,
                                 variables
                         )
                 )
