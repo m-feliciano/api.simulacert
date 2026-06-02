@@ -319,12 +319,12 @@ class QuestionExplanationServiceTest {
         assertThat(saved.getQuestionId()).isEqualTo(questionId);
         assertThat(saved.getModelProvider()).isEqualTo("openai");
         assertThat(saved.getModelName()).isEqualTo("gpt-4-turbo");
-        assertThat(saved.getPromptVersion()).isEqualTo("question-explanation-prompt-v2");
+        assertThat(saved.getPromptVersion()).isEqualTo("question-explanation-prompt-latest");
         assertThat(saved.getTemperature()).isEqualTo(0.25);
         assertThat(saved.getLanguage()).isEqualTo("pt_br");
         assertThat(saved.getContent()).isEqualTo(generated);
         assertThat(saved.getCreatedAt()).isEqualTo(now);
-        assertThat(saved.getExpiresAt()).isEqualTo(now.plus(Duration.ofDays(60)));
+        assertThat(saved.getExpiresAt()).isEqualTo(now.plus(Duration.ofDays(120)));
     }
 }
 
