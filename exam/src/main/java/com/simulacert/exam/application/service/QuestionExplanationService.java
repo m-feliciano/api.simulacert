@@ -35,10 +35,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuestionExplanationService implements QuestionExplanationUseCase {
-    private static final String PROMPT_VERSION = "2";
     private static final Double TEMPERATURE = 0.25;
-    private static final int MAX_OUTPUT_TOKENS = 2000;
-    private static final Duration EXPIRATION_DURATION = Duration.ofDays(60);
+    private static final int MAX_OUTPUT_TOKENS = 3000;
+    private static final Duration EXPIRATION_DURATION = Duration.ofDays(120);
     private static final String PROVIDER = "AWS";
 
     private final QuestionRepositoryPort questionRepository;
@@ -72,7 +71,6 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         }
 
         Question question = questionRepository.findById(questionId);
-        // TODO: Use a dynamic provider below
         PromptRequest llmRequest = buildLLMRequest(question, command.certification());
         LLMResult llmResult = llmProvider.generate(llmRequest, MAX_OUTPUT_TOKENS);
 
@@ -127,7 +125,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
         String correctAnswers = String.join(", ", correctList);
 
         return PromptRequest.builder()
-                .prompt(new PromptRequest.Prompt(promptId, PROMPT_VERSION))
+                .prompt(new PromptRequest.Prompt(promptId, null))
                 .variables(new PromptRequest.Variables(
                         question.getLanguage(),
                         PROVIDER,
@@ -153,7 +151,7 @@ public class QuestionExplanationService implements QuestionExplanationUseCase {
                 command.questionId(),
                 "openai", // TODO: make configurable
                 modelName,
-                promptId + "-v" + PROMPT_VERSION,
+                promptId + "-latest",
                 TEMPERATURE,
                 language,
                 content,
