@@ -26,7 +26,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Duration;
@@ -325,7 +324,7 @@ class QuestionExplanationServiceTest {
         assertThat(saved.getLanguage()).isEqualTo("pt_br");
         assertThat(saved.getContent()).isEqualTo(generated);
         assertThat(saved.getCreatedAt()).isEqualTo(now);
-        assertThat(saved.getExpiresAt()).isEqualTo(now.plus(Duration.ofDays(30)));
+        assertThat(saved.getExpiresAt()).isEqualTo(now.plus(Duration.ofDays(60)));
     }
 }
 
