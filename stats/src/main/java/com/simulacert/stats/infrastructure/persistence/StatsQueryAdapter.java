@@ -24,6 +24,65 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class StatsQueryAdapter implements StatsQueryPort {
 
+    private static final String QUERY_GET_STATS_PERFORMANCE = """
+            WITH user_attempts AS (
+                SELECT id
+                FROM attempts
+                WHERE user_id = ?
+            ),
+            latest_answers AS (
+                SELECT DISTINCT ON (a.question_id)
+                    a.question_id,
+                    a.selected_option,
+                    a.answered_at
+                FROM answers a
+                JOIN user_attempts ua ON ua.id = a.attempt_id
+                ORDER BY a.question_id, a.answered_at DESC
+            ),
+            correct_options AS (
+                SELECT
+                    question_id, 
+                    STRING_AGG(option_key, ',' ORDER BY option_key) AS correct_keys
+                FROM question_options
+                WHERE is_correct = true
+                GROUP BY question_id
+            ),
+            user_answers_expanded AS (
+                SELECT
+                    la.question_id,
+                    UPPER(TRIM(unnested.option_key)) AS option_key
+                FROM latest_answers la
+                CROSS JOIN LATERAL unnest(string_to_array(la.selected_option, ',')) AS unnested(option_key)
+            ),
+            user_answers AS (
+                SELECT
+                    question_id,
+                    STRING_AGG(option_key, ',' ORDER BY option_key) AS user_keys
+                FROM user_answers_expanded
+                GROUP BY question_id
+            ),
+            correct_by_question AS (
+                SELECT ua.question_id
+                FROM user_answers ua
+                JOIN correct_options co ON ua.question_id = co.question_id
+                WHERE ua.user_keys = co.correct_keys
+            )
+            SELECT
+                q.domain,
+                COUNT(DISTINCT la.question_id) as total_questions,
+                COUNT(DISTINCT cbq.question_id) as correct_answers,
+                CASE 
+                    WHEN COUNT(DISTINCT la.question_id) > 0 
+                    THEN ROUND((COUNT(DISTINCT cbq.question_id)::NUMERIC / COUNT(DISTINCT la.question_id)::NUMERIC) * 100, 2)
+                    ELSE 0.0 
+                END as accuracy_rate
+            FROM latest_answers la
+            JOIN questions q ON q.id = la.question_id
+            LEFT JOIN correct_by_question cbq ON cbq.question_id = la.question_id
+            GROUP BY q.domain
+            ORDER BY q.domain
+            """;
+
     private final JdbcTemplate jdbcTemplate;
     private final UserStatsMapper mapper;
     private final AttemptHistoryMapper historyMapper;
@@ -72,65 +131,7 @@ public class StatsQueryAdapter implements StatsQueryPort {
     @Override
     @XRaySubsegment("db.stats.awsDomain")
     public List<AwsDomainStatsDto> getStatsByAwsDomain(UUID userId) {
-        String sql = """
-                WITH user_attempts AS (
-                    SELECT id
-                    FROM attempts
-                    WHERE user_id = ?
-                ),
-                latest_answers AS (
-                    SELECT DISTINCT ON (a.question_id)
-                        a.question_id,
-                        a.selected_option,
-                        a.answered_at
-                    FROM answers a
-                    JOIN user_attempts ua ON ua.id = a.attempt_id
-                    ORDER BY a.question_id, a.answered_at DESC
-                ),
-                correct_options AS (
-                    SELECT
-                        question_id, 
-                        STRING_AGG(option_key, ',' ORDER BY option_key) AS correct_keys
-                    FROM question_options
-                    WHERE is_correct = true
-                    GROUP BY question_id
-                ),
-                user_answers_expanded AS (
-                    SELECT
-                        la.question_id,
-                        UPPER(TRIM(unnested.option_key)) AS option_key
-                    FROM latest_answers la
-                    CROSS JOIN LATERAL unnest(string_to_array(la.selected_option, ',')) AS unnested(option_key)
-                ),
-                user_answers AS (
-                    SELECT
-                        question_id,
-                        STRING_AGG(option_key, ',' ORDER BY option_key) AS user_keys
-                    FROM user_answers_expanded
-                    GROUP BY question_id
-                ),
-                correct_by_question AS (
-                    SELECT ua.question_id
-                    FROM user_answers ua
-                    JOIN correct_options co ON ua.question_id = co.question_id
-                    WHERE ua.user_keys = co.correct_keys
-                )
-                SELECT
-                    q.domain,
-                    COUNT(DISTINCT la.question_id) as total_questions,
-                    COUNT(DISTINCT cbq.question_id) as correct_answers,
-                    CASE 
-                        WHEN COUNT(DISTINCT la.question_id) > 0 
-                        THEN ROUND((COUNT(DISTINCT cbq.question_id)::NUMERIC / COUNT(DISTINCT la.question_id)::NUMERIC) * 100, 2)
-                        ELSE 0.0 
-                    END as accuracy_rate
-                FROM latest_answers la
-                JOIN questions q ON q.id = la.question_id
-                LEFT JOIN correct_by_question cbq ON cbq.question_id = la.question_id
-                GROUP BY q.domain
-                ORDER BY q.domain
-                """;
-        List<AwsDomainStatsRow> rows = jdbcTemplate.query(sql, this::mapAwsDomainStatsRow, userId);
+        List<AwsDomainStatsRow> rows = jdbcTemplate.query(QUERY_GET_STATS_PERFORMANCE, this::mapAwsDomainStatsRow, userId);
         return domainStatsMapper.toDtoList(rows);
     }
 
