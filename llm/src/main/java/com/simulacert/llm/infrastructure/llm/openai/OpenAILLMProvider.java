@@ -22,11 +22,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component
 @ConditionalOnProperty(prefix = "app.llm.openai", name = "enabled", havingValue = "true")
 public class OpenAILLMProvider implements ExplanationLLMPort {
+    private static final String MESSAGE = "message";
+    private static final String OUTPUT_TEXT = "output_text";
 
     @Value("${app.llm.openai.model}")
     private String model;
@@ -85,10 +88,8 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
         var openAIRequest = buildOpenAIPromptRequest(request, maxOutputTokens);
         var responseEntity = openAIClient.createPrompt(openAIRequest, "Bearer " + apiKey);
 
-        OpenAIPromptResponse body = responseEntity.getBody();
-        if (body == null) {
-            throw new IllegalStateException("OpenAI returned empty response");
-        }
+        OpenAIPromptResponse body = Optional.ofNullable(responseEntity.getBody())
+                .orElseThrow(() -> new IllegalStateException("OpenAI returned empty response"));
 
         OpenAIPromptResponse.Usage usage = body.usage();
         log.info("OpenAI API call successful.\nInput Tokens: {}, Output Tokens: {}, Total Tokens: {}",
@@ -117,12 +118,12 @@ public class OpenAILLMProvider implements ExplanationLLMPort {
 
     private static String extractContent(OpenAIPromptResponse body) {
         return body.output().stream()
-                .filter(output -> "message".equalsIgnoreCase(output.type()))
+                .filter(output -> MESSAGE.equalsIgnoreCase(output.type()))
                 .findFirst()
                 .orElseThrow()
                 .content()
                 .stream()
-                .filter(c -> "output_text".equalsIgnoreCase(c.type()))
+                .filter(c -> OUTPUT_TEXT.equalsIgnoreCase(c.type()))
                 .findFirst()
                 .orElseThrow()
                 .text();

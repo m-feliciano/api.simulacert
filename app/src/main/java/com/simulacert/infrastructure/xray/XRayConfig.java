@@ -1,13 +1,13 @@
 package com.simulacert.infrastructure.xray;
 
 import com.amazonaws.xray.jakarta.servlet.AWSXRayServletFilter;
-import jakarta.servlet.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.Ordered;
 
 @Slf4j
 @Configuration
@@ -18,9 +18,11 @@ public class XRayConfig {
     private String tracingName;
 
     @Bean
-    public Filter TracingFilter() {
-        log.info("Initializing AWS X-Ray Servlet Filter for tracing");
-
-        return new AWSXRayServletFilter(tracingName);
+    public FilterRegistrationBean<AWSXRayServletFilter> xrayFilter() {
+        FilterRegistrationBean<AWSXRayServletFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new AWSXRayServletFilter(tracingName));
+        registration.addUrlPatterns("/api/*");
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registration;
     }
 }
